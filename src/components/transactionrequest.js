@@ -157,7 +157,7 @@ const Selector = ({onChange, label}) => {
       <select onChange={onChange}>
         <option value="full">Fully specified</option>
         <option value="handle">Handle</option>
-        <option value="omit">Omit</option>
+        <option value="omit" selected>Omit</option>
       </select>
       {label}
     </label>
