@@ -6,14 +6,15 @@ import SEO from '../components/seo'
 
 <SEO title="Home" keywords={['oauth', 'authorization', 'security']} />
 
-Welcome to your new Gatsby site.
+OAuth 2 is one of the most successful security protocols in use today. Even so, in its wide use, the protocol has come up against some of its own limitations. This is a proposal for a transactional authorization protocol XYZ to address the things that OAuth 2 doesn't handle well on its own. 
 
-Now go build something great.
+# The process
 
-<div style={{ maxWidth: '300px', marginBottom: '1.45rem' }}>
-  <Image />
-</div>
+In XYZ, a client that needs to talk to an API first <Link to="/transactionrequest">begins an authorization transaction</Link> with the authorization server. This request includes information about the client, the user, the API being requested, the ways the client can interact with the user, and any keys the client can prove possession of.
 
-<Link to="/page-2/">Go to page 2</Link>
+The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interactresponse">interact with the user</Link> or <Link to="/waitresponse">wait for a server-side action</Link>, depending on the nature of the client and what the authorization server needs.
 
-<Link to="/source/">Source Demo</Link>
+After successful authorization, the client will <Link to="/transactioncontinue">continue a transaction</Link> with the authorization server. This can result in additional <Link to="/interactresponse">interact</Link> or <Link to="/waitresponse">wait</Link> responses as needed.
+
+Upon successful authorization, the authorization server will <Link to="/tokenresponse">issue an access token for use at the API</Link>. 
+
