@@ -2,20 +2,25 @@ import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const Header = ({ siteTitle }) => (
-  <div
-    style={{
-      background: '#883344',
-      marginBottom: '1.45rem',
-    }}
-  >
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '1.45rem 1.0875rem',
-      }}
-    >
+const menuLinks = [
+      {
+        name: 'Request',
+        link: '/transactionrequest/'
+      },
+      {
+        name: 'Interaction',
+        link: '/interaction/'
+      },
+      {
+        name: 'Keys',
+        link: '/keys/'
+      },
+]
+
+
+const Header = ({ siteTitle, currentPage }) => (
+  <div className="header">
+    <div className="wrapper">
       <h1 style={{ margin: 0 }}>
         <Link
           to="/"
@@ -27,6 +32,14 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </h1>
+          <nav style={{ display: 'flex', flex: 1 }}>
+            {
+              menuLinks.map(link =>
+                <li key={link.name}>
+                  <Link to={link.link}>{link.name}</Link>
+                </li> )
+            }
+          </nav>
     </div>
   </div>
 )

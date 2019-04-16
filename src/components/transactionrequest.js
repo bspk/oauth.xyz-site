@@ -1,148 +1,108 @@
 import React from 'react'
 
 import Code from '../components/code.js'
+import ToggleButton from 'react-bootstrap/ToggleButton'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 
 class TransactionRequest extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      transaction: {
-        client: undefined,
-        user: undefined,
-        resources: undefined,
-        interact: undefined,
-        keys: undefined
+  codeValues = {
+    client: {
+      full: {
+          name: "My Client Display Name",
+          uri: "https://example.net/client"
+      },
+      handle: {
+        handle: "87ytghio0987yhjk"
       }
-    };
-  }
-
-  changeClient = (event) => {
+    },
     
-    const t = this.state.transaction;
+    interact: {
+      full: {
+        type: "redirect",
+        callback: "https://client.example.net/return/123455",
+        state: "98764389312-81341978d-1"
+      },
+      handle: {
+        handle: "23409872543698-1345"
+      }
+    },
     
-    if (event.target.value === 'full') {
-      t.client = {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      };
-    } else if (event.target.value === 'handle') {
-      t.client = {
+    user: {
+      full: {
+          assertion: "eyj0...",
+          type: "oidc_id_token"
+      },
+      handle: {
+        handle: "baabanealkjasdwfeasvd"
+      }
+    },
+    
+    resources: {
+      full: [{
+          name: "My Client Display Name",
+          uri: "https://example.net/client"
+      }],
+      handle: [{
         handle: "87ytghio0987yhjk"
-      };
-    } else {
-      t.client = undefined;
+      }]
+    },
+    
+    keys: {
+      full: {
+          name: "My Client Display Name",
+          uri: "https://example.net/client"
+      },
+      handle: {
+        handle: "87ytghio0987yhjk"
+      }
     }
-    
-    this.setState({
-      transaction: t
-    });
-    
   }
-
-  changeInteract = (event) => {
   
-    const t = this.state.transaction;
+  state = {
+      transaction: {
+        client: this.codeValues.client.full,
+        user: this.codeValues.user.full,
+        resources: this.codeValues.resources.handle,
+        interact: this.codeValues.interact.omit,
+        keys: this.codeValues.keys.omit
+      },
+      selected: {
+        client: 'full',
+        user: 'full',
+        resources: 'handle',
+        interact: 'omit',
+        keys: 'omit'
+      }
+  }
+
+  
+  change = (field) => (value) => {
+    const val = this.codeValues[field][value];
     
-    if (event.target.value === 'full') {
-      t.interact = {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      };
-    } else if (event.target.value === 'handle') {
-      t.interact = {
-        handle: "87ytghio0987yhjk"
-      };
-    } else {
-      t.interact = undefined;
-    }
+    const t = this.state.transaction;
+    t[field] = val;
+    
+    const s = this.state.selected;
+    s[field] = value;
     
     this.setState({
-      transaction: t
+      transaction: t,
+      selected: s
     });
     
   }
-
-  changeResources = (event) => {
-    
-    const t = this.state.transaction;
-    
-    if (event.target.value === 'full') {
-      t.resources = {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      };
-    } else if (event.target.value === 'handle') {
-      t.resources = {
-        handle: "87ytghio0987yhjk"
-      };
-    } else {
-      t.resources = undefined;
-    }
-    
-    this.setState({
-      transaction: t
-    });
-    
-  }
-
-  changeUser = (event) => {
-    
-    const t = this.state.transaction;
-    
-    if (event.target.value === 'full') {
-      t.user = {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      };
-    } else if (event.target.value === 'handle') {
-      t.user = {
-        handle: "87ytghio0987yhjk"
-      };
-    } else {
-      t.user = undefined;
-    }
-    
-    this.setState({
-      transaction: t
-    });
-    
-  }
-
-  changeKeys = (event) => {
-    
-    const t = this.state.transaction;
-    
-    if (event.target.value === 'full') {
-      t.keys = {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      };
-    } else if (event.target.value === 'handle') {
-      t.keys = {
-        handle: "87ytghio0987yhjk"
-      };
-    } else {
-      t.keys = undefined;
-    }
-    
-    this.setState({
-      transaction: t
-    });
-    
-  }
-
+  
   render = () => {
-
 
     return (
       <div>
-        <Code code={this.state.transaction} />
-        <Selector onChange={this.changeClient} label="Client" />
-        <Selector onChange={this.changeInteract} label="Interact" />
-        <Selector onChange={this.changeResources} label="Resources" />
-        <Selector onChange={this.changeUser} label="User" />
-        <Selector onChange={this.changeKeys} label="Keys" />
+          <Selector onChange={this.change('client')} label="Client" selected={this.state.selected.client} /><br />
+          <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  /><br />
+          <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} /><br />
+          <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} /><br />
+          <Selector onChange={this.change('keys')} label="Keys" selected={this.state.selected.keys} /><br />
+          <Code code={this.state.transaction} />
       </div>
     );
   
@@ -150,18 +110,32 @@ class TransactionRequest extends React.Component {
 
 };
 
-
-const Selector = ({onChange, label}) => {
+/*
+const Selector = ({onChange, label, selected}) => {
   return (
     <label>
-      <select onChange={onChange}>
+      <select value={selected} onChange={onChange}>
         <option value="full">Fully specified</option>
         <option value="handle">Handle</option>
-        <option value="omit" selected>Omit</option>
+        <option value="omit">Omit</option>
       </select>
       {label}
     </label>
   );
 };
+*/
+
+const Selector = ({onChange, label, selected}) => {
+  return (
+    <ToggleButtonGroup name={label} value={selected} onChange={onChange}>
+      <ToggleButton variant="link" disabled value="label">{label}: </ToggleButton>
+      <ToggleButton variant="primary" value="full">Full</ToggleButton>
+      <ToggleButton variant="primary" value="handle">Handle</ToggleButton>
+      <ToggleButton variant="primary" value="omit">Omit</ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+
+
   
 export default TransactionRequest;

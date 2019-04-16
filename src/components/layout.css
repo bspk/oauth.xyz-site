@@ -622,3 +622,38 @@ pre tt:after {
     font-size: 100%;
   }
 }
+
+.header {
+  background: #883344;
+  margin-bottom: 1.45rem;
+}
+
+.header .wrapper {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 1.45rem 1.0875rem;
+}
+
+.header nav {
+  margin-top: 0.3rem;
+}
+
+.header nav li {
+  list-style: none;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  color: #eebbbb;
+}
+
+.header nav li:before{
+  content: "\00BB ";
+}
+
+nav li a {
+  color: white;
+  text-decoration: none;
+}
+
+nav li a:hover {
+  color: white;
+}

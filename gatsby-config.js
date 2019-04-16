@@ -5,7 +5,7 @@ module.exports = {
     title: 'OAuth.xyz',
     description:
       'A new authorization protocol based on concepts from OAuth2 and its extensions.',
-    author: '@jricher',
+    author: '@jricher'
   },
   plugins: [
     {

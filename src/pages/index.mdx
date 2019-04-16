@@ -6,7 +6,13 @@ import SEO from '../components/seo'
 
 <SEO title="Home" keywords={['oauth', 'authorization', 'security']} />
 
-OAuth 2 is one of the most successful security protocols in use today. Even so, in its wide use, the protocol has come up against some of its own limitations. This is a proposal for a transactional authorization protocol XYZ to address the things that OAuth 2 doesn't handle well on its own. 
+# The proposal
+
+OAuth 2 is one of the most successful security protocols in use today. Even so, in its wide use, the protocol has come up against some of its own limitations. This is a proposal for a transactional authorization protocol XYZ to address the things that OAuth 2 doesn't handle well on its own. Optimizations and decisions that made sense in OAuth 2 don't make as much sense today. We are in a different world, and perhaps it's time we started to look to a different protocol.
+
+But we're not trying to invent something in a vacuum. In particular, OAuth 2 has been extended to cover a wide variety of client applications, deployments, and use cases. Unfortunately, this has led to a number of components that are almost--but not quite--solving the same problems in similar ways. 
+
+This protocol, which I'm naming "XYZ" for the moment, is based on a transactional model. The client of the API declares who it is and what it wants, the AS figures out what information it needs to fulfill that (which might include interacting with a user), and ultimately a token is produced. All along the way, components have the opportunity to bind keys to different parts of the transaction.
 
 # The process
 
