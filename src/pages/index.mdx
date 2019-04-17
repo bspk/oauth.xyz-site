@@ -18,9 +18,8 @@ The XYZ protocol is not intended to be directly compatible with OAuth 2, much in
 
 In XYZ, a client that needs to talk to an API first <Link to="/transactionrequest">begins an authorization transaction</Link> with the authorization server. This request includes information about the client, the user, the API being requested, the ways the client can interact with the user, and any <Link to="/keys">keys the client can prove possession of</Link>.
 
-The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interaction">interact with the user</Link> or wait for a server-side action, depending on the nature of the client and what the authorization server needs.
+The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interaction">interact with the user</Link> or wait for a server-side action, depending on the nature of the client and what the authorization server needs. If the client is told to wait (as in a multi-device or multi-party authorization process), it can poll the transaction endpoint again after the indicated time window. After successful interaction, the client will continue a transaction with the authorization server. This can result in additional responses to continue the transaction, as needed.
 
-After successful authorization, the client will continue a transaction with the authorization server. This can result in additional responses to continue the transaction, as needed.
+The AS might instead determine that no interaction from a user is required, such as is the case in OAuth 2's client credentials and assertion flows, and UMA 2's push-based claims flows. In any of these cases, the AS can determine that the presentation of a particular set of keys and assertions for a certain set of resources is sufficient for issuance of an access token, and the process can continue.
 
 Upon successful authorization, the authorization server will <Link to="/tokens">issue an access token for use at the API</Link>. 
-

@@ -8,7 +8,7 @@ import Code from '../components/code'
 
 # Transaction Request
 
-The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint.
+The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
 
 The transaction request contains five parts:
  - `client` includes information about how the client software making the request
@@ -66,6 +66,8 @@ The `key` parameter lets the client tell the AS which keys it is able to prove o
 The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions.
 
 Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
+
+> We need a mechanism for the AS to issue keys to the client during this process, and to acknowledge that it's accepted the presentation and proof of any keys sent by the client.
 
 ## User
 

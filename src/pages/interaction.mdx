@@ -77,6 +77,12 @@ Note that the AS has to use a proper URL builder in case the client's callback U
 
 > This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates.
 
+Once the AS creates the redirect response to the interaction request, the AS deletes or otherwise deactivates the interaction URL to prevent phishing and replay attacks. 
+
+If the AS determines that there is an error during the interaction, its response depends on whether or not the incoming interaction URL was valid.
+ - If the URL was valid and bound to an active transaction, the AS can return to the client as in a sucessful transaction. The client needs to send data to the transaction endpoint to determine next steps.
+ - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
+ 
 The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native aplication, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `state` parameter and compare its value to the hash of its stored state parameter from the start of the transaction. 
 
 The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.

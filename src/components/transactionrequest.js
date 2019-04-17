@@ -52,7 +52,7 @@ class TransactionRequest extends React.Component {
     key: {
       full: {
           type: "jwsd",
-          uri: {
+          jwks: {
   "keys": [
     {
       "kty": "RSA",
