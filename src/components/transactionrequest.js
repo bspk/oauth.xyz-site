@@ -1,8 +1,9 @@
 import React from 'react'
 
 import Code from '../components/code.js'
-import ToggleButton from 'react-bootstrap/ToggleButton'
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import Selector from '../components/selector.js'
+import SelectorList from '../components/selectorlist.js'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 class TransactionRequest extends React.Component {
 
@@ -62,10 +63,10 @@ class TransactionRequest extends React.Component {
   state = {
       transaction: {
         client: this.codeValues.client.full,
-        user: this.codeValues.user.full,
         resources: this.codeValues.resources.handle,
         interact: this.codeValues.interact.omit,
-        keys: this.codeValues.keys.omit
+        keys: this.codeValues.keys.omit,
+        user: this.codeValues.user.full
       },
       selected: {
         client: 'full',
@@ -78,6 +79,17 @@ class TransactionRequest extends React.Component {
 
   
   change = (field) => (value) => {
+
+    // if we're toggling everything at once
+    if (field == 'all') {
+      this.change('client')(value);
+      this.change('interact')(value);
+      this.change('resources')(value);
+      this.change('user')(value);
+      this.change('keys')(value);
+      return;
+    }
+    
     const val = this.codeValues[field][value];
     
     const t = this.state.transaction;
@@ -97,11 +109,14 @@ class TransactionRequest extends React.Component {
 
     return (
       <div>
-          <Selector onChange={this.change('client')} label="Client" selected={this.state.selected.client} /><br />
-          <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  /><br />
-          <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} /><br />
-          <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} /><br />
-          <Selector onChange={this.change('keys')} label="Keys" selected={this.state.selected.keys} /><br />
+          <SelectorList>
+            <Selector onChange={this.change('client')} label="Client" selected={this.state.selected.client} />
+            <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  />
+            <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} />
+            <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} />
+            <Selector onChange={this.change('keys')} label="Keys" selected={this.state.selected.keys} />
+            <Selector onChange={this.change('all')} label="All" all />
+          </SelectorList>
           <Code code={this.state.transaction} />
       </div>
     );
@@ -110,32 +125,4 @@ class TransactionRequest extends React.Component {
 
 };
 
-/*
-const Selector = ({onChange, label, selected}) => {
-  return (
-    <label>
-      <select value={selected} onChange={onChange}>
-        <option value="full">Fully specified</option>
-        <option value="handle">Handle</option>
-        <option value="omit">Omit</option>
-      </select>
-      {label}
-    </label>
-  );
-};
-*/
-
-const Selector = ({onChange, label, selected}) => {
-  return (
-    <ToggleButtonGroup name={label} value={selected} onChange={onChange}>
-      <ToggleButton variant="link" disabled value="label">{label}: </ToggleButton>
-      <ToggleButton variant="primary" value="full">Full</ToggleButton>
-      <ToggleButton variant="primary" value="handle">Handle</ToggleButton>
-      <ToggleButton variant="primary" value="omit">Omit</ToggleButton>
-    </ToggleButtonGroup>
-  );
-}
-
-
-  
 export default TransactionRequest;
