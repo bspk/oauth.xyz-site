@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Code from '../components/code.js'
-import Selector from '../components/selector.js'
-import SelectorList from '../components/selectorlist.js'
+import Code from '../components/code'
+import Selector from '../components/selector'
+import SelectorList from '../components/selectorlist'
 
 class TransactionRequest extends React.Component {
 
@@ -121,10 +121,10 @@ class TransactionRequest extends React.Component {
       <div>
           <SelectorList>
             <Selector onChange={this.change('client')} label="Client" selected={this.state.selected.client} />
-            <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  />
             <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} />
-            <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} />
+            <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  />
             <Selector onChange={this.change('key')} label="Key" selected={this.state.selected.key} />
+            <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} />
             <Selector onChange={this.change('all')} label="All" all />
           </SelectorList>
           <Code code={this.state.transaction} />
