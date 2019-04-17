@@ -80,9 +80,9 @@ class TransactionRequest extends React.Component {
       },
       selected: {
         client: 'full',
-        user: 'full',
+        user: 'omit',
         resources: 'handle',
-        interact: 'omit',
+        interact: 'full',
         key: 'omit'
       }
   }
