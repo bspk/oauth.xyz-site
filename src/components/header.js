@@ -16,6 +16,10 @@ const menuLinks = [
         link: '/keys/'
       },
       {
+        name: 'Tokens',
+        link: '/tokens/'
+      },
+      {
         name: 'About',
         link: '/about/'
       },
