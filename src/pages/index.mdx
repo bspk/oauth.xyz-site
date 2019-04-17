@@ -1,15 +1,14 @@
 import { Link } from 'gatsby'
 
-import Layout from '../components/layout'
-import Image from '../components/image'
-
 # The proposal
 
 OAuth 2 is one of the most successful security protocols in use today. Even so, in its wide use, the protocol has come up against some of its own limitations. This is a proposal for a transactional authorization protocol XYZ to address the things that OAuth 2 doesn't handle well on its own. Optimizations and decisions that made sense in OAuth 2 don't make as much sense today. We are in a different world, and perhaps it's time we started to look to a different protocol.
 
-But we're not trying to invent something in a vacuum. In particular, OAuth 2 has been extended to cover a wide variety of client applications, deployments, and use cases. Unfortunately, this has led to a number of components that are almost--but not quite--solving the same problems in similar ways. 
+But we're not trying to invent something in a vacuum. In particular, OAuth 2 has been extended to cover a wide variety of client applications, deployments, and use cases. While this flexibility and extensibility is one of OAuth 2's strengths, this has unfortunately led to a number of components that are almost--but not quite--solving the same problems in similar ways. PKCE, UMA, CIBA, OBUK, FAPI, and a host of other extensions to OAuth 2 make use of temporary credentials to let the protocol behave in new ways. 
 
-This protocol, which I'm naming "XYZ" for the moment, is based on a transactional model. The client of the API declares who it is and what it wants, the AS figures out what information it needs to fulfill that (which might include interacting with a user), and ultimately a token is produced. All along the way, components have the opportunity to bind keys to different parts of the transaction.
+This protocol, which I'm calling "XYZ" for the moment, is based on a transactional model. The client of the API declares who it is and what it wants, the AS figures out what information it needs to fulfill that (which might include interacting with a user), and ultimately a token is produced. All along the way, components have the opportunity to bind keys to different parts of the transaction so that attackers can't take over.
+
+The XYZ protocol is not intended to be directly compatible with OAuth 2, much in the same way that OAuth 2 was not directly compatible with OAuth 1. However, the concepts and many of the goals should feel familiar to developers used to these existing protocols and their extensions. 
 
 # The process
 

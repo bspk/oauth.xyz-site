@@ -15,6 +15,10 @@ const menuLinks = [
         name: 'Keys',
         link: '/keys/'
       },
+      {
+        name: 'About',
+        link: '/about/'
+      },
 ]
 
 

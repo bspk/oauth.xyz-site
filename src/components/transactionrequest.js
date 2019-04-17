@@ -3,7 +3,6 @@ import React from 'react'
 import Code from '../components/code.js'
 import Selector from '../components/selector.js'
 import SelectorList from '../components/selectorlist.js'
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 class TransactionRequest extends React.Component {
 
@@ -14,7 +13,7 @@ class TransactionRequest extends React.Component {
           uri: "https://example.net/client"
       },
       handle: {
-        handle: "87ytghio0987yhjk"
+        handle: "VBUEOIQA82PBY2ZDJW7Q"
       }
     },
     
@@ -22,40 +21,51 @@ class TransactionRequest extends React.Component {
       full: {
         type: "redirect",
         callback: "https://client.example.net/return/123455",
-        state: "98764389312-81341978d-1"
+        state: "LKLTI25DK82FX4T4QFZC"
       },
       handle: {
-        handle: "23409872543698-1345"
+        handle: "JMMLJ6393FI7ST9B1SRS"
       }
     },
     
     user: {
       full: {
-          assertion: "eyj0...",
+          assertion: "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ",
           type: "oidc_id_token"
       },
       handle: {
-        handle: "baabanealkjasdwfeasvd"
+        handle: "XUT2MFM1XBIKJKSDU8QM"
       }
     },
     
     resources: {
       full: [{
-          name: "My Client Display Name",
-          uri: "https://example.net/client"
+          actions: ["read", "write", "dolphin"],
+          locations: ["https://server.example.net/", "https://resource.local/other"],
+          data: ["metadata"]
       }],
       handle: [{
-        handle: "87ytghio0987yhjk"
+        handle: "dolphin-metadata"
       }]
     },
     
-    keys: {
+    key: {
       full: {
-          name: "My Client Display Name",
-          uri: "https://example.net/client"
+          type: "jwsd",
+          uri: {
+  "keys": [
+    {
+      "kty": "RSA",
+      "e": "AQAB",
+      "kid": "xyz-1",
+      "alg": "RS256",
+      "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
+    }
+  ]
+}
       },
       handle: {
-        handle: "87ytghio0987yhjk"
+        handle: "7C7C4AZ9KHRS6X63AJAO"
       }
     }
   }
@@ -65,7 +75,7 @@ class TransactionRequest extends React.Component {
         client: this.codeValues.client.full,
         resources: this.codeValues.resources.handle,
         interact: this.codeValues.interact.omit,
-        keys: this.codeValues.keys.omit,
+        key: this.codeValues.key.omit,
         user: this.codeValues.user.full
       },
       selected: {
@@ -73,7 +83,7 @@ class TransactionRequest extends React.Component {
         user: 'full',
         resources: 'handle',
         interact: 'omit',
-        keys: 'omit'
+        key: 'omit'
       }
   }
 
@@ -81,12 +91,12 @@ class TransactionRequest extends React.Component {
   change = (field) => (value) => {
 
     // if we're toggling everything at once
-    if (field == 'all') {
+    if (field === 'all') {
       this.change('client')(value);
       this.change('interact')(value);
       this.change('resources')(value);
       this.change('user')(value);
-      this.change('keys')(value);
+      this.change('key')(value);
       return;
     }
     
@@ -114,7 +124,7 @@ class TransactionRequest extends React.Component {
             <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  />
             <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} />
             <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} />
-            <Selector onChange={this.change('keys')} label="Keys" selected={this.state.selected.keys} />
+            <Selector onChange={this.change('key')} label="Key" selected={this.state.selected.key} />
             <Selector onChange={this.change('all')} label="All" all />
           </SelectorList>
           <Code code={this.state.transaction} />

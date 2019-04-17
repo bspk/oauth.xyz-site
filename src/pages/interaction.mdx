@@ -1,0 +1,50 @@
+import Code from "../components/code.js"
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+# Interaction
+
+During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the transaction request, the client tells the AS how it is able to interact with the user, including information on how to get back to the server when done. 
+
+Currently, two modes of interaction are defined: 
+
+ - The `redirect` mode is used when the client is capable of opening a browser on the same device for the user to interact with the AS.
+ - The `device` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
+ 
+## Redirect
+
+To use this mode, the client's transaction request includes a section that includes a URI the client can receive requests at as well as a unique state value. 
+
+<Code
+  code={{
+"transaction": {
+  "interact": {
+    "type": "redirect",
+    "callback": "https://client.foo",
+    "state": "VJLO6A4CAYLBXHTR0KRO"
+  }
+}
+  }}
+/>
+
+The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used.
+
+When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The interaction URI is for a user-facing page at the AS.
+
+<Code
+  code={{
+interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+  }}
+/>
+
+Much like the callback URI, the interaction URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open.
+
+The client sends the user to the URL completely as-is, without adding any query parameters, fragments, paths, or other components. If the client is a web server, it can send the user to the remote site via an HTTP redirect.
+
+<SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
+Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ`}</SyntaxHighlighter>
+
+If the client is a mobile application, such as an Android app, it can launch the system browser for interaction.
+
+<SyntaxHighlighter language='java' style={okaidia}>{`Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"));
+startActivity(browserIntent);`}</SyntaxHighlighter>
