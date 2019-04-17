@@ -2,6 +2,7 @@ import { Link } from 'gatsby'
 
 import TransactionRequest from '../components/transactionrequest'
 import SEO from '../components/seo'
+import Code from '../components/code'
 
 <SEO title="Transaction Request" keywords={['oauth', 'authorization', 'security']} />
 
@@ -9,4 +10,67 @@ import SEO from '../components/seo'
 
 The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint.
 
+The transaction request contains five parts:
+ - `client` includes information about how the client software making the request
+ - `resources` contains a list of resources that the client is requesting access tok
+ - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
+ - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
+ - `user` contains assertions about the current user 
+ 
+Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or keys when used with a client handle. 
+
+This example shows how the different sections can be composed with each other in a transaction request.
+
 <TransactionRequest />
+
+Each of the sections is detailed below.
+
+## Client
+
+The `client` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
+
+The AS can statically issue a client handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
+
+A client that is accessing things of its own accord and not on behalf of a user has to be pre-registered with a handle in this way and attached to a key.
+
+An AS can also dynamically generate a client handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify itself in future transactions.
+
+## Resources
+
+The `resources` paramter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
+
+<Code code={{
+          actions: ["read", "write", "dolphin"],
+          locations: ["https://server.example.net/", "https://resource.local/other"],
+          data: ["metadata"]
+}} />
+
+An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can deterine a default set of resources for a client not asking for anything specifically.
+
+An AS can also dynamically generate a resources handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify this same kind of request in future transactions.
+
+The client can send several of these objects of handles in a single request, which the AS interprets as the client requesting access to all of the resources. 
+
+## Interact
+
+The `interact` parameter lets the client tell the AS how to get a user to interact with the AS during a transaction. 
+
+More detail is found in the <Link to="/interaction">Interaction</Link> section.
+
+> Do we care about an interact handle? Redirect based clients need to send a new state parameter every time anyway, and could potentially send a new callback URL while they're at it.
+
+## Key
+
+The `key` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction. 
+
+The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions.
+
+Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
+
+## User
+
+The `user` parameter lets the client pass information to the AS about the current user in the form of an assertion or other set of claims gathered from a trusted source. These claims need to be able to be validated by the AS, and it should be additionally validated that the client is an authorized holder of this information. 
+
+While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction in appropriately trusted scenarios.
+
+The AS can dynamically generate a user handle and return it to the client in the transaction response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
