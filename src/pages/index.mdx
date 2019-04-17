@@ -16,11 +16,11 @@ The XYZ protocol is not intended to be directly compatible with OAuth 2, much in
 
 # The process
 
-In XYZ, a client that needs to talk to an API first <Link to="/transactionrequest">begins an authorization transaction</Link> with the authorization server. This request includes information about the client, the user, the API being requested, the ways the client can interact with the user, and any keys the client can prove possession of.
+In XYZ, a client that needs to talk to an API first <Link to="/transactionrequest">begins an authorization transaction</Link> with the authorization server. This request includes information about the client, the user, the API being requested, the ways the client can interact with the user, and any <Link to="/keys">keys the client can prove possession of</Link>.
 
-The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interactresponse">interact with the user</Link> or <Link to="/waitresponse">wait for a server-side action</Link>, depending on the nature of the client and what the authorization server needs.
+The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interaction">interact with the user</Link> or wait for a server-side action, depending on the nature of the client and what the authorization server needs.
 
-After successful authorization, the client will <Link to="/transactioncontinue">continue a transaction</Link> with the authorization server. This can result in additional <Link to="/interactresponse">interact</Link> or <Link to="/waitresponse">wait</Link> responses as needed.
+After successful authorization, the client will continue a transaction with the authorization server. This can result in additional responses to continue the transaction, as needed.
 
-Upon successful authorization, the authorization server will <Link to="/tokenresponse">issue an access token for use at the API</Link>. 
+Upon successful authorization, the authorization server will <Link to="/tokens">issue an access token for use at the API</Link>. 
 
