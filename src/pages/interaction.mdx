@@ -1,6 +1,9 @@
 import Code from "../components/code.js"
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import SEO from '../components/seo'
+
+<SEO title="Interaction" keywords={['oauth', 'authorization', 'security']} />
 
 # Interaction
 
@@ -12,6 +15,8 @@ Currently, two modes of interaction are defined:
  - The `device` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
  
 ## Redirect
+
+In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
 
 To use this mode, the client's transaction request includes a section that includes a URI the client can receive requests at as well as a unique state value. 
 
@@ -27,13 +32,17 @@ To use this mode, the client's transaction request includes a section that inclu
   }}
 />
 
-The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used.
+The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used. The state value is opaque to the AS and should be random. The client remembers this state value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the state value is remembered in the application's current state.
 
-When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The interaction URI is for a user-facing page at the AS.
+When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
 
 <Code
   code={{
-interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+handle: {
+  value: "80UPRY5NM33OMUKMKSKU",
+  type: "bearer"
+}
   }}
 />
 
@@ -46,5 +55,95 @@ Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ`}</SyntaxHigh
 
 If the client is a mobile application, such as an Android app, it can launch the system browser for interaction.
 
-<SyntaxHighlighter language='java' style={okaidia}>{`Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"));
+<SyntaxHighlighter language='java' style={okaidia}>{`Intent browserIntent = 
+  new Intent(Intent.ACTION_VIEW, 
+    Uri.parse("https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"));
 startActivity(browserIntent);`}</SyntaxHighlighter>
+
+Obviously, any method including an embedded security tab such as used by the AppAuth implementation of OAuth 2 is also acceptable. The important thing is to get the current user to the AS, where they can start interacting.
+
+Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
+
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
+ - the Base64 URL encoded SHA3 hash of the `state` value sent by the client in that same request as a query parameter. 
+ - a unique interaction handle, which is both opaque and unguessable, in this example `4IFWWIKYBC2PQ6U56NL1`
+
+<SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
+Location: https://client.foo/
+  ?state=WiQw-eN-ZA0Dkx8l1ytzc3h-I9xU1RRHO-1I68sdKS-ytjQXL8_CuSpWJYeqRTGL0KyTOraz2u-DedC9UG4mkw
+  &interact=4IFWWIKYBC2PQ6U56NL1`}</SyntaxHighlighter>
+
+Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
+
+> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates.
+
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native aplication, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `state` parameter and compare its value to the hash of its stored state parameter from the start of the transaction. 
+
+The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
+
+<Code
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU",
+    interact: {
+      handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
+    }    
+  }} />
+
+The AS looks up the transaction from the transaction handle and fetches the interaction handle associated with that transaction. The AS compares the presented handle to hash of the stored interaction handle it appended to the client's callback. If they match, the AS continues processing as normal, likely issuing a token.
+
+## Device
+
+The device-based interaction is intended for clients that need to have the user use a secondary device of some kind to interact with the authorization server. Unlike the redirect based interaction, the client does not send the user to the AS directly. Instead, the client presents the user with a code and instructs the user to interact with the server. Meanwhile, the client polls the AS in the background until the transaction is approved.
+
+The client starts this mode by sending a transaction request indicating that the user will interact with the AS through a secondary device. 
+
+<Code
+  code={{
+"transaction": {
+  "interact": {
+    "type": "device"
+  }
+}
+  }}
+/>
+
+When the AS determines that the client's request needs user interaction, it sends an interaction URI in the transaction response. The interaction URI is for a user-facing page at the AS, and this can be a static URI for this mode. The AS also includes a short user-facing code. This code must be random, short-lived, and easily typed by a user. It must be processed in a case-insensitive way, and should use characters that are unambiguous when displayed even at low resolution (e.g., not using both the `0` (zero) and `O` (letter O) characters as options).
+
+<Code
+  code={{
+interaction_url: "https://server.example.com/interact/device",
+user_code: "A1BC-3DFF",
+handle: {
+  value: "80UPRY5NM33OMUKMKSKU",
+  type: "bearer"
+}
+  }}
+/>
+
+The client presents the user code to the user. The client also indicates to the user that they need to go to the interaction URL. As this is likely to be a static URL, the AS can provide a static link to this page. 
+
+Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol. At the interaction page, the user is prompted to enter the code from their device. The AS uses this code to look up the associated transaction to determine which actions it needs to take.
+
+When the AS has collected whatever additional input it needs from the user, it displays to the user that they can return to their device and continue operation.
+
+> To completely close a session-fixation attack, we could require the AS to present another code to the user and have the user enter that into the client device. This only works on some kinds of devices, though, so it would need to be an option. Additionally, we might want to consider a kind of "secondary application" based interaction that isn't web-based.
+
+Meanwhile, the client can poll the AS using the transaction handle to see if the user has authorized them yet. This request includes proofs of any keys that the client sent during the original transaction request.
+
+<Code
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU"
+  }} />
+
+If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
+
+<Code
+  code={{
+  wait: 30,
+  handle: {
+    value: "BI9QNW6V9W3XFJK4R02D",
+    method: "bearer"
+  }
+}} />
+
+The `wait` parameter tells the client the number of integer seconds it must wait before polling again. The client can continue to poll in this manner until it receives either a token response or the user code times out and the client receives an error response.

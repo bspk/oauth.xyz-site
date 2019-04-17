@@ -661,3 +661,9 @@ nav li a:hover {
 .selectorList li {
   list-style: none;
 }
+
+blockquote {
+  background: #ffffee;
+  padding: 1rem 3rem;
+  border-left: 4px solid #ddddcc;
+}
