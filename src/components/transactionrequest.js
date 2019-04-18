@@ -73,17 +73,17 @@ class TransactionRequest extends React.Component {
   state = {
       transaction: {
         client: this.codeValues.client.full,
-        user: this.codeValues.user.omit,
         resources: this.codeValues.resources.handle,
         interact: this.codeValues.interact.full,
-        key: this.codeValues.key.omit
+        key: this.codeValues.key.omit,
+        user: this.codeValues.user.omit
       },
       selected: {
         client: 'full',
-        user: 'omit',
         resources: 'handle',
         interact: 'full',
-        key: 'omit'
+        key: 'omit',
+        user: 'omit'
       }
   }
 
