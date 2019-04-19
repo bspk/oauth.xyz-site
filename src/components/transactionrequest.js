@@ -8,6 +8,7 @@ class TransactionRequest extends React.Component {
 
   codeValues = {
     client: {
+      label: 'Client',
       full: {
           name: "My Client Display Name",
           uri: "https://example.net/client"
@@ -18,6 +19,7 @@ class TransactionRequest extends React.Component {
     },
     
     interact: {
+      label: 'Interact',
       full: {
         type: "redirect",
         callback: "https://client.example.net/return/123455",
@@ -29,6 +31,7 @@ class TransactionRequest extends React.Component {
     },
     
     user: {
+      label: 'User',
       full: {
           assertion: "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ",
           type: "oidc_id_token"
@@ -39,6 +42,7 @@ class TransactionRequest extends React.Component {
     },
     
     resources: {
+      label: 'Resources',
       full: [{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
@@ -50,6 +54,7 @@ class TransactionRequest extends React.Component {
     },
     
     key: {
+      label: 'Key',
       full: {
           type: "jwsd",
           jwks: {
@@ -71,20 +76,13 @@ class TransactionRequest extends React.Component {
   }
   
   state = {
-      transaction: {
-        client: this.codeValues.client.full,
-        resources: this.codeValues.resources.handle,
-        interact: this.codeValues.interact.full,
-        key: this.codeValues.key.omit,
-        user: this.codeValues.user.omit
-      },
-      selected: {
-        client: 'full',
-        resources: 'handle',
-        interact: 'full',
-        key: 'omit',
-        user: 'omit'
-      }
+    selected: {
+      client: 'full',
+      resources: 'handle',
+      interact: 'full',
+      key: 'omit',
+      user: 'omit'
+    }
   }
 
   
@@ -92,24 +90,16 @@ class TransactionRequest extends React.Component {
 
     // if we're toggling everything at once
     if (field === 'all') {
-      this.change('client')(value);
-      this.change('interact')(value);
-      this.change('resources')(value);
-      this.change('user')(value);
-      this.change('key')(value);
+      Object.keys(this.state.selected).forEach((field) => {
+        this.change(field)(value);
+      });
       return;
     }
-    
-    const val = this.codeValues[field][value];
-    
-    const t = this.state.transaction;
-    t[field] = val;
-    
+
     const s = this.state.selected;
     s[field] = value;
     
     this.setState({
-      transaction: t,
       selected: s
     });
     
@@ -117,17 +107,27 @@ class TransactionRequest extends React.Component {
   
   render = () => {
 
+    // build the transaction object based on the current selection
+    const transaction = Object.keys(this.codeValues).reduce((result, key) => {
+      result[key] = this.codeValues[key][this.state.selected[key]];
+      return result;
+    }, {});
+    
+    // build the selectors
+    const selectors = Object.keys(this.codeValues).map((field) => {
+      return (
+        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} />
+      );
+    })
+    // add the "all" selector
+    .concat(<Selector onChange={this.change('all')} label="All" all />);
+
     return (
       <div>
           <SelectorList>
-            <Selector onChange={this.change('client')} label="Client" selected={this.state.selected.client} />
-            <Selector onChange={this.change('resources')} label="Resources" selected={this.state.selected.resources} />
-            <Selector onChange={this.change('interact')} label="Interact" selected={this.state.selected.interact}  />
-            <Selector onChange={this.change('key')} label="Key" selected={this.state.selected.key} />
-            <Selector onChange={this.change('user')} label="User" selected={this.state.selected.user} />
-            <Selector onChange={this.change('all')} label="All" all />
+            {selectors}
           </SelectorList>
-          <Code code={this.state.transaction} />
+          <Code code={transaction} />
       </div>
     );
   
