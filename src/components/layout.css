@@ -662,6 +662,16 @@ nav li a:hover {
   list-style: none;
 }
 
+.selector :nth-child(2) {
+  border-top-left-radius: 40% !important;
+  border-bottom-left-radius: 40% !important;
+}
+
+.selector :last-child {
+  border-top-right-radius: 40%;
+  border-bottom-right-radius: 40%;
+}
+
 blockquote {
   background: #ffffee;
   padding: 1rem 3rem;

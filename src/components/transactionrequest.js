@@ -114,13 +114,19 @@ class TransactionRequest extends React.Component {
     }, {});
     
     // build the selectors
+    const options = {
+      full: "Full",
+      handle: "Handle",
+      omit: "Omit"
+    };
+    
     const selectors = Object.keys(this.codeValues).map((field) => {
       return (
-        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} />
+        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={options} />
       );
     })
     // add the "all" selector
-    .concat(<Selector onChange={this.change('all')} label="All" all />);
+    .concat(<Selector onChange={this.change('all')} label="All" all options={options} />);
 
     return (
       <div>
