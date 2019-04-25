@@ -90,9 +90,7 @@ The client then sends a transaction continue request to the AS including the int
 <Code
   code={{
     handle: "80UPRY5NM33OMUKMKSKU",
-    interact: {
-      handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
-    }    
+    interact_handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
   }} />
 
 The AS looks up the transaction from the transaction handle and fetches the interaction handle associated with that transaction. The AS compares the presented handle to hash of the stored interaction handle it appended to the client's callback. If they match, the AS continues processing as normal, likely issuing a token.

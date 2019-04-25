@@ -20,6 +20,10 @@ const menuLinks = [
         link: '/tokens/'
       },
       {
+        name: 'Specification',
+        link: '/specification/'
+      },
+      {
         name: 'About',
         link: '/about/'
       },
