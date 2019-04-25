@@ -8,10 +8,10 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 const Selector = ({onChange, label, selected, all, options}) => {
   
   if (!options) {
-    options = new Map({
+    options = {
       on: "On",
       off: "Off"
-    });
+    };
   }
   
   const elements = [<ToggleButton variant="link" disabled value="label">{label}: </ToggleButton>]

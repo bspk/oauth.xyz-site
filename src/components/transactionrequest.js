@@ -114,11 +114,11 @@ class TransactionRequest extends React.Component {
     }, {});
     
     // build the selectors
-    const options = new Map({
+    const options = {
       full: "Full",
       handle: "Handle",
       omit: "Omit"
-    });
+    };
     
     const selectors = Object.keys(this.codeValues).map((field) => {
       return (
