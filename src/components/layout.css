@@ -638,24 +638,21 @@ pre tt:after {
   margin-top: 0.3rem;
 }
 
-.header nav li {
-  list-style: none;
+.header nav a {
   padding-left: 0.2rem;
   padding-right: 0.2rem;
-  color: #eebbbb;
-}
-
-.header nav li:before{
-  content: "\00BB ";
-}
-
-nav li a {
   color: white;
   text-decoration: none;
 }
 
-nav li a:hover {
+.header nav a:before{
+  color: #eebbbb;
+  content: "\00BB\00A0";
+}
+
+.header nav a:hover {
   color: white;
+  text-decoration: underline;
 }
 
 .selectorList li {

@@ -44,12 +44,11 @@ const Header = ({ siteTitle, currentPage }) => (
           {siteTitle}
         </Link>
       </h1>
-          <nav style={{ display: 'flex', flex: 1 }}>
-            {
+          <nav>
+          {
               menuLinks.map(link =>
-                <li key={link.name}>
                   <Link to={link.link}>{link.name}</Link>
-                </li> )
+              )
             }
           </nav>
     </div>
