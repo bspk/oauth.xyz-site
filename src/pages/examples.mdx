@@ -28,7 +28,7 @@ The client credentials grant in XYZ is simply one that does not require user int
 
 The resource owner grant could be replicated in XYZ by presenting the user's credentials as part of the `user` section of the transaction request. However, even more powerfully, the client can present a wide variety of verifiable assertions in this section for the AS to validate and interpret as it sees fit. Chained authorization and authentication are possible in this way, as are forms of linked delegation for cases where the client already knows who the user is and has the authority to do something on their behalf, but needs to translate the authentication to somethign that can be used further downstream. 
 
-##Dynamic Registration
+## Dynamic Registration
 
 OAuth 2 makes the assumption that all clients have been registered with the authorization server ahead of time, and that this registration includes a wide swath of information about the cleint software, including its capabilites, its keys, its identity, and other items. This assumption lead to the development of the dynamic registration protocol to allow client instances to be managed at runtime, but at the cost of an additional round trip.
 
