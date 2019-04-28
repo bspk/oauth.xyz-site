@@ -1,0 +1,17 @@
+import { Link } from 'gatsby'
+
+import TransactionResponse from '../components/transactionresponse'
+import SEO from '../components/seo'
+import Code from '../components/code'
+
+<SEO title="Transaction Request" keywords={['oauth', 'authorization', 'security']} />
+
+# Transaction Response
+
+The response from the transaciton endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
+
+If the transaction can be continued by the client, the AS includes a transaction handle in the response as well. This handle is used by the client for any subsequent references to this transaciton. 
+
+The response can also include handles that the client can use in future transactions in lieu of any of the request sections.
+
+<TransactionResponse />

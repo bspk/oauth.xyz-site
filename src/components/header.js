@@ -8,6 +8,10 @@ const menuLinks = [
         link: '/transactionrequest/'
       },
       {
+        name: 'Response',
+        link: '/transactionresponse/'
+      },
+      {
         name: 'Interaction',
         link: '/interaction/'
       },
