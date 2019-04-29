@@ -4,13 +4,13 @@ import TransactionResponse from '../components/transactionresponse'
 import SEO from '../components/seo'
 import Code from '../components/code'
 
-<SEO title="Transaction Request" keywords={['oauth', 'authorization', 'security']} />
+<SEO title="Transaction Response" keywords={['oauth', 'authorization', 'security']} />
 
 # Transaction Response
 
-The response from the transaciton endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
+The response from the transaction endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
 
-If the transaction can be continued by the client, the AS includes a transaction handle in the response as well. This handle is used by the client for any subsequent references to this transaciton. 
+If the transaction can be continued by the client, the AS includes a transaction handle in the response as well. This handle is used by the client for any subsequent references to this transaction. 
 
 The response can also include handles that the client can use in future transactions in lieu of any of the request sections.
 
@@ -34,7 +34,7 @@ If a `client_handle` is returned by the AS, the client can use this handle in li
 
 ## Interact Handle
 
-If an `interact_handle` is returned by the AS, the client can use this handle in lieu of the `interact` portion of the transaction request in future transations. However, for a redirect based interaction, as this section includes the `state` value which is supposed to be unguessable and unique per transaction, this response doesn't make sense in such cases.
+If an `interact_handle` is returned by the AS, the client can use this handle in lieu of the `interact` portion of the transaction request in future transactions. However, for a redirect based interaction, as this section includes the `state` value which is supposed to be unguessable and unique per transaction, this response doesn't make sense in such cases.
 
 ## User Handle
 

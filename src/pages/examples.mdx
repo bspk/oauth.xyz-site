@@ -26,11 +26,11 @@ The client credentials grant in XYZ is simply one that does not require user int
 
 ## Resource Owner and Assertion
 
-The resource owner grant could be replicated in XYZ by presenting the user's credentials as part of the `user` section of the transaction request. However, even more powerfully, the client can present a wide variety of verifiable assertions in this section for the AS to validate and interpret as it sees fit. Chained authorization and authentication are possible in this way, as are forms of linked delegation for cases where the client already knows who the user is and has the authority to do something on their behalf, but needs to translate the authentication to somethign that can be used further downstream. 
+The resource owner grant could be replicated in XYZ by presenting the user's credentials as part of the `user` section of the transaction request. However, even more powerfully, the client can present a wide variety of verifiable assertions in this section for the AS to validate and interpret as it sees fit. Chained authorization and authentication are possible in this way, as are forms of linked delegation for cases where the client already knows who the user is and has the authority to do something on their behalf, but needs to translate the authentication to something that can be used further downstream. 
 
 ## Dynamic Registration
 
-OAuth 2 makes the assumption that all clients have been registered with the authorization server ahead of time, and that this registration includes a wide swath of information about the cleint software, including its capabilites, its keys, its identity, and other items. This assumption lead to the development of the dynamic registration protocol to allow client instances to be managed at runtime, but at the cost of an additional round trip.
+OAuth 2 makes the assumption that all clients have been registered with the authorization server ahead of time, and that this registration includes a wide swath of information about the client software, including its capabilities, its keys, its identity, and other items. This assumption lead to the development of the dynamic registration protocol to allow client instances to be managed at runtime, but at the cost of an additional round trip.
 
 In XYZ, the client has the choice of presenting all of this information during the transaction request. This dynamic request can be bound to keys during the transaction itself, and these keys can be created by the client instance (as would be likely in a native application) or supplied during the transaction response (as would potentially be the case with an SPA). These keys identify the instance, and the AS can return a client handle that the client can use to identify itself in future transactions. 
 
@@ -48,7 +48,7 @@ The main addition that OpenID Connect brings is the ability to pass identity inf
 
 Many of the additional mechanisms in OpenID Connect can be incorporated into the transaction request instead of being passed through the browser, including any `prompt`, `login_hint`, or vectors of trust parameters. Additionally, the `claims` mechanism can be readily incorporated into the `resources` portion of the request. 
 
-Other mechanisms in OpenID Connect become unnecessary additions, including the request object and hybrid signed response modes. Many of these components were invtend to overcome shortcomings in the OAuth 2 protocol that XYZ does not share. 
+Other mechanisms in OpenID Connect become unnecessary additions, including the request object and hybrid signed response modes. Many of these components were intend to overcome shortcomings in the OAuth 2 protocol that XYZ does not share. 
 
 ## CIBA
 
@@ -62,8 +62,8 @@ FAPI's request object endpoint allows a client to pre-register the request objec
 
 ## PKCE
 
-PKCE effectively creates an ephemeral key that the client can prove posession of at a later part of the process. With XYZ, the same results are an automatic side effect of the transactional process. The transaction handle is something known only to the client and is never passed through the front channel, and any interaction handle returned from the interaction endpoint makes sense only in the context of a specific transaction. Furthermore, the client's own keys can be bound to the transaction, making it even more difficult for an attacker to make use of a stolen interaction handle. 
+PKCE effectively creates an ephemeral key that the client can prove possession of at a later part of the process. With XYZ, the same results are an automatic side effect of the transactional process. The transaction handle is something known only to the client and is never passed through the front channel, and any interaction handle returned from the interaction endpoint makes sense only in the context of a specific transaction. Furthermore, the client's own keys can be bound to the transaction, making it even more difficult for an attacker to make use of a stolen interaction handle. 
 
 ## PoP
 
-The main goal of of OAuth 2's Proof of Posession extension work is to bind a set of runtime keys that the client can prove posession of to the token issued to the client. XYZ allows a client to bind keys during its transacton request, and these keys can be further bound to the access token. 
+The main goal of of OAuth 2's Proof of Possession extension work is to bind a set of runtime keys that the client can prove possession of to the token issued to the client. XYZ allows a client to bind keys during its transacton request, and these keys can be further bound to the access token. 
