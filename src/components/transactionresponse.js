@@ -90,16 +90,16 @@ class TransactionRequest extends React.Component {
   
   change = (field) => (value) => {
 
-    // if we're toggling everything at once
-    if (field === 'all') {
-      Object.keys(this.state.selected).forEach((field) => {
-        this.change(field)(value);
-      });
-      return;
-    }
-
     const s = this.state.selected;
     s[field] = value;
+    
+    if (field === 'handle' && value === 'off') {
+      s.interaction = 'access_token';
+    }
+    
+    if (field === 'interaction' && value !== 'access_token') {
+      s.handle = 'on';
+    }
     
     this.setState({
       selected: s
