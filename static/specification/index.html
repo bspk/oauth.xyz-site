@@ -611,7 +611,7 @@ provided to the RC, in the form of assertions or references to external
 data.  This section is OPTIONAL.</dd>
 <dt>interact</dt>
 <dd style="margin-left: 8">Information about how the RC is able to 
-interact with the RO, including callback URI's and state. This section 
+interact with the RO, including callback URL's and state. This section 
 is REQUIRED if the client is capable of driving interaction with the 
 user.</dd>
 <dt>keys</dt>
@@ -629,15 +629,15 @@ be optional.)</dd>
 <dl>
 <dt>name</dt>
 <dd style="margin-left: 8">Display name of the client software</dd>
-<dt>uri</dt>
+<dt>url</dt>
 <dd style="margin-left: 8">User-facing web page of the client software</dd>
-<dt>logo_uri</dt>
+<dt>logo_url</dt>
 <dd style="margin-left: 8">Display image to represent the client software</dd>
 </dl>
 <pre>client: {
 
   name: "Display Name",
-  uri: "https://example.com/client"
+  url: "https://example.com/client"
 
 }</pre>
 <p></p>
@@ -655,7 +655,7 @@ listed.</p>
 <dt>actions</dt>
 <dd style="margin-left: 8">The types of actions the RC will take at the RS</dd>
 <dt>locations</dt>
-<dd style="margin-left: 8">URIs the RC will call at the RS</dd>
+<dd style="margin-left: 8">URLs the RC will call at the RS</dd>
 <dt>data</dt>
 <dd style="margin-left: 8">types of data available to the RC at the RS's API</dd>
 </dl>
@@ -704,14 +704,14 @@ listed.</p>
 <p id="rfc.section.2.4.1.p.1">A redirect type interaction has the RC 
 send the RO to a URL at the AS and interact with the AS directly, using 
 any number of interactions. Following the interaction, the RO is sent 
-back to the RC using the "callback" URI.</p>
+back to the RC using the "callback" URL.</p>
 <p></p>
 
 <dl>
 <dt>type</dt>
 <dd style="margin-left: 8">MUST be "redirect"</dd>
 <dt>callback</dt>
-<dd style="margin-left: 8">REQUIRED. URI to send the user to after 
+<dd style="margin-left: 8">REQUIRED. URL to send the user to after 
 interaction, SHOULD (MUST?) be unique per transaction and hosted or 
 accessible by the RC. This URL MUST NOT contain any fragment component. 
 This URL MUST be protected by HTTPS, hosted on a server local to the 

@@ -18,7 +18,7 @@ Currently, two modes of interaction are defined:
 
 In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
 
-To use this mode, the client's transaction request includes a section that includes a URI the client can receive requests at as well as a unique state value. 
+To use this mode, the client's transaction request includes a section that includes a URL the client can receive requests at as well as a unique state value. 
 
 <Code
   code={{
@@ -32,9 +32,9 @@ To use this mode, the client's transaction request includes a section that inclu
   }}
 />
 
-The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used. The state value is opaque to the AS and should be random. The client remembers this state value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the state value is remembered in the application's current state.
+The URL must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URL that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used. The state value is opaque to the AS and should be random. The client remembers this state value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the state value is remembered in the application's current state.
 
-When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
+When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URL with the transaction. The interaction URL is for a user-facing page at the AS.
 
 <Code
   code={{
@@ -46,7 +46,7 @@ handle: {
   }}
 />
 
-Much like the callback URI, the interaction URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open.
+Much like the callback URL, the interaction URL must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URL that the user's browser can open.
 
 The client sends the user to the URL completely as-is, without adding any query parameters, fragments, paths, or other components. If the client is a web server, it can send the user to the remote site via an HTTP redirect.
 
@@ -64,7 +64,7 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. The AS creates the URL for the redirect by taking the `callback` URL presented in the transaction request and appending two parameters: 
  - the Base64 URL encoded SHA3 hash of the `state` value sent by the client in that same request as a query parameter. 
  - a unique interaction handle, which is both opaque and unguessable, in this example `4IFWWIKYBC2PQ6U56NL1`
 
@@ -75,13 +75,13 @@ Location: https://client.foo/
 
 Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
 
-> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates.
+> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URL that looks safe. Alternatively we could use URL templates.
 
 Once the AS creates the redirect response to the interaction request, the AS deletes or otherwise deactivates the interaction URL to prevent phishing and replay attacks. 
 
 If the AS determines that there is an error during the interaction, its response depends on whether or not the incoming interaction URL was valid.
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
- - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
+ - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URL alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
 The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `state` parameter and compare its value to the hash of its stored state parameter from the start of the transaction. 
 
@@ -111,7 +111,7 @@ The client starts this mode by sending a transaction request indicating that the
   }}
 />
 
-When the AS determines that the client's request needs user interaction, it sends an interaction URI in the transaction response. The interaction URI is for a user-facing page at the AS, and this can be a static URI for this mode. The AS also includes a short user-facing code. This code must be random, short-lived, and easily typed by a user. It must be processed in a case-insensitive way, and should use characters that are unambiguous when displayed even at low resolution (e.g., not using both the `0` (zero) and `O` (letter O) characters as options).
+When the AS determines that the client's request needs user interaction, it sends an interaction URL in the transaction response. The interaction URL is for a user-facing page at the AS, and this can be a static URL for this mode. The AS also includes a short user-facing code. This code must be random, short-lived, and easily typed by a user. It must be processed in a case-insensitive way, and should use characters that are unambiguous when displayed even at low resolution (e.g., not using both the `0` (zero) and `O` (letter O) characters as options).
 
 <Code
   code={{

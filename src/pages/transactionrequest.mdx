@@ -17,7 +17,7 @@ The transaction request contains five parts:
  - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
  - `user` contains assertions about the current user 
  
-Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or keys when used with a client handle. 
+Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URLs or keys when used with a client handle. 
 
 This example shows how the different sections can be composed with each other in a transaction request.
 
@@ -37,7 +37,7 @@ An AS can also dynamically generate a client handle and return it to the client 
 
 ## Resources
 
-The `resources` paramter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
+The `resources` paramter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URLs where those actions can be taken, and the kinds of data that the client expects access to. 
 
 <Code code={{
           actions: ["read", "write", "dolphin"],
