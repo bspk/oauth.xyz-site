@@ -12,7 +12,7 @@ The client begins the transaction by creating a transaction request. This is a `
 
 The transaction request contains five parts:
  - `client` includes information about how the client software making the request
- - `resources` contains a list of resources that the client is requesting access tok
+ - `resources` contains a list of resources that the client is requesting access to
  - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
  - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
  - `user` contains assertions about the current user 
@@ -37,7 +37,7 @@ An AS can also dynamically generate a client handle and return it to the client 
 
 ## Resources
 
-The `resources` paramter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
+The `resources` parameter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
 
 <Code code={{
           actions: ["read", "write", "dolphin"],
