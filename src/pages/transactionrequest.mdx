@@ -19,6 +19,8 @@ The transaction request contains five parts:
  
 Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or keys when used with a client handle. 
 
+Note that the JSON in all sections is potentially multimodal. That is to say, when sent as a fully-formed request, it is a JSON `object`. When sent as a handle, it is sent as a JSON `string`. 
+
 This example shows how the different sections can be composed with each other in a transaction request.
 
 <TransactionRequest />

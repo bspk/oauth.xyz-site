@@ -13,9 +13,7 @@ class TransactionRequest extends React.Component {
           name: "My Client Display Name",
           uri: "https://example.net/client"
       },
-      handle: {
-        handle: "VBUEOIQA82PBY2ZDJW7Q"
-      }
+      handle: "VBUEOIQA82PBY2ZDJW7Q"
     },
     
     interact: {
@@ -25,9 +23,7 @@ class TransactionRequest extends React.Component {
         callback: "https://client.example.net/return/123455",
         state: "LKLTI25DK82FX4T4QFZC"
       },
-      handle: {
-        handle: "JMMLJ6393FI7ST9B1SRS"
-      }
+      handle: "JMMLJ6393FI7ST9B1SRS"
     },
     
     user: {
@@ -36,9 +32,7 @@ class TransactionRequest extends React.Component {
           assertion: "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ",
           type: "oidc_id_token"
       },
-      handle: {
-        handle: "XUT2MFM1XBIKJKSDU8QM"
-      }
+      handle: "XUT2MFM1XBIKJKSDU8QM"
     },
     
     resources: {
@@ -48,9 +42,15 @@ class TransactionRequest extends React.Component {
           locations: ["https://server.example.net/", "https://resource.local/other"],
           data: ["metadata"]
       }],
-      handle: [{
-        handle: "dolphin-metadata"
-      }]
+      handle: ["dolphin-metadata"],
+      both: [
+        {
+                  actions: ["read", "write", "dolphin"],
+                  locations: ["https://server.example.net/", "https://resource.local/other"],
+                  data: ["metadata"]
+        },
+        "dolphin-metadata"        
+      ]
     },
     
     key: {
@@ -69,9 +69,7 @@ class TransactionRequest extends React.Component {
   ]
 }
       },
-      handle: {
-        handle: "7C7C4AZ9KHRS6X63AJAO"
-      }
+      handle: "7C7C4AZ9KHRS6X63AJAO"
     }
   }
   
@@ -117,13 +115,27 @@ class TransactionRequest extends React.Component {
     const options = {
       full: "Full",
       handle: "Handle",
-      omit: "Omit"
+      omit: "Off"
     };
     
     const selectors = Object.keys(this.codeValues).map((field) => {
-      return (
-        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={options} />
-      );
+      if (field == 'resources') {
+        
+        const moreOptions = {
+          full: "Full",
+          handle: "Handle",
+          both: "Both",
+          omit: "Off"
+        };
+        
+        return (
+          <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={moreOptions} />
+        );
+      } else {
+        return (
+          <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={options} />
+        );
+      }
     })
     // add the "all" selector
     .concat(<Selector onChange={this.change('all')} label="All" all options={options} />);
