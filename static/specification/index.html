@@ -419,7 +419,7 @@
 
   <meta name="dct.creator" content="Richer, J., Ed.">
   <meta name="dct.identifier" content="urn:ietf:id:draft-richer-transactional-authz-00">
-  <meta name="dct.issued" scheme="ISO8601" content="2019-04-30">
+  <meta name="dct.issued" scheme="ISO8601" content="2019-05-15">
   <meta name="dct.abstract" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software.">
   <meta name="description" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software.">
 
@@ -440,10 +440,10 @@
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">April 30, 2019</td>
+<td class="right">May 15, 2019</td>
 </tr>
 <tr>
-<td class="left">Expires: November 1, 2019</td>
+<td class="left">Expires: November 16, 2019</td>
 <td class="right"></td>
 </tr>
 
@@ -472,7 +472,7 @@ documents as Internet-Drafts.  The list of current Internet-Drafts is at
  and may be updated, replaced, or obsoleted by other documents at any 
 time.  It is inappropriate to use Internet-Drafts as reference material 
 or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 1, 2019.</p>
+<p>This Internet-Draft will expire on November 16, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal 
@@ -620,7 +620,7 @@ and able to be presented in future parts of the transaction. This
 section is REQUIRED. (Note: I can't think of a good reason for this to 
 be optional.)</dd>
 </dl>
-<p id="rfc.section.2.p.3">An AS MAY </p>
+<p id="rfc.section.2.p.3">An AS MAY</p>
 <h1 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> Client</h1>
 <p id="rfc.section.2.1.p.1">This section provides descriptive details of the client software making the call.</p>
@@ -668,7 +668,7 @@ listed.</p>
   }
 ]</pre>
 <p></p>
-<p id="rfc.section.2.2.p.4">This can also be presented as a set of resource handle references.</p>
+<p id="rfc.section.2.2.p.4">This can also be presented as a set of resource handle references, or a combination of handles and resource structures.</p>
 <h1 id="rfc.section.2.3">
 <a href="#rfc.section.2.3">2.3.</a> User</h1>
 <p id="rfc.section.2.3.p.1">This section provides a verifiable assertion about the RO interacting with the client on behalf of the request.</p>
@@ -864,7 +864,7 @@ See the section on transaction handles.</dd>
 <p></p>
 <p id="rfc.section.3.1.p.4">When the RC receives this response, it sends
  the RO to the interaction URL. When interacting with the RO, the AS MAY
- perform any of the behaviors in the User Interaction section. </p>
+ perform any of the behaviors in the User Interaction section.</p>
 <p id="rfc.section.3.1.p.5">Once the RO has completed the interaction 
 with the AS, the AS returns the user to the RC by redirecting the RO's 
 browser to the RC's callback URL presented at the start of the 
@@ -887,7 +887,7 @@ the underlying transaction that is associated to with this interaction.</dd>
 original transaction request. The RC then sends a transaction 
 continuation request with the transaction handle returned in the 
 interaction response and the (hash of?) the interaction handle returned 
-as a query parameter to the callback URL. </p>
+as a query parameter to the callback URL.</p>
 <p id="rfc.section.3.1.p.8">The client sends the hash of the interaction handle as the "interact_handle" field of the transaction continuation request.</p>
 <pre>{
     "handle": "80UPRY5NM33OMUKMKSKU",
@@ -968,7 +968,7 @@ transaction handles.</dd>
 }</pre>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> Interaction at the AS</h1>
-<p id="rfc.section.5.p.1">When the RO is interacting with the AS at the interaction endpoint, the AS MAY perform whatever actions it sees </p>
+<p id="rfc.section.5.p.1">When the RO is interacting with the AS at the interaction endpoint, the AS MAY perform whatever actions it sees</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> Error response</h1>
 <p id="rfc.section.6.p.1">If the AS determines that the token cannot be 
@@ -988,7 +988,7 @@ and start again.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.6.p.4">TODO: we should have a robust error mechanism. </p>
+<p id="rfc.section.6.p.4">TODO: we should have a robust error mechanism.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> Transaction continue request</h1>
 <p id="rfc.section.7.p.1">Once a transaction has begun, the AS 
@@ -1094,9 +1094,7 @@ transaction requests instead of sending its information again.</p>
 <p id="rfc.section.9.3.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
 <pre>{
 
-  client: {
-    handle: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
-  }
+  client: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
@@ -1123,15 +1121,26 @@ MAY present the handle in future transaction requests instead of sending
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.4.p.4">The RC sends its handle in lieu of the resource block of the transaction request:</p>
+<p id="rfc.section.9.4.p.4">The RC sends its handle in lieu of the resource block of the future transaction request:</p>
 <pre>{
 
-  resource: {
-    handle: "foo"
-  }
+  resources: ["foo"]
 
 }</pre>
 <p></p>
+<p id="rfc.section.9.4.p.6">Handles and object values MAY be combined.</p>
+<pre>{
+
+  resources: [
+    "foo",
+    {
+      actions: ["read", "write"],
+      locations: ["https://exapmle.com/resource"]
+      data: ["foo", "bar"]
+    }
+  ]
+
+}</pre>
 <h1 id="rfc.section.9.5">
 <a href="#rfc.section.9.5">9.5.</a> User handles</h1>
 <p id="rfc.section.9.5.p.1">User handles MAY be issued by the AS in 
@@ -1154,9 +1163,7 @@ analogous to the persistent claims token.</p>
 <p id="rfc.section.9.5.p.3">The RC sends its handle in lieu of the user block of the transaction request:</p>
 <pre>{
 
-  user: {
-    handle: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
-  }
+  user: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
@@ -1188,9 +1195,7 @@ transaction requests instead of sending its information again.</p>
 <p id="rfc.section.9.6.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
 <pre>{
 
-  key: {
-    handle: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
-  }
+  key: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
@@ -1312,7 +1317,11 @@ the methods in the Binding Keys section.</p>
 </tbody></table>
 <h1 id="rfc.appendix.A">
 <a href="#rfc.appendix.A">Appendix A.</a> Document History</h1>
-<p id="rfc.section.A.p.1">- 00</p>
+<p id="rfc.section.A.p.1">- 01</p>
+<p></p>
+
+<ul><li>Made JSON multimodal for handle requests.</li></ul>
+<p id="rfc.section.A.p.3">- 00</p>
 <p></p>
 
 <ul><li>Initial submission.</li></ul>
