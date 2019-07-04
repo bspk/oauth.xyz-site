@@ -371,55 +371,54 @@
   </style>
 
   <link href="#rfc.toc" rel="Contents">
-<link href="#rfc.section.1" rel="Chapter" title="1 Parties">
+<link href="#rfc.section.1" rel="Chapter" title="1 Protocol">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Parties">
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Sequence">
 <link href="#rfc.section.2" rel="Chapter" title="2 Transaction request">
 <link href="#rfc.section.2.1" rel="Chapter" title="2.1 Client">
 <link href="#rfc.section.2.2" rel="Chapter" title="2.2 Resource">
 <link href="#rfc.section.2.3" rel="Chapter" title="2.3 User">
 <link href="#rfc.section.2.4" rel="Chapter" title="2.4 Interact">
-<link href="#rfc.section.2.4.1" rel="Chapter" title="2.4.1 Redirect">
-<link href="#rfc.section.2.4.2" rel="Chapter" title="2.4.2 Device">
 <link href="#rfc.section.2.5" rel="Chapter" title="2.5 Keys">
-<link href="#rfc.section.2.5.1" rel="Chapter" title="2.5.1 Detatched JWS method">
-<link href="#rfc.section.2.5.2" rel="Chapter" title="2.5.2 MTLS method">
-<link href="#rfc.section.2.5.3" rel="Chapter" title="2.5.3 DID method">
 <link href="#rfc.section.3" rel="Chapter" title="3 Interaction response">
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Redirect interaction">
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Secondary device interaction">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Callback response">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Secondary device interaction">
 <link href="#rfc.section.4" rel="Chapter" title="4 Wait response">
 <link href="#rfc.section.5" rel="Chapter" title="5 Interaction at the AS">
 <link href="#rfc.section.6" rel="Chapter" title="6 Error response">
 <link href="#rfc.section.7" rel="Chapter" title="7 Transaction continue request">
 <link href="#rfc.section.8" rel="Chapter" title="8 Token response">
+<link href="#rfc.section.8.1" rel="Chapter" title="8.1 Presenting Tokens to the RS">
 <link href="#rfc.section.9" rel="Chapter" title="9 Handle references">
-<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Validating handles">
-<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Transaction handles">
-<link href="#rfc.section.9.3" rel="Chapter" title="9.3 Client handles">
-<link href="#rfc.section.9.4" rel="Chapter" title="9.4 Resource handles">
-<link href="#rfc.section.9.5" rel="Chapter" title="9.5 User handles">
-<link href="#rfc.section.9.6" rel="Chapter" title="9.6 Key handles">
+<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Presenting handles">
+<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Validating handles">
+<link href="#rfc.section.9.3" rel="Chapter" title="9.3 Transaction handles">
+<link href="#rfc.section.9.4" rel="Chapter" title="9.4 Client handles">
+<link href="#rfc.section.9.5" rel="Chapter" title="9.5 Resource handles">
+<link href="#rfc.section.9.5.1" rel="Chapter" title="9.5.1 Resource-first">
+<link href="#rfc.section.9.6" rel="Chapter" title="9.6 User handles">
+<link href="#rfc.section.9.7" rel="Chapter" title="9.7 Key handles">
 <link href="#rfc.section.10" rel="Chapter" title="10 Binding Keys">
 <link href="#rfc.section.10.1" rel="Chapter" title="10.1 Binding a key to a transaction">
-<link href="#rfc.section.10.2" rel="Chapter" title="10.2 Validating detached JWS">
-<link href="#rfc.section.10.3" rel="Chapter" title="10.3 Validating attached JWS">
-<link href="#rfc.section.10.4" rel="Chapter" title="10.4 Validating MTLS">
-<link href="#rfc.section.10.5" rel="Chapter" title="10.5 Validating DID">
-<link href="#rfc.section.11" rel="Chapter" title="11 Using a Token">
-<link href="#rfc.section.12" rel="Chapter" title="12 Acknowledgements">
-<link href="#rfc.section.13" rel="Chapter" title="13 IANA Considerations">
-<link href="#rfc.section.14" rel="Chapter" title="14 Security Considerations">
-<link href="#rfc.section.15" rel="Chapter" title="15 Privacy Considerations">
-<link href="#rfc.references" rel="Chapter" title="16 Normative References">
+<link href="#rfc.section.10.2" rel="Chapter" title="10.2 Detached JWS">
+<link href="#rfc.section.10.3" rel="Chapter" title="10.3 Validating MTLS">
+<link href="#rfc.section.10.4" rel="Chapter" title="10.4 Validating DID">
+<link href="#rfc.section.11" rel="Chapter" title="11 Acknowledgements">
+<link href="#rfc.section.12" rel="Chapter" title="12 IANA Considerations">
+<link href="#rfc.section.13" rel="Chapter" title="13 Security Considerations">
+<link href="#rfc.section.14" rel="Chapter" title="14 Privacy Considerations">
+<link href="#rfc.references" rel="Chapter" title="15 Normative References">
 <link href="#rfc.appendix.A" rel="Chapter" title="A Document History">
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.22.3 - https://tools.ietf.org/tools/xml2rfc">
+  <meta name="generator" content="xml2rfc version 2.23.0 - https://tools.ietf.org/tools/xml2rfc">
   <link rel="schema.dct" href="http://purl.org/dc/terms/">
 
   <meta name="dct.creator" content="Richer, J., Ed.">
-  <meta name="dct.identifier" content="urn:ietf:id:draft-richer-transactional-authz-00">
-  <meta name="dct.issued" scheme="ISO8601" content="2019-05-15">
+  <meta name="dct.identifier" content="urn:ietf:id:draft-richer-transactional-authz-01">
+  <meta name="dct.issued" scheme="ISO8601" content="2019-07-03">
   <meta name="dct.abstract" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software.">
   <meta name="description" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software.">
 
@@ -440,10 +439,10 @@
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">May 15, 2019</td>
+<td class="right">July 3, 2019</td>
 </tr>
 <tr>
-<td class="left">Expires: November 16, 2019</td>
+<td class="left">Expires: January 4, 2020</td>
 <td class="right"></td>
 </tr>
 
@@ -452,7 +451,7 @@
   </table>
 
   <p class="title">Transactional Authorization<br>
-  <span class="filename">draft-richer-transactional-authz-00</span></p>
+  <span class="filename">draft-richer-transactional-authz-01</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This document defines a mechanism for delegating authorization to a 
@@ -472,7 +471,7 @@ documents as Internet-Drafts.  The list of current Internet-Drafts is at
  and may be updated, replaced, or obsoleted by other documents at any 
 time.  It is inappropriate to use Internet-Drafts as reference material 
 or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 16, 2019.</p>
+<p>This Internet-Draft will expire on January 4, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal 
@@ -490,9 +489,13 @@ Simplified BSD License.</p>
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Parties</a>
+  	<li>1.   <a href="#rfc.section.1">Protocol</a>
 </li>
-<li>2.   <a href="#rfc.section.2">Transaction request</a>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Parties</a>
+</li>
+<li>1.2.   <a href="#rfc.section.1.2">Sequence</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Transaction request</a>
 </li>
 <ul><li>2.1.   <a href="#rfc.section.2.1">Client</a>
 </li>
@@ -502,23 +505,15 @@ Simplified BSD License.</p>
 </li>
 <li>2.4.   <a href="#rfc.section.2.4">Interact</a>
 </li>
-<ul><li>2.4.1.   <a href="#rfc.section.2.4.1">Redirect</a>
+<li>2.5.   <a href="#rfc.section.2.5">Keys</a>
 </li>
-<li>2.4.2.   <a href="#rfc.section.2.4.2">Device</a>
-</li>
-</ul><li>2.5.   <a href="#rfc.section.2.5">Keys</a>
-</li>
-<ul><li>2.5.1.   <a href="#rfc.section.2.5.1">Detatched JWS method</a>
-</li>
-<li>2.5.2.   <a href="#rfc.section.2.5.2">MTLS method</a>
-</li>
-<li>2.5.3.   <a href="#rfc.section.2.5.3">DID method</a>
-</li>
-</ul></ul><li>3.   <a href="#rfc.section.3">Interaction response</a>
+</ul><li>3.   <a href="#rfc.section.3">Interaction response</a>
 </li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Redirect interaction</a>
 </li>
-<li>3.2.   <a href="#rfc.section.3.2">Secondary device interaction</a>
+<li>3.2.   <a href="#rfc.section.3.2">Callback response</a>
+</li>
+<li>3.3.   <a href="#rfc.section.3.3">Secondary device interaction</a>
 </li>
 </ul><li>4.   <a href="#rfc.section.4">Wait response</a>
 </li>
@@ -530,43 +525,45 @@ Simplified BSD License.</p>
 </li>
 <li>8.   <a href="#rfc.section.8">Token response</a>
 </li>
-<li>9.   <a href="#rfc.section.9">Handle references</a>
+<ul><li>8.1.   <a href="#rfc.section.8.1">Presenting Tokens to the RS</a>
 </li>
-<ul><li>9.1.   <a href="#rfc.section.9.1">Validating handles</a>
+</ul><li>9.   <a href="#rfc.section.9">Handle references</a>
 </li>
-<li>9.2.   <a href="#rfc.section.9.2">Transaction handles</a>
+<ul><li>9.1.   <a href="#rfc.section.9.1">Presenting handles</a>
 </li>
-<li>9.3.   <a href="#rfc.section.9.3">Client handles</a>
+<li>9.2.   <a href="#rfc.section.9.2">Validating handles</a>
 </li>
-<li>9.4.   <a href="#rfc.section.9.4">Resource handles</a>
+<li>9.3.   <a href="#rfc.section.9.3">Transaction handles</a>
 </li>
-<li>9.5.   <a href="#rfc.section.9.5">User handles</a>
+<li>9.4.   <a href="#rfc.section.9.4">Client handles</a>
 </li>
-<li>9.6.   <a href="#rfc.section.9.6">Key handles</a>
+<li>9.5.   <a href="#rfc.section.9.5">Resource handles</a>
+</li>
+<ul><li>9.5.1.   <a href="#rfc.section.9.5.1">Resource-first</a>
+</li>
+</ul><li>9.6.   <a href="#rfc.section.9.6">User handles</a>
+</li>
+<li>9.7.   <a href="#rfc.section.9.7">Key handles</a>
 </li>
 </ul><li>10.   <a href="#rfc.section.10">Binding Keys</a>
 </li>
 <ul><li>10.1.   <a href="#rfc.section.10.1">Binding a key to a transaction</a>
 </li>
-<li>10.2.   <a href="#rfc.section.10.2">Validating detached JWS</a>
+<li>10.2.   <a href="#rfc.section.10.2">Detached JWS</a>
 </li>
-<li>10.3.   <a href="#rfc.section.10.3">Validating attached JWS</a>
+<li>10.3.   <a href="#rfc.section.10.3">Validating MTLS</a>
 </li>
-<li>10.4.   <a href="#rfc.section.10.4">Validating MTLS</a>
+<li>10.4.   <a href="#rfc.section.10.4">Validating DID</a>
 </li>
-<li>10.5.   <a href="#rfc.section.10.5">Validating DID</a>
+</ul><li>11.   <a href="#rfc.section.11">Acknowledgements</a>
 </li>
-</ul><li>11.   <a href="#rfc.section.11">Using a Token</a>
+<li>12.   <a href="#rfc.section.12">IANA Considerations</a>
 </li>
-<li>12.   <a href="#rfc.section.12">Acknowledgements</a>
+<li>13.   <a href="#rfc.section.13">Security Considerations</a>
 </li>
-<li>13.   <a href="#rfc.section.13">IANA Considerations</a>
+<li>14.   <a href="#rfc.section.14">Privacy Considerations</a>
 </li>
-<li>14.   <a href="#rfc.section.14">Security Considerations</a>
-</li>
-<li>15.   <a href="#rfc.section.15">Privacy Considerations</a>
-</li>
-<li>16.   <a href="#rfc.references">Normative References</a>
+<li>15.   <a href="#rfc.references">Normative References</a>
 </li>
 <li>Appendix A.   <a href="#rfc.appendix.A">Document History</a>
 </li>
@@ -577,22 +574,36 @@ Simplified BSD License.</p>
   </ul>
 
   <h1 id="rfc.section.1">
-<a href="#rfc.section.1">1.</a> Parties</h1>
-<p id="rfc.section.1.p.1">The Authorization Server (AS) manages the 
+<a href="#rfc.section.1">1.</a> Protocol</h1>
+<p id="rfc.section.1.p.1">This protocol allows a piece of software to 
+request delegated authorization to an API, protected by an authorization
+ server usually on behalf of a resource owner. </p>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Parties</h1>
+<p id="rfc.section.1.1.p.1">The Authorization Server (AS) manages the 
 transactions. It is defined by its transaction endpoint, a single URL 
-that accepts a POST request with a JSON payload. The AS can also have 
-other endpoints, including interaction endpoints.</p>
-<p id="rfc.section.1.p.2">The Authorization Requester (AR) is a party 
-calling the AS. It can be acting as either RC or RS. (TODO: there needs 
-to be a better term for this.)</p>
-<p id="rfc.section.1.p.3">The Resource Client (RC) requests tokens from the AS and uses tokens at the RS.</p>
-<p id="rfc.section.1.p.4">The Resource Server (RS) accepts tokens from the RC and validates them (potentially at the AS).</p>
-<p id="rfc.section.1.p.5">The Resource Owner (RO) authorizes the request from the RC to the RS</p>
+that accepts a POST request with a JSON payload. The AS MAY also have 
+other endpoints, including interaction endpoints, but these are</p>
+<p id="rfc.section.1.1.p.2">The Resource Client (RC) requests tokens from the AS and uses tokens at the RS.</p>
+<p id="rfc.section.1.1.p.3">The Resource Server (RS) accepts tokens from the RC and validates them (potentially at the AS).</p>
+<p id="rfc.section.1.1.p.4">The Resource Owner (RO) authorizes the request from the RC to the RS, often interactively at the AS.</p>
+<h1 id="rfc.section.1.2">
+<a href="#rfc.section.1.2">1.2.</a> Sequence</h1>
+<p></p>
+
+<ol>
+<li>The RC creates a transaction request and sends it to the AS</li>
+<li>The AS processes the transaction request and determines if the RO needs to interact</li>
+<li>If interaction is required, the AS interacts with the RO, possibly by directing the RC to send the RO there</li>
+<li>The RC continues the transaction at the AS</li>
+<li>The AS processess the transaction again, determining that a token can be issued</li>
+<li>The AS issues a token to the RC</li>
+<li>The RC uses the token with the RS</li>
+</ol>
 <h1 id="rfc.section.2">
-<a href="#rfc.section.2">2.</a> Transaction request</h1>
-<p id="rfc.section.2.p.1">To start a transaction, the RC makes a 
-transaction request to the transaction endpoint of the AS. The RC 
-creates a JSON document with up to five sections.</p>
+<a href="#rfc.section.2">2.</a> <a href="#transaction-request" id="transaction-request">Transaction request</a>
+</h1>
+<p id="rfc.section.2.p.1">To start a transaction, the RC makes a transaction request to the transaction endpoint of the AS. The RC creates a JSON <a href="#RFC8259" class="xref">[RFC8259]</a> document with five primary sections, included as members of a root JSON object.</p>
 <p></p>
 
 <dl>
@@ -612,27 +623,37 @@ data.  This section is OPTIONAL.</dd>
 <dt>interact</dt>
 <dd style="margin-left: 8">Information about how the RC is able to 
 interact with the RO, including callback URI's and state. This section 
-is REQUIRED if the client is capable of driving interaction with the 
-user.</dd>
+is REQUIRED if the RC is capable of driving interaction with the user.</dd>
 <dt>keys</dt>
 <dd style="margin-left: 8">Information about the keys known to the RC 
 and able to be presented in future parts of the transaction. This 
 section is REQUIRED. (Note: I can't think of a good reason for this to 
 be optional.)</dd>
 </dl>
-<p id="rfc.section.2.p.3">An AS MAY</p>
+<p id="rfc.section.2.p.3">Each section consists of either a JSON object 
+or an array of JSON objects, as described in the subsections below. Many
+ sections MAY be represented by an appropriate handle instead as 
+described in <a href="#handles" class="xref">Section 9</a>. In such 
+cases, the section is replaced entirely by the handle presentation, 
+which is a single string instead of a JSON object. The RC MAY present 
+additional sections as defined by extensions of this specification. The 
+AS MUST ignore any sections that it does not understand. </p>
 <h1 id="rfc.section.2.1">
-<a href="#rfc.section.2.1">2.1.</a> Client</h1>
-<p id="rfc.section.2.1.p.1">This section provides descriptive details of the client software making the call.</p>
+<a href="#rfc.section.2.1">2.1.</a> <a href="#client-request" id="client-request">Client</a>
+</h1>
+<p id="rfc.section.2.1.p.1">This section provides descriptive details of
+ the RC software making the call. This section is a JSON object, and all
+ fields are OPTIONAL.  The RC MAY send additional fields, and the AS 
+MUST ignore all fields that it does not understand. </p>
 <p></p>
 
 <dl>
 <dt>name</dt>
-<dd style="margin-left: 8">Display name of the client software</dd>
+<dd style="margin-left: 8">Display name of the RC software</dd>
 <dt>uri</dt>
-<dd style="margin-left: 8">User-facing web page of the client software</dd>
+<dd style="margin-left: 8">User-facing web page of the RC software</dd>
 <dt>logo_uri</dt>
-<dd style="margin-left: 8">Display image to represent the client software</dd>
+<dd style="margin-left: 8">Display image to represent the RC software</dd>
 </dl>
 <pre>client: {
 
@@ -641,14 +662,16 @@ be optional.)</dd>
 
 }</pre>
 <p></p>
-<p id="rfc.section.2.1.p.4">This can also be presented as a client handle reference.</p>
+<p id="rfc.section.2.1.p.4">The AS SHOULD use this information in presenting any authorization screens to the RO during interaction.</p>
+<p id="rfc.section.2.1.p.5">The client information MAY instead be presented as a client handle reference <a href="#client-handle" class="xref">Section 9.4</a>.</p>
 <h1 id="rfc.section.2.2">
-<a href="#rfc.section.2.2">2.2.</a> Resource</h1>
-<p id="rfc.section.2.2.p.1">This section identifies the RS and describes
- what the RC wants to do with the API hosted at the RS. This section is 
-an array of objects, each object representing a single resource set. 
+<a href="#rfc.section.2.2">2.2.</a> <a href="#resource-request" id="resource-request">Resource</a>
+</h1>
+<p id="rfc.section.2.2.p.1">This section identifies what the RC wants to
+ do with the API hosted at the RS. This section is a JSON array of 
+objects, each object representing a single resource or resource set. 
 That AS MUST interpret the request as being for all of the resources 
-listed.</p>
+listed. </p>
 <p></p>
 
 <dl>
@@ -668,10 +691,11 @@ listed.</p>
   }
 ]</pre>
 <p></p>
-<p id="rfc.section.2.2.p.4">This can also be presented as a set of resource handle references, or a combination of handles and resource structures.</p>
+<p id="rfc.section.2.2.p.4">This can also be presented as a set of resource handle references <a href="#resource-handle" class="xref">Section 9.5</a>, or a combination of handles and resource structures.</p>
 <h1 id="rfc.section.2.3">
-<a href="#rfc.section.2.3">2.3.</a> User</h1>
-<p id="rfc.section.2.3.p.1">This section provides a verifiable assertion about the RO interacting with the client on behalf of the request.</p>
+<a href="#rfc.section.2.3">2.3.</a> <a href="#user-request" id="user-request">User</a>
+</h1>
+<p id="rfc.section.2.3.p.1">This section provides a verifiable assertion about the RO interacting with the RC on behalf of the request.</p>
 <p></p>
 
 <dl>
@@ -687,144 +711,74 @@ listed.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.2.3.p.4">This can also be presented as a user handle reference.</p>
+<p id="rfc.section.2.3.p.4">This can also be presented as a user handle reference <a href="#user-handle" class="xref">Section 9.6</a>.</p>
 <h1 id="rfc.section.2.4">
-<a href="#rfc.section.2.4">2.4.</a> Interact</h1>
+<a href="#rfc.section.2.4">2.4.</a> <a href="#interact-request" id="interact-request">Interact</a>
+</h1>
 <p id="rfc.section.2.4.p.1">This section provides details of how the RC can interact with the RO. All interact requests MUST have the "type" field.</p>
 <p></p>
 
 <dl>
 <dt>type</dt>
-<dd style="margin-left: 8">REQUIRED. Type of interaction. Can be "redirect" or "device".</dd>
+<dd style="margin-left: 8">REQUIRED. Type of interaction. Can be 
+"redirect" or "device". The "redirect" type indicates that the RO is 
+capable of sending the user to an arbitrary URL to be returned from the 
+AS. The "device" type indicates that the RC is capable of communicating a
+ short, human-readable code to the RO, which the RO can enter 
+interactively to the AS.</dd>
+<dt>callback</dt>
+<dd style="margin-left: 8">OPTIONAL. IF the RC is capable of receiving 
+inbound messages from the RO's browser, this indicates the URI to send 
+the RO to after interaction. This URI SHOULD (MUST?) be unique per 
+transaction and MUST be hosted or accessible by the RC.  This URI MUST 
+NOT contain any fragment component. This URI MUST be protected by HTTPS,
+ be hosted on a server local to the user's browser ("localhost"), or use
+ an application-specific URI scheme.  The allowable URIs MAY be limited 
+by the AS based on the RC's presented key information.</dd>
+<dt>state</dt>
+<dd style="margin-left: 8">REQUIRED if the "callback" parameter is used.
+  Unique value to be returned to the application as a query parameter on
+ the callback URL, must be sufficiently random to be unguessable by an 
+attacker. MUST be generated by the RC for this transaction.</dd>
 </dl>
 <p id="rfc.section.2.4.p.3">Each interaction type has its own parameters and behaviors, detailed below.</p>
-<p id="rfc.section.2.4.p.4">This can also be presented as interaction handle reference.</p>
-<h1 id="rfc.section.2.4.1">
-<a href="#rfc.section.2.4.1">2.4.1.</a> Redirect</h1>
-<p id="rfc.section.2.4.1.p.1">A redirect type interaction has the RC 
-send the RO to a URL at the AS and interact with the AS directly, using 
-any number of interactions. Following the interaction, the RO is sent 
-back to the RC using the "callback" URI.</p>
-<p></p>
-
-<dl>
-<dt>type</dt>
-<dd style="margin-left: 8">MUST be "redirect"</dd>
-<dt>callback</dt>
-<dd style="margin-left: 8">REQUIRED. URI to send the user to after 
-interaction, SHOULD (MUST?) be unique per transaction and hosted or 
-accessible by the RC. This URL MUST NOT contain any fragment component. 
-This URL MUST be protected by HTTPS, hosted on a server local to the 
-user's browser ("localhost"), or use an application-specific URL scheme.
- MAY be limited by the AS based on the client's information.</dd>
-<dt>state</dt>
-<dd style="margin-left: 8">REQUIRED. Unique value to be returned to the 
-application as a query parameter on the callback URL, must be 
-sufficiently random to be unguessable by an attacker. MUST be generated 
-by the client for this transaction.</dd>
-</dl>
-<pre>interact: {
-  type: redirect
-  callback: https://client.foo/
-  state: foo
-}</pre>
-<p></p>
-<h1 id="rfc.section.2.4.2">
-<a href="#rfc.section.2.4.2">2.4.2.</a> Device</h1>
-<p id="rfc.section.2.4.2.p.1">The device type interaction has the RC 
-instruct the user to go to a URL at the AS using a secondary device. The
- user then interacts with the AS directly by entering a short code 
-provided by the AS to the RC. Following the interaction, the RO is 
-prompted by the AS to check their RC device, which can poll the AS until
- the authorization is complete.</p>
-<p></p>
-
-<dl>
-<dt>type</dt>
-<dd style="margin-left: 8">MUST be "device"</dd>
-</dl>
-<pre>interact: {
-  type: device
-}</pre>
-<p></p>
+<p id="rfc.section.2.4.p.4">This section MUST NOT be represented by a handle reference. (Note: this </p>
 <h1 id="rfc.section.2.5">
-<a href="#rfc.section.2.5">2.5.</a> Keys</h1>
-<p id="rfc.section.2.5.p.1">This section lists the keys that the client 
-can present proof of ownership. Each key type has its own proofing 
-mechanism and additional required parameters, listed in individual 
-sections below.</p>
+<a href="#rfc.section.2.5">2.5.</a> <a href="#key-request" id="key-request">Keys</a>
+</h1>
+<p id="rfc.section.2.5.p.1">This section lists the keys that the RC can 
+present proof of ownership. The RC MUST send at least one key. The RC 
+MAY send more than one key, but only one key of each type. </p>
 <p></p>
 
 <dl>
-<dt>type</dt>
-<dd style="margin-left: 8">Validation method for the key, must be one of "jwsd", "mtls/x509", or "did/zkp".</dd>
-</dl>
-<p id="rfc.section.2.5.p.3">All presented keys MUST be validated by the AS as per the Key Validation section.</p>
-<p id="rfc.section.2.5.p.4">This can also be presented as a key handle reference. The key referenced by a handle MUST be validated by the AS.</p>
-<pre>key: {
-
-  handle: "3eru876tyhgr5678ikjhgt"
-
-}</pre>
-<h1 id="rfc.section.2.5.1">
-<a href="#rfc.section.2.5.1">2.5.1.</a> Detatched JWS method</h1>
-<p></p>
-
-<dl>
-<dt>type</dt>
-<dd style="margin-left: 8">MUST be "jwsd"</dd>
 <dt>jwks</dt>
 <dd style="margin-left: 8">Value of the public key as a JWK Set JSON 
 object [Note: should this be a single JWK instead? And do we want to 
 bother with url-based references?]. MUST contain an "alg" field which is
  used to validate the signature. MUST contain the "kid" field to 
-identify the key in the signed object.</dd>
-</dl>
-<pre>key: {
-
-  type: jwsd,
-  jwks: { keys: [ alg: RS256, kty: ... ] }
-
-}</pre>
-<p></p>
-<h1 id="rfc.section.2.5.2">
-<a href="#rfc.section.2.5.2">2.5.2.</a> MTLS method</h1>
-<p></p>
-
-<dl>
-<dt>type</dt>
-<dd style="margin-left: 8">MUST be "mtls"</dd>
+identify the key in the signed object. This key type MUST be proved 
+using either the detached JWS or HTTP-Signing mechanisms. </dd>
 <dt>cert</dt>
-<dd style="margin-left: 8">REQUIRED. String serialized value of the certificate thumbprint as per OAuth-MTLS.</dd>
-</dl>
-<pre>key: {
-
-  type: mtls,
-  cert: "MII...."
-
-}</pre>
-<p></p>
-<h1 id="rfc.section.2.5.3">
-<a href="#rfc.section.2.5.3">2.5.3.</a> DID method</h1>
-<p></p>
-
-<dl>
-<dt>type</dt>
-<dd style="margin-left: 8">MUST be "did"</dd>
+<dd style="margin-left: 8">String serialized value of the certificate thumbprint as per OAuth-MTLS. This key type MUST be proved using Mutual TLS.</dd>
 <dt>did</dt>
-<dd style="margin-left: 8">The DID URL identifying the key (or keys) used to sign this request.</dd>
+<dd style="margin-left: 8">The DID URL identifying the key (or keys) used to sign this request. This key type MUST be proved using [[ note -- how? ]]</dd>
 </dl>
+<p id="rfc.section.2.5.p.3">The RC MUST provide proof of possession of all presented keys<a href="#binding-keys" class="xref">Section 10</a>. All presented keys MUST be validated by the AS as per the Key Validation section.</p>
+<p id="rfc.section.2.5.p.4">This section MAY also be presented as a key handle reference <a href="#key-handle" class="xref">Section 9.7</a>. The keys referenced by a handle MUST be validated by the AS.</p>
+<p id="rfc.section.2.5.p.5">The following non-normative example shows all three key methods:</p>
 <pre>key: {
 
-  type: did,
+  jwks: { keys: [ alg: RS256, kty: ... ] },
+  cert: "MII....",
   did: "did:v:foo...."
 
 }</pre>
-<p></p>
 <h1 id="rfc.section.3">
-<a href="#rfc.section.3">3.</a> Interaction response</h1>
+<a href="#rfc.section.3">3.</a> <a href="#interact-response" id="interact-response">Interaction response</a>
+</h1>
 <p id="rfc.section.3.p.1">When evaluating a transaction request, the AS 
-can determine that it needs to have the RO present to interact with the 
+MAY determine that it needs to have the RO present to interact with the 
 AS before issuing a token. This interaction can include the RO logging 
 in to the AS, authorizing the transaction, providing proof claims, 
 determining if the transaction decision should be remembered for the 
@@ -834,7 +788,8 @@ future, and other items.</p>
 bound to the transaction as in Key Binding. This response includes a 
 transaction handle as in Transaction Handle.</p>
 <h1 id="rfc.section.3.1">
-<a href="#rfc.section.3.1">3.1.</a> Redirect interaction</h1>
+<a href="#rfc.section.3.1">3.1.</a> <a href="#redirect-response" id="redirect-response">Redirect interaction</a>
+</h1>
 <p id="rfc.section.3.1.p.1">If the RC supports a "redirect" style 
 interaction, the AS creates a unique interaction URL and returns it to 
 the RC. This URL MUST be associated with a single pending transaction.</p>
@@ -846,106 +801,128 @@ the RC. This URL MUST be associated with a single pending transaction.</p>
 the RO to. This URL MUST be unique to this transaction request. The URL 
 SHOULD contain a random portion of sufficient entropy so as not to be 
 guessable by the user. The URL MUST NOT contain the transaction handle 
-or any client identifying information. This URL MUST be protected by 
-HTTPS. This URL MUST NOT contain any fragment component.</dd>
+or any RC identifying information.  This URL MUST be protected by HTTPS.
+ This URL MUST NOT contain any fragment component.</dd>
 <dt>handle</dt>
 <dd style="margin-left: 8">The transaction handle to use in the continue
  request once the RO has been returned to the RC via the callback URL. 
-See the section on transaction handles.</dd>
+See the section on transaction handles<a href="#transaction-handle" class="xref">Section 9.3</a>.</dd>
 </dl>
-<pre>{
+<pre>{ 
 
   interaction_url: "https://server.example.com/interact/123asdfklj",
   handle: {
     value: "tghji76ytghj9876tghjko987yh",
-    method: "bearer"
+    type: "bearer"
   }
 }</pre>
 <p></p>
-<p id="rfc.section.3.1.p.4">When the RC receives this response, it sends
- the RO to the interaction URL. When interacting with the RO, the AS MAY
- perform any of the behaviors in the User Interaction section.</p>
-<p id="rfc.section.3.1.p.5">Once the RO has completed the interaction 
-with the AS, the AS returns the user to the RC by redirecting the RO's 
-browser to the RC's callback URL presented at the start of the 
-transaction, with the state parameter appended to the callback URL as a 
-query parameter in addition to an interaction handle to be returned to 
-the AS in a transaction continuation request.</p>
+<p id="rfc.section.3.1.p.4">When the RC receives this response, it MUST 
+launch the system browser, redirect the RO through an HTTP 302 response,
+ display the URL through a scannable barcode, or otherwise send the RO 
+to the interaction URL. The RC MUST NOT modify the interaction URL or 
+append anything to it, including any query parameters, fragments, or 
+special headers. </p>
+<p id="rfc.section.3.1.p.5">The interaction URL MUST be reachable from 
+the RO's browser, though note that the RO MAY open the interaction URL 
+on a separate device from the RC itself. The interaction URL MUST be 
+accessible from an HTTP GET request, and MUST be protected by HTTPS or 
+equivalent means.</p>
+<p id="rfc.section.3.1.p.6">Upon receiving an incoming request at the 
+interaction URL, the AS MUST determine the transaction associated with 
+this unique URL. If the transaction is not found, an error is returned 
+to the end user through the browser and the AS MUST NOT attempt to 
+redirect to a callback URL.  When interacting with the RO, the AS MAY 
+perform any of the behaviors in the User Interaction section <a href="#user-interaction" class="xref">Section 5</a>.  </p>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#callback-response" id="callback-response">Callback response</a>
+</h1>
+<p id="rfc.section.3.2.p.1">If the RC has supplied a callback URL in its interact request <a href="#interact-request" class="xref">Section 2.4</a>,
+ the AS returns the user to the RC by redirecting the RO's browser to 
+the RC's callback URL presented at the start of the transaction, with 
+the addition of two query parameters.</p>
 <p></p>
 
 <dl>
 <dt>state</dt>
-<dd style="margin-left: 8">REQUIRED. The (hashed?) value of the state parameter sent by the client in the initial interaction request.</dd>
+<dd style="margin-left: 8">REQUIRED. The (hashed?) value of the state parameter sent by the RC in the initial interaction request <a href="#interact-request" class="xref">Section 2.4</a>.</dd>
 <dt>interact_handle</dt>
 <dd style="margin-left: 8">REQUIRED. A shared secret associated with 
 this interaction. This value MUST be sufficiently random so as not to be
  guessable by an attacker. This value MUST be associated by the AS with 
 the underlying transaction that is associated to with this interaction.</dd>
 </dl>
-<p id="rfc.section.3.1.p.7">Upon processing this request to the callback
- URL, the client MUST match the state value to the value it sent in the 
+<p id="rfc.section.3.2.p.3">Upon processing this request to the callback
+ URL, the RC MUST match the state value to the value it sent in the 
 original transaction request. The RC then sends a transaction 
 continuation request with the transaction handle returned in the 
 interaction response and the (hash of?) the interaction handle returned 
 as a query parameter to the callback URL.</p>
-<p id="rfc.section.3.1.p.8">The client sends the hash of the interaction handle as the "interact_handle" field of the transaction continuation request.</p>
+<p id="rfc.section.3.2.p.4">The RC sends (the hash of? example here is 
+hashed) the interaction handle as the "interact_handle" field of the 
+transaction continuation request<a href="#transaction-continue" class="xref">Section 7</a>, using the transaction handle <a href="#transaction-continue" class="xref">Section 7</a> returned in the most recent transaction response from the AS.</p>
 <pre>{
     "handle": "80UPRY5NM33OMUKMKSKU",
     "interact_handle": "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
 }</pre>
 <p></p>
-<p id="rfc.section.3.1.p.10">[Open Question: error conditions. If the 
-user denies access or there's some other authorization error, do we 
-return to the callback? What's the attack surface here? We could always 
-return an error page to the browser and cancel the underlying 
-transaction, effectively killing it at the AS.]</p>
-<p id="rfc.section.3.1.p.11">If the AS cannot identify the source 
-transaction from the source URL, it returns an HTTP 404 error page to 
-the browser and optionally an error message to the user.</p>
-<h1 id="rfc.section.3.2">
-<a href="#rfc.section.3.2">3.2.</a> Secondary device interaction</h1>
-<p id="rfc.section.3.2.p.1">If the RC supports a "device" style 
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#device-response" id="device-response">Secondary device interaction</a>
+</h1>
+<p id="rfc.section.3.3.p.1">If the RC supports a "device" style 
 interaction, the AS creates a unique interaction code and returns it to 
-the RC along with a URL to give the user for interaction.</p>
+the RC. The RC communicates this code to the RO and instructs the RO to 
+enter the code at a URL hosted by the AS.</p>
 <p></p>
 
 <dl>
 <dt>user_code</dt>
-<dd style="margin-left: 8">A short code that the user can type into an 
-authorization server. This string MUST be case-insensitive, MUST consist
- of only easily typeable characters (such as letters or numbers). The 
-time in which this code will be accepted MUST be short lived.</dd>
-<dt>interaction_url</dt>
-<dd style="margin-left: 8">The interaction URL that the RC will direct the RO to. This URL SHOULD be stable over time.</dd>
+<dd style="margin-left: 8">REQUIRED. A short code that the user can type
+ into an authorization server. This string MUST be case-insensitive, 
+MUST consist of only easily typeable characters (such as letters or 
+numbers). The time in which this code will be accepted SHOULD be short 
+lived, such as several minutes.</dd>
+<dt>user_code_url</dt>
+<dd style="margin-left: 8">RECOMMENDED. The interaction URL that the RC 
+will direct the RO to. This URL SHOULD be stable at the AS such that 
+clients can be statically configured with it.</dd>
 <dt>wait</dt>
-<dd style="margin-left: 8">The amount of time to wait before polling again, in integer seconds.</dd>
+<dd style="margin-left: 8">RECOMMENDED. The amount of time to wait before polling again, in integer seconds.</dd>
 <dt>handle</dt>
-<dd style="margin-left: 8">The transaction handle to use in the continue request. See the section on transaction handles.</dd>
+<dd style="margin-left: 8">REQUIRED. The transaction handle to use in the continue request. See the section on transaction handles<a href="#transaction-handle" class="xref">Section 9.3</a>.</dd>
 </dl>
 <pre>{
 
   user_code: "ABCD1234"
-  interaction_url: "https://server.example.com/device",
+  user_code_url: "https://server.example.com/device",
   wait: 30,
   handle: {
     value: "tghji76ytghj9876tghjko987yh",
-    method: "bearer"
+    type: "bearer"
   }
 }</pre>
 <p></p>
-<p id="rfc.section.3.2.p.4">When the RC receives this response, it MUST 
+<p id="rfc.section.3.3.p.4">When the RC receives this response, it MUST 
 communicate the user code to the RO. If possible the RC SHOULD 
-communicate the interaction URL to the user as well, although this can 
-be a stable URL at the AS.</p>
+communicate the interaction URL to the user as well. </p>
+<p id="rfc.section.3.3.p.5">When the RO enters the unique user code at 
+the user code URL, the AS MUST determine which active transaction is 
+associated with the user code. If a transaction is not found, the AS 
+MUST return an error page to the user and MUST NOT attempt to redirect 
+to a callback URL. The AS MAY use any mechanism to interact with the RO 
+as listed in <a href="#user-interaction" class="xref">Section 5</a>.</p>
+<p id="rfc.section.3.3.p.6">Note that this method is strictly for 
+allowing the user to enter a code at a static URL. If the AS wishes to 
+communicate a pre-composed URL to the RO containing both the user code 
+and the URL at which to enter it, the AS MUST use the "interaction_url" <a href="#redirect-response" class="xref">Section 3.1</a> redirect mechanism instead as this allows the client to communicate an arbitrary interaction URL to the RO.</p>
 <h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> Wait response</h1>
-<p id="rfc.section.4.p.1">If the AS needs to do something that the RC 
-has no part in before it can give a definitive response, the AS replies 
-to the transaction request with a wait response. This tells the RC that 
-it can poll the transaction after a set amount of time.</p>
-<p id="rfc.section.4.p.2">This response can indicate a set of keys are 
-bound to the transaction as in Key Binding. This response includes a 
-transaction handle as in Transaction Handle.</p>
+<a href="#rfc.section.4">4.</a> <a href="#wait-response" id="wait-response">Wait response</a>
+</h1>
+<p id="rfc.section.4.p.1">If the AS needs the RC to wait before it can give a definitive response to a transaction continue request<a href="#transaction-continue" class="xref">Section 7</a>,
+ the AS replies to the transaction request with a wait response. This 
+tells the RC that it can poll the transaction after a set amount of 
+time.</p>
+<p id="rfc.section.4.p.2">This response includes a transaction handle as in Transaction Handle <a href="#transaction-handle" class="xref">Section 9.3</a>.</p>
 <p></p>
 
 <dl>
@@ -962,20 +939,40 @@ transaction handles.</dd>
   wait: 30,
   handle: {
     value: "tghji76ytghj9876tghjko987yh",
-    method: "bearer"
+    type: "bearer"
   }
 
 }</pre>
 <h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> Interaction at the AS</h1>
-<p id="rfc.section.5.p.1">When the RO is interacting with the AS at the interaction endpoint, the AS MAY perform whatever actions it sees</p>
+<a href="#rfc.section.5">5.</a> <a href="#user-interaction" id="user-interaction">Interaction at the AS</a>
+</h1>
+<p id="rfc.section.5.p.1">When the RO is interacting with the AS at the 
+interaction endpoint, the AS MAY perform whatever actions it sees fit, 
+including but not limited to:</p>
+<p></p>
+
+<ul>
+<li>authenticate the RO</li>
+<li>gather identity claims about the RO</li>
+<li>gather consent and authorization from the RO</li>
+<li>allow the RO to modify the parameters of the requested transaction (such as disallowing some requested resources)</li>
+</ul>
+<p id="rfc.section.5.p.3">When the AS has concluded interacting with the
+ RO, the AS MUST determine if the RC has registered a callback URL and 
+state parameter for this transaction. If so, the AS MUST redirect the 
+RO's browser to the callback URL as described in <a href="#interact-response" class="xref">Section 3</a>.
+ If the AS detects an error condition, such as an unknown transaction, 
+an untrustworthy callback URL, an untrustworthy client, or suspicious RO
+ behavior, the AS MUST return an error to the RO's browser and MUST NOT 
+redirect to the callback URL.</p>
 <h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> Error response</h1>
+<a href="#rfc.section.6">6.</a> <a href="#error-response" id="error-response">Error response</a>
+</h1>
 <p id="rfc.section.6.p.1">If the AS determines that the token cannot be 
-issued for any reason, it responds to the client with an error message. 
-This message does not include a transaction handle, and the RC can no 
-longer poll for this transaction. The RC MAY create a new transaction 
-and start again.</p>
+issued for any reason, it responds to the RC with an error message. This
+ message does not include a transaction handle, and the RC can no longer
+ poll for this transaction. The RC MAY create a new transaction and 
+start again.</p>
 <p></p>
 
 <dl>
@@ -988,64 +985,88 @@ and start again.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.6.p.4">TODO: we should have a robust error mechanism.</p>
-<h1 id="rfc.section.7">
-<a href="#rfc.section.7">7.</a> Transaction continue request</h1>
-<p id="rfc.section.7.p.1">Once a transaction has begun, the AS 
-associates that transaction with a transaction handle which is returned 
-to the RC in one of the transaction responses. This handle MUST be 
-unique, MUST be associated with a single transaction, and MUST be one 
-time use.</p>
-<p id="rfc.section.7.p.2">The RC continues the transaction by making a 
-request with the transaction handle in the body of the request. The RC 
-MAY add additional fields depending on the type of interaction and 
-authorization process in play.</p>
+<p id="rfc.section.6.p.4">TODO: we should have a more robust error mechanism. Current candidate list of errors:</p>
 <p></p>
 
 <dl>
-<dt>transaction</dt>
-<dd style="margin-left: 8">The (hash of?) transaction handle to use in the continue request.</dd>
+<dt>user_denied</dt>
+<dd style="margin-left: 8">The RO denied the transaction request.</dd>
+<dt>too_fast</dt>
+<dd style="margin-left: 8">The RC did not respect the timeout in the wait response.</dd>
+<dt>unknown_transaction</dt>
+<dd style="margin-left: 8">The transaction continuation request referenced an unknown transaction.</dd>
+<dt>unknown_handle</dt>
+<dd style="margin-left: 8">The request referenced an unknown handle.</dd>
+</dl>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#transaction-continue" id="transaction-continue">Transaction continue request</a>
+</h1>
+<p id="rfc.section.7.p.1">Once a transaction has begun, the AS associates that transaction with a transaction handle<a href="#transaction-handle" class="xref">Section 9.3</a> which is returned to the RC in one of the transaction responses <a href="#redirect-response" class="xref">Section 3.1</a>, <a href="#device-response" class="xref">Section 3.3</a>, <a href="#wait-response" class="xref">Section 4</a>. This handle MUST be unique, MUST be associated with a single transaction, and MUST be one time use.</p>
+<p id="rfc.section.7.p.2">The RC continues the transaction by making a 
+request with the transaction handle in the body of the request. The RC 
+MAY add additional fields to the transaction continuation request, such 
+as the interaction handle return in the callback response <a href="#interact-response" class="xref">Section 3</a>. </p>
+<p></p>
+
+<dl>
+<dt>handle</dt>
+<dd style="margin-left: 8">REQUIRED. The (hash of?) transaction handle indicating which transaction to continue.</dd>
 <dt>interaction_handle</dt>
-<dd style="margin-left: 8">The (hash of?) interaction handle returned to the RC's callback URL from the interaction endpoint.</dd>
+<dd style="margin-left: 8">OPTIONAL. If the RC has received an 
+interaction handle from the callback response of the interaction URL, 
+the RC MUST include the (hash of?) that handle in its transaction 
+continue request.</dd>
 </dl>
 <pre>{
 
-  transaction: "tghji76ytghj9876tghjko987yh"
+  handle: "tghji76ytghj9876tghjko987yh"
 
 }</pre>
 <p></p>
+<p id="rfc.section.7.p.5">The RC MUST prove all keys initially sent in the transaction request<a href="#key-request" class="xref">Section 2.5</a> as described in <a href="#binding-keys" class="xref">Section 10</a>.</p>
 <h1 id="rfc.section.8">
-<a href="#rfc.section.8">8.</a> Token response</h1>
+<a href="#rfc.section.8">8.</a> <a href="#token-response" id="token-response">Token response</a>
+</h1>
 <p></p>
 <p></p>
 
 <dl>
 <dt>access_token</dt>
-<dd style="margin-left: 8">The access token that the RC uses to call the RS.</dd>
-<dt>access_token_keys</dt>
-<dd style="margin-left: 8">List of keys that the access token is bound 
-to using the methods in key validation. If not specified, the access 
-token is a bearer token.</dd>
+<dd style="margin-left: 8">The access token that the RC uses to call the RS. The access token follows the handle structure described in <a href="#handles" class="xref">Section 9</a>.</dd>
 <dt>handle</dt>
-<dd style="margin-left: 8">The transaction handle to use in the continue
- request to get a new access token once the one issued is no longer 
-usable. See the section on transaction handles.</dd>
+<dd style="margin-left: 8">The transaction handle to use in the continue request<a href="#transaction-continue" class="xref">Section 7</a> to get a new access token once the one issued is no longer usable. See the section on transaction handles<a href="#transaction-handle" class="xref">Section 9.3</a>.</dd>
 </dl>
 <pre>key: {
 
-  access_token: "08ur4kahfga09u23rnkjasdf",
+  access_token: {
+    value: "08ur4kahfga09u23rnkjasdf",
+    type: "bearer"
+  },
   handle: {
     value: "tghji76ytghj9876tghjko987yh",
-    method: "bearer"
+    type: "bearer"
   }
 
 }</pre>
 <p></p>
+<h1 id="rfc.section.8.1">
+<a href="#rfc.section.8.1">8.1.</a> Presenting Tokens to the RS</h1>
+<p id="rfc.section.8.1.p.1">A bearer style access token MUST be presented using the Header method of OAuth 2 Bearer Tokens <a href="#RFC6750" class="xref">[RFC6750]</a>. A sha3 style access token is hashed as described in <a href="#handles" class="xref">Section 9</a> and presented using the Header method of OAuth 2 Bearer Tokens <a href="#RFC6750" class="xref">[RFC6750]</a>.</p>
+<p id="rfc.section.8.1.p.2">An access token MAY be bound to any keys 
+presented by the client during the transaction request. A bound access 
+token MUST be presented with proof of the key as described in <a href="#binding-keys" class="xref">Section 10</a>.  </p>
 <h1 id="rfc.section.9">
-<a href="#rfc.section.9">9.</a> Handle references</h1>
-<p id="rfc.section.9.p.1">Many parts of this protocol are referenced 
-through the use of handles as stand-ins for actual values, including 
-transactions themselves as well as portions of transactions.</p>
+<a href="#rfc.section.9">9.</a> <a href="#handles" id="handles">Handle references</a>
+</h1>
+<p id="rfc.section.9.p.1">A handle in this protocol is a value presented
+ from one party to another as proof that they are the appropriate party 
+for part of the transaction. Handles can be used to reference the 
+transaction as a whole, or one of its constituent parts. When a handle 
+is used to represent a part of a transaction request, the handle 
+presentation replaces the original value. In practical terms, this often
+ means that the values of a transaction request are either an object 
+(when the full value is used) or a single string (when the handle is 
+used). </p>
 <p></p>
 
 <dl>
@@ -1055,29 +1076,46 @@ transactions themselves as well as portions of transactions.</p>
 <dd style="margin-left: 8">The verification method, MUST be one of "bearer" or "sha3".</dd>
 </dl>
 <h1 id="rfc.section.9.1">
-<a href="#rfc.section.9.1">9.1.</a> Validating handles</h1>
-<p id="rfc.section.9.1.p.1">Bearer handles are validated by doing an exact byte comparison of the string representation of the handle value.</p>
-<p id="rfc.section.9.1.p.2">SHA3 handles are validated by taking the SHA3 hash of the handle value and encoding it in Base64URL with no padding.</p>
+<a href="#rfc.section.9.1">9.1.</a> Presenting handles</h1>
+<p id="rfc.section.9.1.p.1">Bearer handles are presented by giving the exact string value of the handle in the appropriate place.</p>
+<p id="rfc.section.9.1.p.2">SHA3 handles are validated by taking the 
+SHA3 hash of the handle value and encoding it in Base64URL with no 
+padding, and presenting the encoded value.</p>
 <h1 id="rfc.section.9.2">
-<a href="#rfc.section.9.2">9.2.</a> Transaction handles</h1>
-<p id="rfc.section.9.2.p.1">Transaction handles are issued by the AS to 
-the RC to allow the RC to continue a transaction after every step. A 
-transaction handle MUST be discarded after it is used. If the AS 
-determines that the RC can continue the transaction, a new transaction 
-handle will be issued in its place.</p>
+<a href="#rfc.section.9.2">9.2.</a> Validating handles</h1>
+<p id="rfc.section.9.2.p.1">Bearer handles are validated by doing an exact byte comparison of the string representation of the handle value.</p>
+<p id="rfc.section.9.2.p.2">SHA3 handles are validated by taking the 
+SHA3 hash of the handle value and encoding it in Base64URL with no 
+padding, and comparing that using an exact byte comparison with the 
+presented value.</p>
 <h1 id="rfc.section.9.3">
-<a href="#rfc.section.9.3">9.3.</a> Client handles</h1>
-<p id="rfc.section.9.3.p.1">Client handles stand in for the client 
-section of the initial transaction request. The AS MAY issue a client 
-handle to a client as part of a static registration process, analogous 
-to a client ID, allowing the client to be associated with an AS-side 
-configuration that does not change at runtime. Such static processes 
-SHOULD be bound to a set of keys known only to the client software.</p>
-<p id="rfc.section.9.3.p.2">Client handles MAY be issued by the RS in 
-response to a transaction request. The AS MAY bind this handle to the 
-interact, resource, and key handles issued in the same response. When 
-the RC receives this handle, it MAY present the handle in future 
-transaction requests instead of sending its information again.</p>
+<a href="#rfc.section.9.3">9.3.</a> <a href="#transaction-handle" id="transaction-handle">Transaction handles</a>
+</h1>
+<p id="rfc.section.9.3.p.1">Transaction handles are issued by the AS to 
+the RC to allow the RC to continue a transaction after every step. A 
+transaction handle MUST be discarded after it is used by both the AS and
+ the RC. A transaction MUST have only a single handle associated with it
+ at any time. If the AS determines that the RC can still continue the 
+transaction after a handle has been used, a new transaction handle will 
+be issued in its place. If the AS does not issue a transaction handle in
+ its response to the RC, the RC MUST NOT continue that transaction.</p>
+<p id="rfc.section.9.3.p.2">Transaction handles always represent the current state of the transaction which they reference. </p>
+<p id="rfc.section.9.3.p.3">Transactions can be continued by the RC if the AS needs to interact with the RO<a href="#user-interaction" class="xref">Section 5</a> and the RC is expecting a callback<a href="#interact-response" class="xref">Section 3</a> or if the AS is still waiting on some external condition<a href="#wait-response" class="xref">Section 4</a> while the RC is polling. The transaction MAY also be continued after an access token is issued <a href="#token-response" class="xref">Section 8</a> as a means of refreshing an access token with the same rights associated with the transaction. </p>
+<h1 id="rfc.section.9.4">
+<a href="#rfc.section.9.4">9.4.</a> <a href="#client-handle" id="client-handle">Client handles</a>
+</h1>
+<p id="rfc.section.9.4.p.1">RC handles stand in for the client section of the initial transaction request<a href="#client-request" class="xref">Section 2.1</a>.
+ The AS MAY issue a client handle to a RC as part of a static 
+registration process, analogous to a client ID in OAuth 2, allowing the 
+RC to be associated with an AS-side configuration that does not change 
+at runtime. Such static processes SHOULD be bound to a set of keys known
+ only to the RC software.</p>
+<p id="rfc.section.9.4.p.2">Client handles MAY be issued by the RS in 
+response to a transaction request. The AS MAY associate the client 
+handle to the interact, resource, and key handles issued in the same 
+response, requiring them to be used together. When the RC receives this 
+handle, it MAY present the handle in future transaction requests instead
+ of sending its information again.</p>
 <pre>{
 
   handle: {
@@ -1091,20 +1129,20 @@ transaction requests instead of sending its information again.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.3.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
+<p id="rfc.section.9.4.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
 <pre>{
 
   client: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
-<h1 id="rfc.section.9.4">
-<a href="#rfc.section.9.4">9.4.</a> Resource handles</h1>
-<p id="rfc.section.9.4.p.1">Resource handles stand in for the detailed 
-resource request in the transaction request. Resource handles MAY be 
-created by the authorization server as static stand-ins for specific 
-resource requests, analogous to OAuth2 scopes.</p>
-<p id="rfc.section.9.4.p.2">Resource handles MAY be issued by the RS in 
+<h1 id="rfc.section.9.5">
+<a href="#rfc.section.9.5">9.5.</a> <a href="#resource-handle" id="resource-handle">Resource handles</a>
+</h1>
+<p id="rfc.section.9.5.p.1">Resource handles stand in for the detailed resource request in the transaction request<a href="#resource-request" class="xref">Section 2.2</a>.
+ Resource handles MAY be created by the authorization server as static 
+stand-ins for specific resource requests, analogous to OAuth2 scopes.</p>
+<p id="rfc.section.9.5.p.2">Resource handles MAY be issued by the RS in 
 response to a transaction request. When the RC receives this handle, it 
 MAY present the handle in future transaction requests instead of sending
  its information again.</p>
@@ -1121,14 +1159,14 @@ MAY present the handle in future transaction requests instead of sending
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.4.p.4">The RC sends its handle in lieu of the resource block of the future transaction request:</p>
+<p id="rfc.section.9.5.p.4">The RC sends its handle in lieu of the resource block of the future transaction request:</p>
 <pre>{
 
   resources: ["foo"]
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.4.p.6">Handles and object values MAY be combined.</p>
+<p id="rfc.section.9.5.p.6">Handles and object values MAY be combined.</p>
 <pre>{
 
   resources: [
@@ -1141,12 +1179,31 @@ MAY present the handle in future transaction requests instead of sending
   ]
 
 }</pre>
-<h1 id="rfc.section.9.5">
-<a href="#rfc.section.9.5">9.5.</a> User handles</h1>
-<p id="rfc.section.9.5.p.1">User handles MAY be issued by the AS in 
-response to validating a specific RO during a transaction. This handle 
-can be used in future transactions to represent the current user, 
-analogous to the persistent claims token.</p>
+<p></p>
+<h1 id="rfc.section.9.5.1">
+<a href="#rfc.section.9.5.1">9.5.1.</a> Resource-first</h1>
+<p id="rfc.section.9.5.1.p.1">[[ Strawman idea: ]]</p>
+<p id="rfc.section.9.5.1.p.2">In order to facilitate dynamic API 
+protection, an RS MAY pre-register a resource handle in response to an 
+unauthorized request from the RC. In this scenario, the RS creates a 
+transaction request with no client information but describing the 
+resources being protected [[Note: this is currently at odds with the 
+required format above, perhaps this should be a special mode or flag? We
+ could still use the "keys" section here though.]] The AS returns a 
+resource handle to the RS, which then communicates both the resource 
+handle and the AS transaction endpoint to the RC. The RC then begins its
+ transaction as normal, using the resource handle as one of perhaps 
+several resources it requests. </p>
+<h1 id="rfc.section.9.6">
+<a href="#rfc.section.9.6">9.6.</a> <a href="#user-handle" id="user-handle">User handles</a>
+</h1>
+<p id="rfc.section.9.6.p.1">User handles MAY be issued by the AS in 
+response to validating a specific RO during a transaction and stand in 
+for the user section of a transaction request<a href="#user-request" class="xref">Section 2.3</a>.
+ This handle MAY refer to the RO that interacted with the AS, the user 
+presented by claims in the transaction request, or a combination of 
+these. This handle can be used in future transactions to represent the 
+current user, analogous to the persistent claims token of UMA 2.</p>
 <pre>{
 
   handle: {
@@ -1160,21 +1217,21 @@ analogous to the persistent claims token.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.5.p.3">The RC sends its handle in lieu of the user block of the transaction request:</p>
+<p id="rfc.section.9.6.p.3">The RC sends its handle in lieu of the user block of the transaction request:</p>
 <pre>{
 
   user: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
-<h1 id="rfc.section.9.6">
-<a href="#rfc.section.9.6">9.6.</a> Key handles</h1>
-<p id="rfc.section.9.6.p.1">Key handles stand in for the keys section of
- the initial transaction request. The AS MAY issue a key handle to a 
-client as part of a static registration process, allowing the client to 
-be associated with an AS-side configuration that does not change at 
-runtime.</p>
-<p id="rfc.section.9.6.p.2">Key handles MAY be issued by the RS in 
+<h1 id="rfc.section.9.7">
+<a href="#rfc.section.9.7">9.7.</a> <a href="#key-handle" id="key-handle">Key handles</a>
+</h1>
+<p id="rfc.section.9.7.p.1">Key handles stand in for the keys section of the initial transaction request<a href="#key-request" class="xref">Section 2.5</a>.
+ The AS MAY issue a key handle to a RC as part of a static registration 
+process, allowing the RC to be associated with an AS-side configuration 
+that does not change at runtime.</p>
+<p id="rfc.section.9.7.p.2">Key handles MAY be issued by the AS in 
 response to a transaction request. The AS SHOULD bind this handle to the
  client, resource, and user handles issued in the same response. When 
 the RC receives this handle, it MAY present the handle in future 
@@ -1192,18 +1249,19 @@ transaction requests instead of sending its information again.</p>
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.6.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
+<p id="rfc.section.9.7.p.4">The RC sends its handle in lieu of the client block of the transaction request:</p>
 <pre>{
 
   key: "absc2948afgdkjnasdf9082ur3kjasdfasdf89"
 
 }</pre>
 <p></p>
-<p id="rfc.section.9.6.p.6">When the AS receives a key handle, it MUST 
+<p id="rfc.section.9.7.p.6">When the AS receives a key handle, it MUST 
 validate that the keys referenced by the handle are bound to the current
  transaction request.</p>
 <h1 id="rfc.section.10">
-<a href="#rfc.section.10">10.</a> Binding Keys</h1>
+<a href="#rfc.section.10">10.</a> <a href="#binding-keys" id="binding-keys">Binding Keys</a>
+</h1>
 <p id="rfc.section.10.p.1">Any keys presented by the RC to the AS or RS 
 MUST be validated as part of the transaction in which they are 
 presented. Any keys bound to the transaction are indicated by the 
@@ -1211,17 +1269,14 @@ bound_keys section of the transaction response. Any keys referenced in
 this section MUST be used with all future transaction requests.</p>
 <h1 id="rfc.section.10.1">
 <a href="#rfc.section.10.1">10.1.</a> Binding a key to a transaction</h1>
-<p id="rfc.section.10.1.p.1">Keys are bound to a transaction by 
-including a bound_keys field in the transaction response alongside the 
-transaction handle. Any further keys used for binding</p>
+<p id="rfc.section.10.1.p.1">All keys presented by the RC in the transaction request<a href="#transaction-request" class="xref">Section 2</a> MUST be proved in all transaction continuation requests<a href="#transaction-continue" class="xref">Section 7</a> for that transaction. The AS MUST validate all keys presented by the RC or referenced in the transaction.</p>
 <h1 id="rfc.section.10.2">
-<a href="#rfc.section.10.2">10.2.</a> Validating detached JWS</h1>
-<p id="rfc.section.10.2.p.1">To sign a request to the transaction 
-endpoint, the RC takes the serialized body of the request and signs it 
-using detached JWS. The header of the JWS MUST contain the kid field of 
-the key bound to this client during this transaction. The header MUST 
-contain an alg field appropriate for the key identified by kid and MUST 
-NOT be none.  The</p>
+<a href="#rfc.section.10.2">10.2.</a> <a href="#detached-jws" id="detached-jws">Detached JWS</a>
+</h1>
+<p id="rfc.section.10.2.p.1">To sign a request to the transaction endpoint, the RC takes the serialized body of the request and signs it using detached JWS <a href="#RFC7797" class="xref">[RFC7797]</a>.
+ The header of the JWS MUST contain the kid field of the key bound to 
+this RC during this transaction. The header MUST contain an alg field 
+appropriate for the key identified by kid and MUST NOT be none. </p>
 <p id="rfc.section.10.2.p.2">The RC presents the signature in the JWS-Signature HTTP Header field. [Note: this is a custom header field, do we need this?]</p>
 <pre>JWS-Signature: eyj0....</pre>
 <p></p>
@@ -1230,54 +1285,48 @@ header, it MUST parse its contents as a detached JWS object. The HTTP
 Body is used as the payload for purposes of validating the JWS, with no 
 transformations.</p>
 <h1 id="rfc.section.10.3">
-<a href="#rfc.section.10.3">10.3.</a> Validating attached JWS</h1>
-<p id="rfc.section.10.3.p.1">[Note: if we do an attached JWS we end up having two different data types to deal with at the AS, is this ok?]</p>
-<p id="rfc.section.10.3.p.2">To sign a request to the transaction 
-endpoint with an attached JWS, the RC takes the body of the request as 
-the JWS payload and wraps the request in a JWS object.</p>
+<a href="#rfc.section.10.3">10.3.</a> <a href="#mtls" id="mtls">Validating MTLS</a>
+</h1>
+<p id="rfc.section.10.3.p.1">The RC presents its client certificate 
+during TLS negotiation with the server (either AS or RS). The AS or RS 
+takes the thumbprint of the client certificate presented during mutual 
+TLS negotiation and compares that thumbprint to the thumbprint presented
+ by the RC application.</p>
 <h1 id="rfc.section.10.4">
-<a href="#rfc.section.10.4">10.4.</a> Validating MTLS</h1>
-<p id="rfc.section.10.4.p.1">The RC presents its client certificate 
-during TLS negotiation with the server. The AS or RS takes the 
-thumbprint of the client certificate presented during mutual TLS 
-negotiation and compares that thumbprint to the thumbprint presented by 
-the RC application.</p>
-<h1 id="rfc.section.10.5">
-<a href="#rfc.section.10.5">10.5.</a> Validating DID</h1>
-<p id="rfc.section.10.5.p.1">The RC signs the request using [some HTTP 
-signing mechanism] and its private key, and attaches the signature to 
-the HTTP request using [a header method?]. [Note: is DID just a 
-key-lookup mechanism here or should we use a different kind of crypto 
-method as well?]</p>
+<a href="#rfc.section.10.4">10.4.</a> <a href="#did" id="did">Validating DID</a>
+</h1>
+<p id="rfc.section.10.4.p.1">[[ Note: validation of DID-based keys could
+ potentially be either detached JWS or MTLS, depending on the type of 
+key used, or some other validation mechanism. ]] The RC signs the 
+request using [some HTTP signing mechanism] and its private key, and 
+attaches the signature to the HTTP request using [a header method?]. 
+[Note: is DID just a key-lookup mechanism here or should we use a 
+different kind of crypto method as well?]</p>
 <h1 id="rfc.section.11">
-<a href="#rfc.section.11">11.</a> Using a Token</h1>
-<p id="rfc.section.11.p.1">Bearer access tokens issued through this 
-method can be used with the authorization header method found in 
-RFC6750. Other access tokens are validated by the RS in accordance with 
-the methods in the Binding Keys section.</p>
+<a href="#rfc.section.11">11.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
+</h1>
+<p></p>
 <h1 id="rfc.section.12">
-<a href="#rfc.section.12">12.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
+<a href="#rfc.section.12">12.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
 </h1>
-<p></p>
+<p id="rfc.section.12.p.1">This specification creates one registry and registers several values into existing registries.</p>
 <h1 id="rfc.section.13">
-<a href="#rfc.section.13">13.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+<a href="#rfc.section.13">13.</a> <a href="#Security" id="Security">Security Considerations</a>
 </h1>
-<p id="rfc.section.13.p.1">This specification creates one registry and registers several values into existing registries.</p>
+<p id="rfc.section.13.p.1">All requests have to be over TLS or equivalent. </p>
 <h1 id="rfc.section.14">
-<a href="#rfc.section.14">14.</a> <a href="#Security" id="Security">Security Considerations</a>
+<a href="#rfc.section.14">14.</a> <a href="#Privacy" id="Privacy">Privacy Considerations</a>
 </h1>
-<p></p>
-<h1 id="rfc.section.15">
-<a href="#rfc.section.15">15.</a> <a href="#Privacy" id="Privacy">Privacy Considerations</a>
-</h1>
-<p></p>
+<p id="rfc.section.14.p.1">Handles are passed between parties and 
+therefore should be stateful and not contain any internal structure or 
+information, which could leak private data. </p>
 <h1 id="rfc.references">
-<a href="#rfc.references">16.</a> Normative References</h1>
+<a href="#rfc.references">15.</a> Normative References</h1>
 <table><tbody>
 <tr>
-<td class="reference"><b id="OpenID">[OpenID]</b></td>
+<td class="reference"><b id="BCP195">[BCP195]</b></td>
 <td class="top">
-<a title="Nomura Research Institute, Ltd.">Sakimura, N.</a>, <a title="Ping Identity">Bradley, J.</a> and <a title="Microsoft">M. Jones</a>, "<a>OpenID Connect Core 1.0</a>", November 2014.</td>
+<a>Sheffer, Y.</a>, <a>Holz, R.</a> and <a>P. Saint-Andre</a>, "<a href="https://tools.ietf.org/html/rfc7525">Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)</a>", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May 2015.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
@@ -1290,6 +1339,11 @@ the methods in the Binding Keys section.</p>
 <a>Hardt, D.</a>, "<a href="https://tools.ietf.org/html/rfc6749">The OAuth 2.0 Authorization Framework</a>", RFC 6749, DOI 10.17487/RFC6749, October 2012.</td>
 </tr>
 <tr>
+<td class="reference"><b id="RFC6750">[RFC6750]</b></td>
+<td class="top">
+<a>Jones, M.</a> and <a>D. Hardt</a>, "<a href="https://tools.ietf.org/html/rfc6750">The OAuth 2.0 Authorization Framework: Bearer Token Usage</a>", RFC 6750, DOI 10.17487/RFC6750, October 2012.</td>
+</tr>
+<tr>
 <td class="reference"><b id="RFC7519">[RFC7519]</b></td>
 <td class="top">
 <a>Jones, M.</a>, <a>Bradley, J.</a> and <a>N. Sakimura</a>, "<a href="https://tools.ietf.org/html/rfc7519">JSON Web Token (JWT)</a>", RFC 7519, DOI 10.17487/RFC7519, May 2015.</td>
@@ -1298,6 +1352,11 @@ the methods in the Binding Keys section.</p>
 <td class="reference"><b id="RFC7662">[RFC7662]</b></td>
 <td class="top">
 <a>Richer, J.</a>, "<a href="https://tools.ietf.org/html/rfc7662">OAuth 2.0 Token Introspection</a>", RFC 7662, DOI 10.17487/RFC7662, October 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7797">[RFC7797]</b></td>
+<td class="top">
+<a>Jones, M.</a>, "<a href="https://tools.ietf.org/html/rfc7797">JSON Web Signature (JWS) Unencoded Payload Option</a>", RFC 7797, DOI 10.17487/RFC7797, February 2016.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC8126">[RFC8126]</b></td>
@@ -1320,7 +1379,11 @@ the methods in the Binding Keys section.</p>
 <p id="rfc.section.A.p.1">- 01</p>
 <p></p>
 
-<ul><li>Made JSON multimodal for handle requests.</li></ul>
+<ul>
+<li>Made JSON multimodal for handle requests.</li>
+<li>Major updates to normative language and references throughout document.</li>
+<li>Allowed interaction to split between how the user gets to the AS and how the user gets back. </li>
+</ul>
 <p id="rfc.section.A.p.3">- 00</p>
 <p></p>
 
