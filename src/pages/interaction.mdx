@@ -1,4 +1,5 @@
 import Code from "../components/code"
+import Network from "../components/network"
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import SEO from '../components/seo'
@@ -14,7 +15,14 @@ Currently, two modes of interaction are defined:
  - The `redirect` mode is used when the client is capable of opening a browser on the same device for the user to interact with the AS.
  - The `device` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
  
-## Redirect
+In addition, the client can indicate how it can receive responses from the interaction request. Currently, there are two modes of getting a response:
+
+ - The client can set a `callback` URL that the AS can send the user back to when done interacting
+ - The client can poll the AS using a transaction handle
+
+These can be used independently of the interaction method, but it will likely be most common to use a callback with the redirect method, polling with the device method, and in limited cases polling with the redirect method. These combinations are shown here.
+
+## Redirect with Callback
 
 In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
 
@@ -95,7 +103,7 @@ The client then sends a transaction continue request to the AS including the int
 
 The AS looks up the transaction from the transaction handle and fetches the interaction handle associated with that transaction. The AS compares the presented handle to hash of the stored interaction handle it appended to the client's callback. If they match, the AS continues processing as normal, likely issuing a token.
 
-## Device
+## Device with Polling
 
 The device-based interaction is intended for clients that need to have the user use a secondary device of some kind to interact with the authorization server. Unlike the redirect based interaction, the client does not send the user to the AS directly. Instead, the client presents the user with a code and instructs the user to interact with the server. Meanwhile, the client polls the AS in the background until the transaction is approved.
 
@@ -115,7 +123,7 @@ When the AS determines that the client's request needs user interaction, it send
 
 <Code
   code={{
-interaction_url: "https://server.example.com/interact/device",
+user_code_url: "https://server.example.com/interact/device",
 user_code: "A1BC-3DFF",
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
@@ -130,7 +138,7 @@ Once at the AS, the AS can ask the user for authentication, and to authorize the
 
 When the AS has collected whatever additional input it needs from the user, it displays to the user that they can return to their device and continue operation.
 
-> To completely close a session-fixation attack, we could require the AS to present another code to the user and have the user enter that into the client device. This only works on some kinds of devices, though, so it would need to be an option. Additionally, we might want to consider a kind of "secondary application" based interaction that isn't web-based.
+> To completely close a session-fixation attack, we could require the AS to present another code to the user and have the user enter that into the client device. This only works on some kinds of devices, though, so it would need to be an option. Additionally, we might want to consider a kind of "secondary application" based interaction that isn't web-based, such as a CIBA login.
 
 Meanwhile, the client can poll the AS using the transaction handle to see if the user has authorized them yet. This request includes proofs of any keys that the client sent during the original transaction request.
 
@@ -151,3 +159,58 @@ If the user has yet to approve the transaction, the AS sends back a response tel
 }} />
 
 The `wait` parameter tells the client the number of integer seconds it must wait before polling again. The client can continue to poll in this manner until it receives either a token response or the user code times out and the client receives an error response.
+
+## Redirect with Polling
+
+For some kinds of clients, it is possible to show the user a visual signal such as a QR code that the user can scan on a secondary device. This allows the client to send the user to an arbitrary URL but not receive a callback in the front channel, so polling is necessary. 
+
+## Redirect with Callback
+
+In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
+
+<Code
+  code={{
+"transaction": {
+  "interact": {
+    "type": "redirect"
+  }
+}
+  }}
+/>
+
+As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
+
+<Code
+  code={{
+interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+handle: {
+  value: "80UPRY5NM33OMUKMKSKU",
+  type: "bearer"
+}
+  }}
+/>
+
+The client then communicates this arbitrary URL to the user, perhaps using a QR code. 
+
+<img src="http://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fserver.example.com%2Finteract%2F4CF492MLVMSW9MKMXKHQ&amp;qzone=1&amp;margin=0&amp;size=200x200&amp;ecc=L" alt="qr code" />
+
+While the client waits for the user to complete the interaction, it polls the AS using the transaction handle.
+
+<Code
+  from="client" to="as"
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU"
+  }} />
+
+If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
+
+<Code
+  code={{
+  wait: 30,
+  handle: {
+    value: "BI9QNW6V9W3XFJK4R02D",
+    method: "bearer"
+  }
+}} />
+
+> It would be interesting to figure out if we can combine both the user code and arbitrary redirect URL methods, giving the user a few options. 
