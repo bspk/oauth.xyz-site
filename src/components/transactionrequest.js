@@ -56,8 +56,7 @@ class TransactionRequest extends React.Component {
     key: {
       label: 'Key',
       full: {
-          type: "jwsd",
-          jwks: {
+        jwks: {
   "keys": [
     {
       "kty": "RSA",
@@ -78,7 +77,7 @@ class TransactionRequest extends React.Component {
       client: 'full',
       resources: 'handle',
       interact: 'full',
-      key: 'omit',
+      key: 'full',
       user: 'omit'
     }
   }
