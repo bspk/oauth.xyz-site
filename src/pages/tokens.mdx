@@ -41,7 +41,6 @@ A token issued with an associated key is bound to that key, and proof of possess
 <Code code={{
   access_token: {
     value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-    type: "jwsd",
     jwks: {
   "keys": [
     {
@@ -60,7 +59,7 @@ The associated key may be one of the public keys the client has proved ownership
 
 Methods for key binding are <Link to="/keys">the same as used by the client to talk to the transaction endpoint</Link>, but applied to the resource server. 
 
-> Since we don't have full control over the resource server's API, the methods available to the client aren't as well defined ahead of time. 
+> Since we don't have full control over the resource server's API, the methods available to the client aren't as well defined ahead of time. For example, using detached JWS, we rely on signing the body, but there may not be a request body at the RS. This makes more sense with MTLS.
 
 ## Refreshing tokens
 

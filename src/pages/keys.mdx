@@ -13,10 +13,9 @@ The client can present a key to the AS during the transaction process that it ca
 
 ## Detached JSON Web Signature
 
-The key in this method is presented as a JSON Web Key Set.
+The key in this method is presented as a JSON Web Key Set by the client during the transaction request.
 
 <Code code={{
-          type: "jwsd",
           jwks: {
   "keys": [
     {
@@ -30,21 +29,20 @@ The key in this method is presented as a JSON Web Key Set.
 }
 }}/>
 
-The `jwsd` key method uses a detached JWS to sign the request body, which is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
+This key presentation method uses a detached JWS to sign the request body, which is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
 
 <SyntaxHighlighter language='http' style={okaidia}>{`POST /transaction HTTP/1.1
 Host: server.example.com
 Content-Type: application/json
 Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY0EegEjoTd_04a4GC6qV48GgVbGKOhHdJnDtD0VuUlVjLfwne8AuUY3U7e89zUWwXLnAYK_BiS84M8EsrFvmv8yDLWzqveeIpcN5_ysveQnYt9Dqi32w6IOtAywkNUDZeJEdc3z5s9Ei8qrYFN2fxcu28YS4e8e_cHTK57003WJu-wFn2TJUmAbHuqvUsyTb-nzYOKxuCKlqQItJF7E-cwSb_xULu-3f77BEU_vGbNYo5ZBa2B7UHO-kWNMSgbW2yeNNLbLC18Kv80GF22Y7SbZt0e2TwnR2Aa2zksuUbntQ5c7a1-gxtnXzuIKa34OekrnyqE1hmVWpeQ
+ 
 {
     "client": {
         "name": "My Client Display Name",
         "uri": "https://example.net/client"
     },
     "resources": [
-        {
-            "handle": "dolphin-metadata"
-        }
+        "dolphin-metadata"
     ],
     "interact": {
         "type": "redirect",
@@ -52,7 +50,6 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
         "state": "LKLTI25DK82FX4T4QFZC"
     },
     "key": {
-        "type": "jwsd",
         "jwks": {
             "keys": [
                 {
@@ -70,6 +67,8 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
 
 > This is susceptible to any number of issues with data transformation, and it doesn't protect the request URL or header, only the body. However, the body is not transformed by the signature, which is a benefit for simplicity.
 
+> We could also do cavage-signatures or a number of other methods
+
 &nbsp;
 
 > Should we also have an "embedded JWS" method, for instance simply turning the request body into a JWS wrapped by the signature in compact format?
@@ -78,7 +77,7 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
 
 The `did` key method uses a `did` URI to indicate the key. The client signs the HTTP request using a ZKP algorithm.
 
-> I'm interested to see how we'd do this in a practical sense, but I haven't seen a lot of work on signing HTTP with ZKP algorithms, only highly specialized queries.  
+> I'm interested to see how we'd do this in a practical sense, but I haven't seen a lot of work on signing HTTP with ZKP algorithms, only highly specialized queries. The keys retrieved from a `did` could be in any number of formats, and could be presented and proofed in several different ways. 
 
 ## Mutual TLS
 
@@ -87,15 +86,14 @@ The `mtls` key method uses the client certificate presented at the TLS layer to 
 <SyntaxHighlighter language='http' style={okaidia}>{`POST /transaction HTTP/1.1
 Host: server.example.com
 Content-Type: application/json
+ 
 {
     "client": {
         "name": "My Client Display Name",
         "uri": "https://example.net/client"
     },
     "resources": [
-        {
-            "handle": "dolphin-metadata"
-        }
+        "dolphin-metadata"
     ],
     "interact": {
         "type": "redirect",
@@ -103,8 +101,8 @@ Content-Type: application/json
         "state": "LKLTI25DK82FX4T4QFZC"
     },
     "key": {
-        "type": "mtls",
-        "x509": "MIIEHDCCAwSgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBmjE3MDUGA1UEAwwuQmVzcG9rZSBFbmdpbmVlcmluZyBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eTELMAkGA1UECAwCTUExCzAJBgNVBAYTAlVTMRkwFwYJKoZIhvcNAQkBFgpjYUBic3BrLmlvMRwwGgYDVQQKDBNCZXNwb2tlIEVuZ2luZWVyaW5nMQwwCgYDVQQLDANNVEkwHhcNMTkwNDEwMjE0MDI5WhcNMjQwNDA4MjE0MDI5WjB8MRIwEAYDVQQDDAlsb2NhbGhvc3QxCzAJBgNVBAgMAk1BMQswCQYDVQQGEwJVUzEgMB4GCSqGSIb3DQEJARYRdGxzY2xpZW50QGJzcGsuaW8xHDAaBgNVBAoME0Jlc3Bva2UgRW5naW5lZXJpbmcxDDAKBgNVBAsMA01USTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMmaXQHbs/wc1RpsQ6Orzf6rN+q2ijaZbQxD8oi+XaaN0P/gnE13JqQduvdq77OmJ4bQLokqsd0BexnI07Njsl8nkDDYpe8rNve5TjyUDCfbwgS7U1CluYenXmNQbaYNDOmCdHwwUjV4kKREg6DGAx22Oq7+VHPTeeFgyw4kQgWRSfDENWY3KUXJlb/vKR6lQ+aOJytkvj8kVZQtWupPbvwoJe0na/ISNAOhL74w20DWWoDKoNltXsEtflNljVoi5nqsmZQcjfjt6LO0T7O1OX3Cwu2xWx8KZ3n/2ocuRqKEJHqUGfeDtuQNt6Jz79v/OTr8puLWaD+uyk6NbtGjoQsCAwEAAaOBiTCBhjAJBgNVHRMEAjAAMAsGA1UdDwQEAwIF4DBsBgNVHREEZTBjgglsb2NhbGhvc3SCD3Rsc2NsaWVudC5sb2NhbIcEwKgBBIERdGxzY2xpZW50QGJzcGsuaW+GF2h0dHA6Ly90bHNjbGllbnQubG9jYWwvhhNzc2g6dGxzY2xpZW50LmxvY2FsMA0GCSqGSIb3DQEBCwUAA4IBAQCKKv8WlLrT4Z5NazaUrYtlTF+2v0tvZBQ7qzJQjlOqAcvxry/d2zyhiRCRS/v318YCJBEv4Iq2W3I3JMMyAYEe2573HzT7rH3xQP12yZyRQnetdiVM1Z1KaXwfrPDLs72hUeELtxIcfZ0M085jLboXhufHI6kqm3NCyCCTihe2ck5RmCc5l2KBO/vAHF0ihhFOOOby1v6qbPHQcxAU6rEb907/p6BW/LV1NCgYB1QtFSfGxowqb9FRIMD2kvMSmO0EMxgwZ6k6spa+jk0IsI3klwLW9b+Tfn/daUbIDctxeJneq2anQyU2znBgQl6KILDSF4eaOqlBut/KNZHHazJh"
+        "cert": "MIIEHDCCAwSgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBmjE3MDUGA1UEAwwuQmVzcG9rZSBFbmdpbmVlcmluZyBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eTELMAkGA1UECAwCTUExCzAJBgNVBAYTAlVTMRkwFwYJKoZIhvcNAQkBFgpjYUBic3BrLmlvMRwwGgYDVQQKDBNCZXNwb2tlIEVuZ2luZWVyaW5nMQwwCgYDVQQLDANNVEkwHhcNMTkwNDEwMjE0MDI5WhcNMjQwNDA4MjE0MDI5WjB8MRIwEAYDVQQDDAlsb2NhbGhvc3QxCzAJBgNVBAgMAk1BMQswCQYDVQQGEwJVUzEgMB4GCSqGSIb3DQEJARYRdGxzY2xpZW50QGJzcGsuaW8xHDAaBgNVBAoME0Jlc3Bva2UgRW5naW5lZXJpbmcxDDAKBgNVBAsMA01USTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMmaXQHbs/wc1RpsQ6Orzf6rN+q2ijaZbQxD8oi+XaaN0P/gnE13JqQduvdq77OmJ4bQLokqsd0BexnI07Njsl8nkDDYpe8rNve5TjyUDCfbwgS7U1CluYenXmNQbaYNDOmCdHwwUjV4kKREg6DGAx22Oq7+VHPTeeFgyw4kQgWRSfDENWY3KUXJlb/vKR6lQ+aOJytkvj8kVZQtWupPbvwoJe0na/ISNAOhL74w20DWWoDKoNltXsEtflNljVoi5nqsmZQcjfjt6LO0T7O1OX3Cwu2xWx8KZ3n/2ocuRqKEJHqUGfeDtuQNt6Jz79v/OTr8puLWaD+uyk6NbtGjoQsCAwEAAaOBiTCBhjAJBgNVHRMEAjAAMAsGA1UdDwQEAwIF4DBsBgNVHREEZTBjgglsb2NhbGhvc3SCD3Rsc2NsaWVudC5sb2NhbIcEwKgBBIERdGxzY2xpZW50QGJzcGsuaW+GF2h0dHA6Ly90bHNjbGllbnQubG9jYWwvhhNzc2g6dGxzY2xpZW50LmxvY2FsMA0GCSqGSIb3DQEBCwUAA4IBAQCKKv8WlLrT4Z5NazaUrYtlTF+2v0tvZBQ7qzJQjlOqAcvxry/d2zyhiRCRS/v318YCJBEv4Iq2W3I3JMMyAYEe2573HzT7rH3xQP12yZyRQnetdiVM1Z1KaXwfrPDLs72hUeELtxIcfZ0M085jLboXhufHI6kqm3NCyCCTihe2ck5RmCc5l2KBO/vAHF0ihhFOOOby1v6qbPHQcxAU6rEb907/p6BW/LV1NCgYB1QtFSfGxowqb9FRIMD2kvMSmO0EMxgwZ6k6spa+jk0IsI3klwLW9b+Tfn/daUbIDctxeJneq2anQyU2znBgQl6KILDSF4eaOqlBut/KNZHHazJh"
     }
 }
 `}</SyntaxHighlighter>
+
