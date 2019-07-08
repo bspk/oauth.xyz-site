@@ -21,6 +21,12 @@ const AS = () => {
   );
 };
 
+const RS = () => {
+  return (
+    <Badge pull variant="dark">RS</Badge>
+  );
+}
+
 const toBadge = (from) => {
   if (from == 'client') {
     return (<Client />);
@@ -28,6 +34,8 @@ const toBadge = (from) => {
     return (<Browser />);
   } else if (from == 'as') {
     return (<AS />);
+  } else if (from == 'rs') {
+    return (<RS />);
   } else {
     return (<Badge pill variant="danger">?</Badge>);
   }

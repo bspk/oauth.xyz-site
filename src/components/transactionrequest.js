@@ -144,7 +144,10 @@ class TransactionRequest extends React.Component {
           <SelectorList>
             {selectors}
           </SelectorList>
-          <Code code={transaction} />
+          <Code   
+            from="client" to="as"
+            code={transaction} 
+          />
       </div>
     );
   

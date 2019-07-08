@@ -1,5 +1,6 @@
 import SEO from '../components/seo'
-import Code from "../components/code"
+import Code from '../components/code'
+import Network from '../components/network'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -15,7 +16,9 @@ The client can present a key to the AS during the transaction process that it ca
 
 The key in this method is presented as a JSON Web Key Set by the client during the transaction request.
 
-<Code code={{
+<Code
+  from="client" to="as"
+  code={{
           jwks: {
   "keys": [
     {
@@ -31,6 +34,7 @@ The key in this method is presented as a JSON Web Key Set by the client during t
 
 This key presentation method uses a detached JWS to sign the request body, which is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
 
+<Network from="client" to="as" />
 <SyntaxHighlighter language='http' style={okaidia}>{`POST /transaction HTTP/1.1
 Host: server.example.com
 Content-Type: application/json
@@ -83,6 +87,7 @@ The `did` key method uses a `did` URI to indicate the key. The client signs the 
 
 The `mtls` key method uses the client certificate presented at the TLS layer to authorize the transaction. The client indicates its certificate as either an encoded certificate string, or as a certificate thumbprint as in OAuth 2's certificate-bound access token methods.
 
+<Network from="client" to="as" />
 <SyntaxHighlighter language='http' style={okaidia}>{`POST /transaction HTTP/1.1
 Host: server.example.com
 Content-Type: application/json

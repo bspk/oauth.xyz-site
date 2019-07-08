@@ -29,15 +29,16 @@ In redirect based interaction, the client sends the user to an interactive page 
 To use this mode, the client's transaction request includes a section that includes a URI the client can receive requests at as well as a unique state value. 
 
 <Code
-  code={{
-"transaction": {
+  from="client" to="as"
+  code={
+{
   "interact": {
     "type": "redirect",
     "callback": "https://client.foo",
     "state": "VJLO6A4CAYLBXHTR0KRO"
   }
 }
-  }}
+  }
 />
 
 The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used. The state value is opaque to the AS and should be random. The client remembers this state value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the state value is remembered in the application's current state.
@@ -45,6 +46,7 @@ The URI must be reachable from the user's system browser, and can be any `https`
 When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
 
 <Code
+  from="as" to="client"
   code={{
 interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
 handle: {
@@ -58,11 +60,13 @@ Much like the callback URI, the interaction URI must be reachable from the user'
 
 The client sends the user to the URL completely as-is, without adding any query parameters, fragments, paths, or other components. If the client is a web server, it can send the user to the remote site via an HTTP redirect.
 
+<Network from="client" to="browser" />
 <SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
 Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ`}</SyntaxHighlighter>
 
 If the client is a mobile application, such as an Android app, it can launch the system browser for interaction.
 
+<Network from="client" to="browser" />
 <SyntaxHighlighter language='java' style={okaidia}>{`Intent browserIntent = 
   new Intent(Intent.ACTION_VIEW, 
     Uri.parse("https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"));
@@ -76,6 +80,7 @@ When the AS has collected whatever input it needs from the user, it sends the us
  - the Base64 URL encoded SHA3 hash of the `state` value sent by the client in that same request as a query parameter. 
  - a unique interaction handle, which is both opaque and unguessable, in this example `4IFWWIKYBC2PQ6U56NL1`
 
+<Network from="as" to="browser" />
 <SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
 Location: https://client.foo/
   ?state=WiQw-eN-ZA0Dkx8l1ytzc3h-I9xU1RRHO-1I68sdKS-ytjQXL8_CuSpWJYeqRTGL0KyTOraz2u-DedC9UG4mkw
@@ -96,6 +101,7 @@ The client receives a request from the user's browser through the callback URL. 
 The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
 
 <Code
+  from="client" to="as"
   code={{
     handle: "80UPRY5NM33OMUKMKSKU",
     interact_handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
@@ -110,18 +116,18 @@ The device-based interaction is intended for clients that need to have the user 
 The client starts this mode by sending a transaction request indicating that the user will interact with the AS through a secondary device. 
 
 <Code
+  from="client" to="as"
   code={{
-"transaction": {
   "interact": {
     "type": "device"
   }
-}
   }}
 />
 
 When the AS determines that the client's request needs user interaction, it sends an interaction URI in the transaction response. The interaction URI is for a user-facing page at the AS, and this can be a static URI for this mode. The AS also includes a short user-facing code. This code must be random, short-lived, and easily typed by a user. It must be processed in a case-insensitive way, and should use characters that are unambiguous when displayed even at low resolution (e.g., not using both the `0` (zero) and `O` (letter O) characters as options).
 
 <Code
+  from="as" to="client"
   code={{
 user_code_url: "https://server.example.com/interact/device",
 user_code: "A1BC-3DFF",
@@ -143,6 +149,7 @@ When the AS has collected whatever additional input it needs from the user, it d
 Meanwhile, the client can poll the AS using the transaction handle to see if the user has authorized them yet. This request includes proofs of any keys that the client sent during the original transaction request.
 
 <Code
+  from="client" to="as"
   code={{
     handle: "80UPRY5NM33OMUKMKSKU"
   }} />
@@ -150,6 +157,7 @@ Meanwhile, the client can poll the AS using the transaction handle to see if the
 If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
 
 <Code
+  from="as" to="client"
   code={{
   wait: 30,
   handle: {
@@ -169,18 +177,18 @@ For some kinds of clients, it is possible to show the user a visual signal such 
 In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
 
 <Code
+  from="client" to="as"
   code={{
-"transaction": {
   "interact": {
     "type": "redirect"
   }
-}
   }}
 />
 
 As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
 
 <Code
+  from="as" to="client"
   code={{
 interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
 handle: {
@@ -205,6 +213,7 @@ While the client waits for the user to complete the interaction, it polls the AS
 If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
 
 <Code
+  from="as" to="client"
   code={{
   wait: 30,
   handle: {

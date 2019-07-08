@@ -3,7 +3,8 @@ import {Link} from 'gatsby'
 import SEO from '../components/seo'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import Code from "../components/code"
+import Code from '../components/code'
+import Network from '../components/network'
 
 <SEO title="Tokens" keywords={['oauth', 'authorization', 'security']} />
 
@@ -11,7 +12,9 @@ import Code from "../components/code"
 
 Tokens in XYZ are issued in response to a request to the transaction endpoint. Unlike OAuth 2, tokens are never issued in the front channel via the browser regardless of the mode or type of client.
 
-<Code code={{
+<Code
+  from="as" to="client"
+  code={{
   access_token: {
     value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
     type: "bearer"
@@ -24,12 +27,14 @@ Access token formats and values are opaque to the client, but must be known to b
 
 A token issued without an associated key is a bearer token, and any party with access to the token can present it to the RS. This token can be presented as-is if the `type` field is `bearer`, and the client sends it using the Authorization header method defined in RFC6750.
 
+<Network from="client" to="rs" />
 <SyntaxHighlighter language='http' style={okaidia}>{`GET / HTTP/1.1
 Host: server.example.com
 Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`}</SyntaxHighlighter>
 
 If the type is `sha3` then the token is presented as the Base64 encoded SHA3 hash of the token value.
 
+<Network from="client" to="rs" />
 <SyntaxHighlighter language='http' style={okaidia}>{`GET / HTTP/1.1
 Host: server.example.com
 Authorization: Bearer WtHmGirjNWJUrWEv7K0I46_hwEdS7SqMcKZOmEsC8XE610t6o7DAv57Zm-3TL3Y9C7UG2AAynXQbwmROXaPMug`}</SyntaxHighlighter>
@@ -38,7 +43,9 @@ Authorization: Bearer WtHmGirjNWJUrWEv7K0I46_hwEdS7SqMcKZOmEsC8XE610t6o7DAv57Zm-
 
 A token issued with an associated key is bound to that key, and proof of possession of that key must be presented to the RS alongside the token. 
 
-<Code code={{
+<Code
+  from="as" to="client"
+  code={{
   access_token: {
     value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
     jwks: {
@@ -65,7 +72,9 @@ Methods for key binding are <Link to="/keys">the same as used by the client to t
 
 If the access token is issued alongside a transaction handle:
 
-<Code code={{
+<Code
+  from="as" to="client"
+  code={{
   access_token: {
     value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
     type: "bearer"
@@ -79,13 +88,16 @@ handle: {
 Then the client can use that handle to request a new access token with the same characteristics.
 
 <Code
+  from="client" to="as"
   code={{
     handle: "80UPRY5NM33OMUKMKSKU"
   }} />
 
 If the transaction handle is still valid, the AS issues the new access token.
 
-<Code code={{
+<Code
+  from="as" to="client"
+  code={{
   access_token: {
     value: "FKPLDO5394XVIWHVNR7POUNC4OYJ2LWKYYZGKFS6",
     type: "bearer"
