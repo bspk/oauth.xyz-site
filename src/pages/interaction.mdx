@@ -172,10 +172,6 @@ The `wait` parameter tells the client the number of integer seconds it must wait
 
 For some kinds of clients, it is possible to show the user a visual signal such as a QR code that the user can scan on a secondary device. This allows the client to send the user to an arbitrary URL but not receive a callback in the front channel, so polling is necessary. 
 
-## Redirect with Callback
-
-In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
-
 <Code
   from="client" to="as"
   code={{
