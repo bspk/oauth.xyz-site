@@ -50,7 +50,7 @@ const Network = ({from, to}) => {
   
   return (
   
-    <Alert variant="primary">
+    <Alert variant="dark" className="alert-network">
       {elements}
     </Alert>
   );

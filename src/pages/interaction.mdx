@@ -1,7 +1,4 @@
 import Code from "../components/code"
-import Network from "../components/network"
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import SEO from '../components/seo'
 
 <SEO title="Interaction" keywords={['oauth', 'authorization', 'security']} />
@@ -60,17 +57,18 @@ Much like the callback URI, the interaction URI must be reachable from the user'
 
 The client sends the user to the URL completely as-is, without adding any query parameters, fragments, paths, or other components. If the client is a web server, it can send the user to the remote site via an HTTP redirect.
 
-<Network from="client" to="browser" />
-<SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
-Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ`}</SyntaxHighlighter>
+<Code 
+  from="client" to="browser"
+  language='http' codeString={`HTTP 302 Found
+Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ`} />
 
 If the client is a mobile application, such as an Android app, it can launch the system browser for interaction.
 
-<Network from="client" to="browser" />
-<SyntaxHighlighter language='java' style={okaidia}>{`Intent browserIntent = 
+<Code from="client" to="browser"  
+  language='java' codeString={`Intent browserIntent = 
   new Intent(Intent.ACTION_VIEW, 
     Uri.parse("https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"));
-startActivity(browserIntent);`}</SyntaxHighlighter>
+startActivity(browserIntent);`} />
 
 Obviously, any method including an embedded security tab such as used by the AppAuth implementation of OAuth 2 is also acceptable. The important thing is to get the current user to the AS, where they can start interacting.
 
@@ -80,11 +78,12 @@ When the AS has collected whatever input it needs from the user, it sends the us
  - the Base64 URL encoded SHA3 hash of the `state` value sent by the client in that same request as a query parameter. 
  - a unique interaction handle, which is both opaque and unguessable, in this example `4IFWWIKYBC2PQ6U56NL1`
 
-<Network from="as" to="browser" />
-<SyntaxHighlighter language='http' style={okaidia}>{`HTTP 302 Found
+<Code 
+  from="as" to="browser"
+  language='http' codeString={`HTTP 302 Found
 Location: https://client.foo/
   ?state=WiQw-eN-ZA0Dkx8l1ytzc3h-I9xU1RRHO-1I68sdKS-ytjQXL8_CuSpWJYeqRTGL0KyTOraz2u-DedC9UG4mkw
-  &interact=4IFWWIKYBC2PQ6U56NL1`}</SyntaxHighlighter>
+  &interact=4IFWWIKYBC2PQ6U56NL1`} />
 
 Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
 

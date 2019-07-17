@@ -1,10 +1,7 @@
 import {Link} from 'gatsby'
 
 import SEO from '../components/seo'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Code from '../components/code'
-import Network from '../components/network'
 
 <SEO title="Tokens" keywords={['oauth', 'authorization', 'security']} />
 
@@ -27,17 +24,19 @@ Access token formats and values are opaque to the client, but must be known to b
 
 A token issued without an associated key is a bearer token, and any party with access to the token can present it to the RS. This token can be presented as-is if the `type` field is `bearer`, and the client sends it using the Authorization header method defined in RFC6750.
 
-<Network from="client" to="rs" />
-<SyntaxHighlighter language='http' style={okaidia}>{`GET / HTTP/1.1
+<Code
+  from="client" to="rs"
+  language='http' codeString={`GET / HTTP/1.1
 Host: server.example.com
-Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`}</SyntaxHighlighter>
+Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />
 
 If the type is `sha3` then the token is presented as the Base64 encoded SHA3 hash of the token value.
 
-<Network from="client" to="rs" />
-<SyntaxHighlighter language='http' style={okaidia}>{`GET / HTTP/1.1
+<Code
+  from="client" to="rs"
+  language='http' codeString={`GET / HTTP/1.1
 Host: server.example.com
-Authorization: Bearer WtHmGirjNWJUrWEv7K0I46_hwEdS7SqMcKZOmEsC8XE610t6o7DAv57Zm-3TL3Y9C7UG2AAynXQbwmROXaPMug`}</SyntaxHighlighter>
+Authorization: Bearer WtHmGirjNWJUrWEv7K0I46_hwEdS7SqMcKZOmEsC8XE610t6o7DAv57Zm-3TL3Y9C7UG2AAynXQbwmROXaPMug`} />
 
 > I'm not convinced that this method is worthwhile. Without some randomness mixed in to the request, the hash is static and therefore as good as the original token for replay and capture. Non-bearer access really needs binding to a key, as below.
 

@@ -5,21 +5,28 @@ import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import Network from '../components/network';
 
-const Code = ({code, codeString, from, to}) => {
+const Code = ({code, codeString, from, to, language}) => {
+
+  if (!language) {
+    language = 'javascript';
+  }
 
   if (!codeString) {
     codeString = JSON.stringify(code, null, 4);
   }
   
-  const elements = [];
-  
   if (from || to) {
-    elements.push(<Network from={from} to={to} />);
+    return ([
+      <>
+      <Network from={from} to={to} />
+      <SyntaxHighlighter language={language} style={okaidia} customStyle={{marginTop: 0, borderRadius: "0 0 0.3rem 0.3rem"}}>{codeString}</SyntaxHighlighter>
+      </>
+    ]);
+  } else {
+    return (
+      <SyntaxHighlighter language={language} style={okaidia}>{codeString}</SyntaxHighlighter>
+    );
   }
-  
-  elements.push(<SyntaxHighlighter language='javascript' style={okaidia}>{codeString}</SyntaxHighlighter>);
-
-  return elements;
   
 };
 
