@@ -23,7 +23,7 @@ const AS = () => {
 
 const RS = () => {
   return (
-    <Badge pull variant="dark">RS</Badge>
+    <Badge pill variant="dark">RS</Badge>
   );
 }
 
