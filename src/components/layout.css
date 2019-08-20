@@ -630,8 +630,20 @@ pre tt:after {
 
 .header .wrapper {
   margin: 0 auto;
-  max-width: 960px;
-  padding: 1.45rem 1.0875rem;
+  padding: 1.45rem 1.0875rem 0.05rem 1.0875rem;
+}
+
+/*
+[aria-current="page"] {
+  background: #772233;
+  padding-bottom: 5px;
+}
+*/
+
+.header .subnav {
+  background: #772233;
+  margin: 0 auto;
+  padding: 0.7rem 1.0875rem;
 }
 
 .header nav {
@@ -660,13 +672,13 @@ pre tt:after {
 }
 
 .selector :nth-child(2) {
-  border-top-left-radius: 40% !important;
-  border-bottom-left-radius: 40% !important;
+  border-top-left-radius: 12px !important;
+  border-bottom-left-radius: 12px !important;
 }
 
 .selector :last-child {
-  border-top-right-radius: 40%;
-  border-bottom-right-radius: 40%;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 blockquote {

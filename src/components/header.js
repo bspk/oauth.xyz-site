@@ -1,4 +1,5 @@
-import { Link } from 'gatsby'
+import { Link, graphql } from 'gatsby'
+import { Location } from '@reach/router';
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -33,7 +34,6 @@ const menuLinks = [
       },
 ]
 
-
 const Header = ({ siteTitle, currentPage }) => (
   <div className="header">
     <div className="wrapper">
@@ -49,12 +49,15 @@ const Header = ({ siteTitle, currentPage }) => (
         </Link>
       </h1>
           <nav>
-          {
+            {
               menuLinks.map(link =>
                   <Link to={link.link}>{link.name}</Link>
               )
             }
           </nav>
+    </div>
+    <div class="subnav">
+            
     </div>
   </div>
 )
