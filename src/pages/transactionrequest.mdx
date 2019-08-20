@@ -59,7 +59,7 @@ The `interact` parameter lets the client tell the AS how to get a user to intera
 
 More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
-> Do we care about an interact handle? Redirect based clients need to send a new state parameter every time anyway, and could potentially send a new callback URL while they're at it.
+> Do we care about an interact handle? Redirect based clients need to send a new `nonce` parameter every time anyway, and could potentially send a new callback URL while they're at it. Any matching on callback URI's can be tied to keys and would need to have the same rules as a dynamic registration system would have anyway. 
 
 ## Key
 

@@ -32,13 +32,13 @@ To use this mode, the client's transaction request includes a section that inclu
   "interact": {
     "type": "redirect",
     "callback": "https://client.foo",
-    "state": "VJLO6A4CAYLBXHTR0KRO"
+    "nonce": "VJLO6A4CAYLBXHTR0KRO"
   }
 }
   }
 />
 
-The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The state must be a unique value for each transaction and cannot be re-used. The state value is opaque to the AS and should be random. The client remembers this state value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the state value is remembered in the application's current state.
+The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The `nonce` must be a unique value for each transaction and cannot be re-used. The `nonce` value is opaque to the AS and should be random. The client remembers this `nonce` value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the `nonce` value is remembered in the application's current state.
 
 When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
 
@@ -46,6 +46,7 @@ When the AS determines that the client's request needs user interaction, it crea
   from="as" to="client"
   code={{
 interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+server_nonce: "MBDOFXG4Y5CVJCX821LH",
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"
@@ -74,20 +75,25 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
- - the Base64 URL encoded SHA3 hash of the `state` value sent by the client in that same request as a query parameter. 
- - a unique interaction handle, which is both opaque and unguessable, in this example `4IFWWIKYBC2PQ6U56NL1`
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the SHA3_512 hash:
+ - the `nonce` value sent by the client in the initial transaction request
+ - the `server_nonce` value returned in the initial transaction response
+ - the unique interaction handle
+
+The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
+ - the Base64 URL encoded `hash` value calculated above
+ - a unique interaction handle, in this example `4IFWWIKYBC2PQ6U56NL1`
 
 <Code 
   from="as" to="browser"
   language='http' codeString={`HTTP 302 Found
 Location: https://client.foo/
-  ?state=WiQw-eN-ZA0Dkx8l1ytzc3h-I9xU1RRHO-1I68sdKS-ytjQXL8_CuSpWJYeqRTGL0KyTOraz2u-DedC9UG4mkw
+  ?hash=p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A
   &interact=4IFWWIKYBC2PQ6U56NL1`} />
 
 Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
 
-> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates.
+> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates but that seems a lot of complexity to enforce with its own set of problems.
 
 Once the AS creates the redirect response to the interaction request, the AS deletes or otherwise deactivates the interaction URL to prevent phishing and replay attacks. 
 
@@ -95,7 +101,7 @@ If the AS determines that there is an error during the interaction, its response
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
  - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
-The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `state` parameter and compare its value to the hash of its stored state parameter from the start of the transaction. 
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` handle parameter from the callback request. If these hash values don't match the client returns an error. 
 
 The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
 
@@ -212,9 +218,9 @@ If the user has yet to approve the transaction, the AS sends back a response tel
   code={{
   wait: 30,
   handle: {
-    value: "BI9QNW6V9W3XFJK4R02D",
+    value: "ZI9QNW6V9W3XFJK4R02D",
     method: "bearer"
   }
 }} />
 
-> It would be interesting to figure out if we can combine both the user code and arbitrary redirect URL methods, giving the user a few options. 
+> It would be interesting to figure out if we can combine both the user code and arbitrary redirect URL methods, giving the user a few options. This should be as simple as allowing more flexibility on the interaction request portion and having the server return all possible options.

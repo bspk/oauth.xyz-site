@@ -18,12 +18,14 @@ class TransactionRequest extends React.Component {
     
     interact: {
       label: 'Interact',
-      full: {
+      redirect: {
         type: "redirect",
         callback: "https://client.example.net/return/123455",
-        state: "LKLTI25DK82FX4T4QFZC"
+        nonce: "LKLTI25DK82FX4T4QFZC"
       },
-      handle: "JMMLJ6393FI7ST9B1SRS"
+      device: {
+        type: "device",
+      }
     },
     
     user: {
@@ -76,7 +78,7 @@ class TransactionRequest extends React.Component {
     selected: {
       client: 'full',
       resources: 'handle',
-      interact: 'full',
+      interact: 'redirect',
       key: 'full',
       user: 'omit'
     }
@@ -118,7 +120,7 @@ class TransactionRequest extends React.Component {
     };
     
     const selectors = Object.keys(this.codeValues).map((field) => {
-      if (field == 'resources') {
+      if (field === 'resources') {
         
         const moreOptions = {
           full: "Full",
@@ -129,6 +131,16 @@ class TransactionRequest extends React.Component {
         
         return (
           <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={moreOptions} />
+        );
+      } else if (field === 'interact') {
+        const interOptions = {
+          redirect: "Redirect",
+          device: "Device",
+          omit: "Off"
+        };
+        
+        return (
+          <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={interOptions} />
         );
       } else {
         return (

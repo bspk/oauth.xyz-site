@@ -10,10 +10,11 @@ class TransactionRequest extends React.Component {
   interactionValues = {
     label: 'Next Step',
     redirect: {
-      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+      server_nonce: "MBDOFXG4Y5CVJCX821LH"
     },
     device: {
-      interaction_url: "https://server.example.com/interact/device",
+      user_code_url: "https://server.example.com/interact/device",
       user_code: "A1BC-3DFF"
     },
     wait: {
@@ -42,14 +43,6 @@ class TransactionRequest extends React.Component {
         type: 'bearer'
       }
     },
-    interact_handle: {
-      label: 'Interact Handle',
-      on: {
-        value: "JMMLJ6393FI7ST9B1SRS",
-        type: 'bearer'
-      }
-    },
-    
     user_handle: {
       label: 'User Handle',
       on: {
@@ -80,7 +73,6 @@ class TransactionRequest extends React.Component {
       handle: 'on',
       client_handle: 'on',
       resources_handle: 'off',
-      interact_handle: 'off',
       key_handle: 'on',
       user_handle: 'off',
       interaction: 'redirect'
