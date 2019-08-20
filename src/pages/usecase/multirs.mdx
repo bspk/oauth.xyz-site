@@ -1,0 +1,17 @@
+# Description
+
+A client wants to talk to its AS to get access to call a standard API available from multiple different RS's across the internet. The only required trust is that the current user said it was ok.
+
+If the access token contains a verifiable identifier for the end user and the assertion is protected by a proof key, the 
+
+# Why OAuth doesn't work
+
+OAuth requires all clients be registered ahead of time. OAuth has no standard and safe way to pass user information.
+
+# What OAuth extensions are doing
+
+DynReg allows clients to register to an arbitrary AS, but not an RS. 
+
+# How XYZ solves it
+
+XYZ doesn't require registration. RS-first pattern has mechanisms for an RS to talk to the AS and introduce a resource set. 

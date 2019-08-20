@@ -1,0 +1,22 @@
+# Description
+
+Multiparty delegation: one user wants to get access for their client software to a resource owned and controlled by another user.
+
+# Why OAuth doesn't work
+
+OAuth always assumes that the resource owner (who is able to authorize the transaction) is the party using the client software. It's alice-to-alice sharing. 
+
+
+# What OAuth extensions are doing
+
+UMA explicitly adds a requesting party, but brings in a lot of complexity in order to work around OAuth's assumptions. Authz endpoint can't be used, so in the case where the two parties are the same it does not collapse nicely. 
+
+CIBA allows an asynchronous second party to request authentication on behalf of the end user. This only works in trusted environments.
+
+# How XYZ solves it
+
+Allows the authorization to happen asynchronously.
+
+Allows the client to push hints about the current user, which the AS can use to determine if it's the RO or not.
+
+Interaction endpoint is the same for local users as well as claims-based authz. AS can determine what's necessary based on the actual policy.

@@ -1,0 +1,15 @@
+# Description
+
+The client starts out at the RS with no knowledge of the AS protecting it.
+
+# Why OAuth doesn't work
+
+OAuth clients have to be registered with an AS before they can talk to it, and OAuth provides no per-resource discovery mechanism. 
+
+# What OAuth extensions are doing
+
+UMA federated authz allows for an RS-first flow letting the client discover the AS. The client is assumed to be registered at (or be able to register at) the AS, and the RqP is assumed to be separate from the RO -- or at least, you can't collapse from the multiparty use case into the single party one.
+
+# How XYZ solves it
+
+When the client talks to the RS, the RS can start its own transaction conversation and get a resource handle representing itself (or at least the call the client made) to hand back to the client along with the transaction endpoint. Since the client needs only this one endpoint to start off a transaction, no additional discovery is necessary. The client can send the resource handle along with any additional resource handles or resource objects to the transaction endpoint when starting. 
