@@ -16,6 +16,7 @@ The transaction request contains five parts:
  - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
  - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
  - `user` contains assertions about the current user 
+ - `capabilities` allows a client to list large pieces of functionality and extensions that it can support
  
 Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or keys when used with a client handle. 
 
@@ -78,3 +79,13 @@ The `user` parameter lets the client pass information to the AS about the curren
 While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction in appropriately trusted scenarios.
 
 The AS can dynamically generate a user handle and return it to the client in the transaction response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
+
+## Capabilities
+
+The `capabilities` parameter lets the client tell the AS about extensions and functions to the XYZ protocol that it can support. If the client sends this parameter, the AS returns its own `capabilities` array selecting which of the client's functions it can support. The client can then self-configure for the ensuing transaction based on these values. If the client does not include this block in the request, the AS does not return a `capabilities` array in the response. 
+
+> Could the client send a request with only the `capabilities` block to effectively do a discovery/registration in one step?
+
+The values in the `capabilities` array map to specific features or extensions. 
+
+> This needs to be a registry and the core spec needs to have clear definitions on how to build these extensions, including which sections and actions they affect. 

@@ -47,3 +47,9 @@ If a `resource_handle` is returned by the AS, the client can use this handle in 
 ## Key Handle
 
 If a `key_handle` is returned by the AS, the client can use this handle in lieu of the `key` section of the transaction request to reference the same key presented and proved by the client in this transaction. When presenting such key handles in a future request, the client must still <Link to="/keys">bind the request to the referenced key</Link>.
+
+## Capabilities
+
+If a `capabilities` section is sent by the client, the AS parses it and returns an array of all the capabilities that this AS can support for this transaction. This allows the client to dynamically self-configure for the transaction. 
+
+> This step is effectively a discovery response, but tied directly to the transaction endpoint. 

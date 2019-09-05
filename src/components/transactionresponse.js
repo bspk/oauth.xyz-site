@@ -36,6 +36,7 @@ class TransactionRequest extends React.Component {
         type: "bearer"
       }
     },
+    
     client_handle: {
       label: 'Client Handle',
       on: {
@@ -65,6 +66,11 @@ class TransactionRequest extends React.Component {
         value: "7C7C4AZ9KHRS6X63AJAO",
         type: 'bearer'
       }
+    },
+    
+    capabilities: {
+      label: 'Capabilities',
+      on: ['mtls', 'jwsd']
     }
   }
   
@@ -75,7 +81,8 @@ class TransactionRequest extends React.Component {
       resources_handle: 'off',
       key_handle: 'on',
       user_handle: 'off',
-      interaction: 'redirect'
+      interaction: 'redirect',
+      capabilities: 'off'
     }
   }
 
