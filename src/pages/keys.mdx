@@ -1,35 +1,78 @@
 import SEO from '../components/seo'
 import Code from '../components/code'
+import { Link } from 'gatsby'
 
 <SEO title="Keys" keywords={['oauth', 'authorization', 'security']} />
 
-# Keys
+# Key Types
 
-The client can present a key to the AS during the transaction process that it can use to bind itself to this and future requests. The AS can restrict access to certain keys, associated with particular clients and controlled through a registration process. The AS can also allow clients to dynamically present and prove a key at runtime, such as a key generated on a client device and bound to only that instance of the client software on that device. Each key type has a specific proofing mechanism associated with it.
+The client can present a key to the AS during the transaction process that it can use to bind itself to this and future requests. The AS can restrict access to certain keys, associated with particular clients and controlled through a registration process. The AS can also allow clients to dynamically present and prove a key at runtime, such as a key generated on a client device and bound to only that instance of the client software on that device. 
 
-> Open question: should we decouple the key type from the presentation mechanism? Having them strongly tied is simpler but this might be too tight of a binding.
+## JSON Web Key Set (JWKS)
+
+This client sends its public key to the server formatted as a JSON Web Key Set (JWKS). The keys must have a `kid` (key identifier) field and an `alg` (algorithm) field.
+
+<Code 
+  from="client" to="as"
+  language='json' codeString={`{
+    "key": {
+        "jwks": {
+            "keys": [
+                {
+                    "kty": "RSA",
+                    "e": "AQAB",
+                    "kid": "xyz-1",
+                    "alg": "RS256",
+                    "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
+                }
+            ]
+        }
+    }
+}
+`} />
+
+## X509 Certificate
+
+The client indicates its certificate as either an encoded certificate string, or as a certificate thumbprint as in OAuth 2's certificate-bound access token methods.
+
+<Code 
+  from="client" to="as"
+  language='json' codeString={`{
+    "key": {
+        "cert": "MIIEHDCCAwSgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBmjE3MDUGA1UEAwwuQmVzcG9rZSBFbmdpbmVlcmluZyBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eTELMAkGA1UECAwCTUExCzAJBgNVBAYTAlVTMRkwFwYJKoZIhvcNAQkBFgpjYUBic3BrLmlvMRwwGgYDVQQKDBNCZXNwb2tlIEVuZ2luZWVyaW5nMQwwCgYDVQQLDANNVEkwHhcNMTkwNDEwMjE0MDI5WhcNMjQwNDA4MjE0MDI5WjB8MRIwEAYDVQQDDAlsb2NhbGhvc3QxCzAJBgNVBAgMAk1BMQswCQYDVQQGEwJVUzEgMB4GCSqGSIb3DQEJARYRdGxzY2xpZW50QGJzcGsuaW8xHDAaBgNVBAoME0Jlc3Bva2UgRW5naW5lZXJpbmcxDDAKBgNVBAsMA01USTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMmaXQHbs/wc1RpsQ6Orzf6rN+q2ijaZbQxD8oi+XaaN0P/gnE13JqQduvdq77OmJ4bQLokqsd0BexnI07Njsl8nkDDYpe8rNve5TjyUDCfbwgS7U1CluYenXmNQbaYNDOmCdHwwUjV4kKREg6DGAx22Oq7+VHPTeeFgyw4kQgWRSfDENWY3KUXJlb/vKR6lQ+aOJytkvj8kVZQtWupPbvwoJe0na/ISNAOhL74w20DWWoDKoNltXsEtflNljVoi5nqsmZQcjfjt6LO0T7O1OX3Cwu2xWx8KZ3n/2ocuRqKEJHqUGfeDtuQNt6Jz79v/OTr8puLWaD+uyk6NbtGjoQsCAwEAAaOBiTCBhjAJBgNVHRMEAjAAMAsGA1UdDwQEAwIF4DBsBgNVHREEZTBjgglsb2NhbGhvc3SCD3Rsc2NsaWVudC5sb2NhbIcEwKgBBIERdGxzY2xpZW50QGJzcGsuaW+GF2h0dHA6Ly90bHNjbGllbnQubG9jYWwvhhNzc2g6dGxzY2xpZW50LmxvY2FsMA0GCSqGSIb3DQEBCwUAA4IBAQCKKv8WlLrT4Z5NazaUrYtlTF+2v0tvZBQ7qzJQjlOqAcvxry/d2zyhiRCRS/v318YCJBEv4Iq2W3I3JMMyAYEe2573HzT7rH3xQP12yZyRQnetdiVM1Z1KaXwfrPDLs72hUeELtxIcfZ0M085jLboXhufHI6kqm3NCyCCTihe2ck5RmCc5l2KBO/vAHF0ihhFOOOby1v6qbPHQcxAU6rEb907/p6BW/LV1NCgYB1QtFSfGxowqb9FRIMD2kvMSmO0EMxgwZ6k6spa+jk0IsI3klwLW9b+Tfn/daUbIDctxeJneq2anQyU2znBgQl6KILDSF4eaOqlBut/KNZHHazJh"
+    }
+}
+`} />
+
+<Code 
+  from="client" to="as"
+  language='json' codeString={`{
+    "key": {
+        "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
+    }
+}
+`} />
+
+## Decentralized Identifier 
+
+The `did` key method uses a `did` URI to indicate the key. The AS resolves the key document using DID resolution.
+
+<Code 
+  from="client" to="as"
+  language='json' codeString={`{
+    "key": {
+        "did": "did:example:CV3BVVXK2PWWLCRQLRFU#xyz-1"
+    }
+}
+`} />
+
+# Presentation Types
+
+When the client starts a <Link to="/transactionrequest">transaction request</Link> or continues an ongoing transaction, it must prove possession of any presented keys. The type of proof is indicated by the `proof` parameter value.
 
 ## Detached JSON Web Signature
 
-The key in this method is presented as a JSON Web Key Set by the client during the transaction request.
-
-<Code
-  from="client" to="as"
-  code={{
-          jwks: {
-  "keys": [
-    {
-      "kty": "RSA",
-      "e": "AQAB",
-      "kid": "xyz-1",
-      "alg": "RS256",
-      "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
-    }
-  ]
-}
-}}/>
-
-This key presentation method uses a detached JWS to sign the request body, which is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
+This key presentation method is indicated by the `jwsd` value of the `proof` field and uses a detached JWS to sign the request body to the transaction endpoint, which itself is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
 
 <Code 
   from="client" to="as"
@@ -52,6 +95,7 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
         "state": "LKLTI25DK82FX4T4QFZC"
     },
     "key": {
+		"proof": "jwsd",
         "jwks": {
             "keys": [
                 {
@@ -69,21 +113,56 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
 
 > This is susceptible to any number of issues with data transformation, and it doesn't protect the request URL or header, only the body. However, the body is not transformed by the signature, which is a benefit for simplicity.
 
-> We could also do cavage-signatures or a number of other methods
-
 &nbsp;
 
 > Should we also have an "embedded JWS" method, for instance simply turning the request body into a JWS wrapped by the signature in compact format?
 
-## Decentralized Identifier 
+## HTTP Signatures (Cavage Signatures)
 
-The `did` key method uses a `did` URI to indicate the key. The client signs the HTTP request using a ZKP algorithm.
+This key presentation method is indicated by the `httpsig` value of the `proof` field, and it uses the signature method in <a href="https://tools.ietf.org/html/draft-cavage-http-signatures-11">Signing HTTP Messages</a>. The signature is presented in the `Signature` header and has to cover the body through use of the HTTP Digest header. 
 
-> I'm interested to see how we'd do this in a practical sense, but I haven't seen a lot of work on signing HTTP with ZKP algorithms, only highly specialized queries. The keys retrieved from a `did` could be in any number of formats, and could be presented and proofed in several different ways. 
+<Code 
+  from="client" to="as"
+  language='http' codeString={`POST /transaction HTTP/1.1
+Host: server.example.com
+Content-Type: application/json
+Signature: keyId="xyz-1", algorithm="hs2019", created=1402170695, expires=1402170995, headers="(request-target) (created) (expires) host date digest content-length", signature="TM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQ"
+Digest: SHA-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=
+ 
+{
+    "client": {
+        "name": "My Client Display Name",
+        "uri": "https://example.net/client"
+    },
+    "resources": [
+        "dolphin-metadata"
+    ],
+    "interact": {
+        "type": "redirect",
+        "callback": "https://client.example.net/return/123455",
+        "state": "LKLTI25DK82FX4T4QFZC"
+    },
+    "key": {
+		"proof": "httpsig",
+        "jwks": {
+            "keys": [
+                {
+                    "kty": "RSA",
+                    "e": "AQAB",
+                    "kid": "xyz-1",
+                    "alg": "RS256",
+                    "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
+                }
+            ]
+        }
+    }
+}
+`} />
+
 
 ## Mutual TLS
 
-The `mtls` key method uses the client certificate presented at the TLS layer to authorize the transaction. The client indicates its certificate as either an encoded certificate string, or as a certificate thumbprint as in OAuth 2's certificate-bound access token methods.
+The `mtls` key presentation method uses the client certificate presented at the TLS layer to authorize the transaction. No additional fields or headers are added to the HTTP message or JSON body, though a TLS terminating reverse proxy can communicate the client certificate to the AS through a special header. 
 
 <Code
   from="client" to="as"
