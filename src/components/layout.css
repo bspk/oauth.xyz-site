@@ -685,6 +685,20 @@ blockquote {
   background: #ffffee;
   padding: 1rem 3rem;
   border-left: 4px solid #ddddcc;
+  position: relative;
+}
+
+blockquote::after{
+  content: "NOTE";
+  top: 1rem;
+  left: 0rem;
+  position: absolute;
+  z-index: 1;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 0.8rem;
+  transform: rotate(-90deg);
+  color: #ccccaa;
 }
 
 .alert-network {
