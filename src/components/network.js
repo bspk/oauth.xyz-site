@@ -47,9 +47,10 @@ const Network = ({from, to}) => {
     '➡',
     toBadge(to)
   ];
+
+  // TODO: change the network banner color based on the communication pair in play
   
   return (
-  
     <Alert variant="dark" className="alert-network">
       {elements}
     </Alert>
