@@ -47,10 +47,8 @@ When the AS determines that the client's request needs user interaction, it crea
 <Code
   from="as" to="client"
   code={{
-redirect: {
-	interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-	server_nonce: "MBDOFXG4Y5CVJCX821LH",
-},
+interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+server_nonce: "MBDOFXG4Y5CVJCX821LH",
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"
@@ -194,14 +192,12 @@ For some kinds of clients, it is possible to show the user a visual signal such 
   }}
 />
 
-As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
+As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS. Note that because the client did not send a `callback` to the AS, the AS does not generate or return a `server_nonce` parameter.
 
 <Code
   from="as" to="client"
   code={{
-redirect: {
-	interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-},
+interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"

@@ -10,10 +10,8 @@ class TransactionRequest extends React.Component {
   interactionValues = {
     label: 'Next Step',
     redirect: {
-      redirect: {
-        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-        server_nonce: "MBDOFXG4Y5CVJCX821LH"
-      }
+      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+      server_nonce: "MBDOFXG4Y5CVJCX821LH"
     },
     user_code: {
       user_code: {
@@ -22,10 +20,8 @@ class TransactionRequest extends React.Component {
       }
     },
     both: {
-      redirect: {
-        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-        server_nonce: "MBDOFXG4Y5CVJCX821LH"
-      },
+      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+      server_nonce: "MBDOFXG4Y5CVJCX821LH",
       user_code: {
         url: "https://server.example.com/interact/device",
         code: "A1BC-3DFF"
