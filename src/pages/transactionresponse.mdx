@@ -26,7 +26,7 @@ Both the interaction and poll-wait style responses require the transaction handl
 
 ## Transaction Handle
 
-This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. 
+This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. This is used in the <Link to="/transactionrequest">transaction continuation request</Link>. 
 
 ## Display Handle
 
@@ -52,4 +52,4 @@ If a `key_handle` is returned by the AS, the client can use this handle in lieu 
 
 If a `capabilities` section is sent by the client, the AS parses it and returns an array of all the capabilities that this AS can support for this transaction. This allows the client to dynamically self-configure for the transaction. 
 
-> This step is effectively a discovery response, but tied directly to the transaction endpoint. 
+> This piece is effectively a discovery response, but tied directly to the transaction endpoint. This means the client knows the AS as only its transaction endpoint URL and can get everything else it needs from there. 

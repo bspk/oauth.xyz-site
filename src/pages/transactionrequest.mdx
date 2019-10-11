@@ -54,7 +54,7 @@ The client can send several of these objects of handles in a single request, whi
 
 ## Interact
 
-The `interact` parameter lets the client tell the AS how to get a user to interact with the AS during a transaction. 
+The `interact` parameter lets the client tell the AS how to get a user to interact with the AS during a transaction. A client could be capable of multiple forms of interaction with the user, from redirecting to an arbitrary URL, to displaying a user code, to relaying messages to another piece of software. 
 
 More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
@@ -64,7 +64,7 @@ More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
 The `key` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
 
-The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions.
+The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions. The key handle stands in for both the key and its proof mechanism. The key handle does not need to be derived from the key ID, CN, or other identifying information found in the key itself. 
 
 Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
 
@@ -87,3 +87,19 @@ The `capabilities` parameter lets the client tell the AS about extensions and fu
 The values in the `capabilities` array map to specific features or extensions. 
 
 > This needs to be a registry and the core spec needs to have clear definitions on how to build these extensions, including which sections and actions they affect. 
+
+# Continuation Request
+
+A transaction continuation request is a form of transaction request that continues the transaction for one of a number of reasons.
+
+ - The client has received a callback on the front channel during <Link to="/interaction">Interaction</Link> with the user
+ - The client is waiting for the user to take some action and is polling the transaction
+ - The client has received information in response to a server challenge that will allow the transaction to progress
+
+<Code
+  from="client" to="as"
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU",
+    interact_handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
+  }} />
+

@@ -10,12 +10,31 @@ class TransactionRequest extends React.Component {
   interactionValues = {
     label: 'Next Step',
     redirect: {
-      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-      server_nonce: "MBDOFXG4Y5CVJCX821LH"
+      redirect: {
+        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+        server_nonce: "MBDOFXG4Y5CVJCX821LH"
+      }
     },
-    device: {
-      user_code_url: "https://server.example.com/interact/device",
-      user_code: "A1BC-3DFF"
+    user_code: {
+      user_code: {
+        url: "https://server.example.com/interact/device",
+        code: "A1BC-3DFF"
+      }
+    },
+    both: {
+      redirect: {
+        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+        server_nonce: "MBDOFXG4Y5CVJCX821LH"
+      },
+      user_code: {
+        url: "https://server.example.com/interact/device",
+        code: "A1BC-3DFF"
+      }
+    },
+    didcomm: {
+      didcomm: {
+        "...": "..."
+      }
     },
     wait: {
       wait: 30
@@ -122,7 +141,9 @@ class TransactionRequest extends React.Component {
     // build next-step selector first
     const nextOptions = {
       redirect: "Redirect",
-      device: "Device",
+      user_code: "User Code",
+      both: "Both",
+      didcomm: "DIDComm",
       wait: "Wait",
       access_token: "Token"
     }

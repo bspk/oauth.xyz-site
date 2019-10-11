@@ -5,16 +5,16 @@ import SEO from '../components/seo'
 
 # Interaction
 
-During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the transaction request, the client tells the AS how it is able to interact with the user, including information on how to get back to the server when done. 
+During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the transaction request, the client tells the AS how it is able to interact with the user. Several modes of interaction are defined, and a client can support multiple forms of interaction simultaneously.
 
-Currently, two modes of interaction are defined: 
-
- - The `redirect` mode is used when the client is capable of opening a browser on the same device for the user to interact with the AS.
- - The `device` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
+ - The `redirect` mode is used when the client is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
+ - The `user_code` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
+ - The `didcomm` mode is used when the client can relay a DIDComm message to the user's Agent.
+ - The `dodcomm_query` mode is used when the client can relay a query to a DIDComm Agent. 
  
 In addition, the client can indicate how it can receive responses from the interaction request. Currently, there are two modes of getting a response:
 
- - The client can set a `callback` URL that the AS can send the user back to when done interacting
+ - The client can set a `callback` section including a URL that the AS can send the user back to when done interacting
  - The client can poll the AS using a transaction handle
 
 These can be used independently of the interaction method, but it will likely be most common to use a callback with the redirect method, polling with the device method, and in limited cases polling with the redirect method. These combinations are shown here.
@@ -30,9 +30,11 @@ To use this mode, the client's transaction request includes a section that inclu
   code={
 {
   "interact": {
-    "type": "redirect",
-    "callback": "https://client.foo",
-    "nonce": "VJLO6A4CAYLBXHTR0KRO"
+    "redirect": true,
+    "callback": {
+		"uri": "https://client.foo",
+		"nonce": "VJLO6A4CAYLBXHTR0KRO"
+	}
   }
 }
   }
@@ -45,8 +47,10 @@ When the AS determines that the client's request needs user interaction, it crea
 <Code
   from="as" to="client"
   code={{
-interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-server_nonce: "MBDOFXG4Y5CVJCX821LH",
+redirect: {
+	interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+	server_nonce: "MBDOFXG4Y5CVJCX821LH",
+},
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"
@@ -101,9 +105,11 @@ If the AS determines that there is an error during the interaction, its response
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
  - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
-The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` handle parameter from the callback request. If these hash values don't match the client returns an error. 
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` handle parameter from the callback request. If these hash values don't match the client returns an error to the user and stops the transaction. 
 
 The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
+
+> Here we've hashed the interaction handle before sending it.
 
 <Code
   from="client" to="as"
@@ -114,9 +120,9 @@ The client then sends a transaction continue request to the AS including the int
 
 The AS looks up the transaction from the transaction handle and fetches the interaction handle associated with that transaction. The AS compares the presented handle to hash of the stored interaction handle it appended to the client's callback. If they match, the AS continues processing as normal, likely issuing a token.
 
-## Device with Polling
+## User Code with Polling
 
-The device-based interaction is intended for clients that need to have the user use a secondary device of some kind to interact with the authorization server. Unlike the redirect based interaction, the client does not send the user to the AS directly. Instead, the client presents the user with a code and instructs the user to interact with the server. Meanwhile, the client polls the AS in the background until the transaction is approved.
+The user-code-based interaction is intended for clients that need to have the user use a secondary device of some kind to interact with the authorization server. Unlike the redirect based interaction, the client does not send the user to the AS directly. Instead, the client presents the user with a code and instructs the user to interact with the server. Meanwhile, the client polls the AS in the background until the transaction is approved.
 
 The client starts this mode by sending a transaction request indicating that the user will interact with the AS through a secondary device. 
 
@@ -124,7 +130,7 @@ The client starts this mode by sending a transaction request indicating that the
   from="client" to="as"
   code={{
   "interact": {
-    "type": "device"
+    "user_code": true
   }
   }}
 />
@@ -134,8 +140,10 @@ When the AS determines that the client's request needs user interaction, it send
 <Code
   from="as" to="client"
   code={{
-user_code_url: "https://server.example.com/interact/device",
-user_code: "A1BC-3DFF",
+user_code: {
+	url: "https://server.example.com/interact/device",
+	code: "A1BC-3DFF"
+},
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"
@@ -181,7 +189,7 @@ For some kinds of clients, it is possible to show the user a visual signal such 
   from="client" to="as"
   code={{
   "interact": {
-    "type": "redirect"
+    "redirect": true
   }
   }}
 />
@@ -191,7 +199,9 @@ As above, when the AS determines that the client's request needs user interactio
 <Code
   from="as" to="client"
   code={{
-interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+redirect: {
+	interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+},
 handle: {
   value: "80UPRY5NM33OMUKMKSKU",
   type: "bearer"
@@ -224,3 +234,38 @@ If the user has yet to approve the transaction, the AS sends back a response tel
 }} />
 
 > It would be interesting to figure out if we can combine both the user code and arbitrary redirect URL methods, giving the user a few options. This should be as simple as allowing more flexibility on the interaction request portion and having the server return all possible options.
+
+## DIDComm Messages and Queries
+
+Some clients will be able to pass a message from the AS to another piece of software using a secondary protocol, such as DIDComm. 
+
+If the client can pass a complete DIDComm message to the agent, it sends the `didcomm` flag. If it can pass along a query, it sends the `didcomm_query` flag. 
+
+<Code
+  from="client" to="as"
+  code={{
+  "interact": {
+    "didcomm": true,
+	"didcomm_query": true
+  }
+  }}
+/>
+
+In either case, the agent might send its response directly to the AS through some external means, or the client might get a message back from the agent. This message is to be included in its transaction continuation request.
+
+<Code
+  from="client" to="as"
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU",
+    didcomm: {
+		"...": "..."
+	}
+}} />
+
+If the client has no response message from the agent, it can poll the transaction as usual.
+
+<Code
+  from="client" to="as"
+  code={{
+    handle: "80UPRY5NM33OMUKMKSKU"
+  }} />
