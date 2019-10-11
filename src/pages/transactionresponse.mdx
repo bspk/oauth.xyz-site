@@ -28,9 +28,9 @@ Both the interaction and poll-wait style responses require the transaction handl
 
 This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. 
 
-## Client Handle
+## Display Handle
 
-If a `client_handle` is returned by the AS, the client can use this handle in lieu of the information sent in the `client` block in the request for future transactions. 
+If a `display_handle` is returned by the AS, the client can use this handle in lieu of the information sent in the `display` block in the request for future transactions. 
 
 ## Interact Handle
 

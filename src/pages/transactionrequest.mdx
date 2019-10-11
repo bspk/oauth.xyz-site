@@ -11,14 +11,14 @@ import Code from '../components/code'
 The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
 
 The transaction request contains five parts:
- - `client` includes information about how the client software making the request
  - `resources` contains a list of resources that the client is requesting access to
- - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
  - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
+ - `display` includes information about how the client software making the request
+ - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
  - `user` contains assertions about the current user 
  - `capabilities` allows a client to list large pieces of functionality and extensions that it can support
  
-Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or keys when used with a client handle. 
+Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or display information for a particular key handle. 
 
 Note that the JSON in all sections is potentially multimodal. That is to say, when sent as a fully-formed request, it is a JSON `object`. When sent as a handle, it is sent as a JSON `string`. 
 
@@ -28,15 +28,13 @@ This example shows how the different sections can be composed with each other in
 
 Each of the sections is detailed below. The AS will send a <Link to="/transactionresponse">transaction response</Link> in response.
 
-## Client
+## Display
 
-The `client` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
+The `display` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
 
-The AS can statically issue a client handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
+The AS can statically issue a display handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
 
-A client that is accessing things of its own accord and not on behalf of a user has to be pre-registered with a handle in this way and attached to a key.
-
-An AS can also dynamically generate a client handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify itself in future transactions.
+An AS can also dynamically generate a display handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify itself in future transactions.
 
 ## Resources
 
@@ -45,10 +43,10 @@ The `resources` parameter contains a list of all resources and APIs the client w
 <Code code={{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
-          data: ["metadata"]
+          datatype: ["metadata", "images"]
 }} />
 
-An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can deterine a default set of resources for a client not asking for anything specifically.
+An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
 
 An AS can also dynamically generate a resources handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify this same kind of request in future transactions.
 

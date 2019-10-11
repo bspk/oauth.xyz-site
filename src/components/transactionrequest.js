@@ -8,20 +8,6 @@ class TransactionRequest extends React.Component {
 
   codeValues = {
     
-    client: {
-      label: 'Client',
-      full: {
-        name: "My Client Display Name",
-        uri: "https://example.net/client"
-      },
-      handle: "VBUEOIQA82PBY2ZDJW7Q",
-      options: {
-        full: "Full",
-        handle: "Handle",
-        omit: "Off"
-      }
-    },
-    
     interact: {
       label: 'Interact',
       redirect: {
@@ -58,14 +44,14 @@ class TransactionRequest extends React.Component {
       full: [{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
-          data: ["metadata"]
+          datatype: ["metadata", "images"]
       }],
       handle: ["dolphin-metadata"],
       both: [
         {
                   actions: ["read", "write", "dolphin"],
                   locations: ["https://server.example.net/", "https://resource.local/other"],
-                  data: ["metadata"]
+                  datatype: ["metadata", "images"]
         },
         "dolphin-metadata"        
       ],
@@ -131,6 +117,20 @@ class TransactionRequest extends React.Component {
       }
     },
 
+    display: {
+      label: 'Display',
+      full: {
+        name: "My Client Display Name",
+        uri: "https://example.net/client"
+      },
+      handle: "VBUEOIQA82PBY2ZDJW7Q",
+      options: {
+        full: "Full",
+        handle: "Handle",
+        omit: "Off"
+      }
+    },
+    
     capabilities: {
       label: 'Capabilities',
       full: [
@@ -146,7 +146,7 @@ class TransactionRequest extends React.Component {
   
   state = {
     selected: {
-      client: 'full',
+      display: 'full',
       resources: 'handle',
       interact: 'redirect',
       key: 'jwsd',

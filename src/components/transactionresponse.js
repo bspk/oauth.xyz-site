@@ -37,8 +37,8 @@ class TransactionRequest extends React.Component {
       }
     },
     
-    client_handle: {
-      label: 'Client Handle',
+    display_handle: {
+      label: 'Display Handle',
       on: {
         value: "VBUEOIQA82PBY2ZDJW7Q",
         type: 'bearer'
@@ -77,11 +77,11 @@ class TransactionRequest extends React.Component {
   state = {
     selected: {
       handle: 'on',
-      client_handle: 'on',
+      interaction: 'redirect',
+      display_handle: 'off',
       resources_handle: 'off',
       key_handle: 'on',
       user_handle: 'off',
-      interaction: 'redirect',
       capabilities: 'off'
     }
   }
