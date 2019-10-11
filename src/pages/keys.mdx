@@ -70,6 +70,8 @@ The `did` key method uses a `did` URI to indicate the key. The AS resolves the k
 
 When the client starts a <Link to="/transactionrequest">transaction request</Link> or continues an ongoing transaction, it must prove possession of any presented keys. The type of proof is indicated by the `proof` parameter value.
 
+> Should we also have an "embedded JWS" method, for instance simply turning the request body into a JWS wrapped by the signature in compact format? That feels counter to the readable nature of the protocol, but since the body is JSON it could potentially work.
+
 ## Detached JSON Web Signature
 
 This key presentation method is indicated by the `jwsd` value of the `proof` field and uses a detached JWS to sign the request body to the transaction endpoint, which itself is a JSON object. The body is taken as a byte stream, with no parsing or interpretation, and signed using the key. The header of the JWS must include the key ID, the algorithm (which must not be `none`), and the `b64` attribute to indicate that it is detached. The calculated JWS is set as the `Detached-JWS` HTTP header.
@@ -111,11 +113,7 @@ Detached-JWS: eyJiNjQiOmZhbHNlLCJhbGciOiJSUzI1NiIsImtpZCI6Inh5ei0xIn0..Y287HMtaY
 }
 `} />
 
-> This is susceptible to any number of issues with data transformation, and it doesn't protect the request URL or header, only the body. However, the body is not transformed by the signature, which is a benefit for simplicity.
-
-&nbsp;
-
-> Should we also have an "embedded JWS" method, for instance simply turning the request body into a JWS wrapped by the signature in compact format?
+> This is susceptible to any number of issues with data transformation, and it doesn't protect the request URL or header, only the body. However, the body is not transformed by adding the signature, which is a benefit for simplicity.
 
 ## HTTP Signatures (Cavage Signatures)
 
