@@ -107,7 +107,7 @@ The client receives a request from the user's browser through the callback URL. 
 
 The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
 
-> Here we've hashed the interaction handle before sending it.
+> Here we've hashed the interaction handle before sending it. It's still in the air whether this hashing is helpful to security or is an unnecessary step.
 
 <Code
   from="client" to="as"
