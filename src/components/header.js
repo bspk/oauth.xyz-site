@@ -25,8 +25,8 @@ const menuLinks = [
         link: '/tokens/'
       },
       {
-        name: 'Examples',
-        link: '/examples/'
+        name: 'Other Specs',
+        link: '/specs/'
       },
       {
         name: 'About',
@@ -52,7 +52,7 @@ const Header = ({ siteTitle, currentPage }) => (
           <nav>
             {
               menuLinks.map(link =>
-                  <Link to={link.link}>{link.name}</Link>
+                  <Link to={link.link}><span>&raquo;</span>&nbsp;{link.name}</Link>
               )
             }
           </nav>

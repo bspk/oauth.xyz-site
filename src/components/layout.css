@@ -657,9 +657,8 @@ pre tt:after {
   text-decoration: none;
 }
 
-.header nav a:before{
+.header nav a span{
   color: #eebbbb;
-  content: "\00BB\00A0";
 }
 
 .header nav a:hover {
