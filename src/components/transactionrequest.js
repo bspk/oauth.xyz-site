@@ -32,8 +32,8 @@ class TransactionRequest extends React.Component {
       }
     },
     
-    key: {
-      label: 'Key',
+    keys: {
+      label: 'Keys',
       jwsd: {
         proof: "jwsd",
         jwks: {
