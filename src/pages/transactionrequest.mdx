@@ -43,7 +43,7 @@ The `resources` parameter contains a list of all resources and APIs the client w
 <Code code={{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
-          datatype: ["metadata", "images"]
+          datatypes: ["metadata", "images"]
 }} />
 
 An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
@@ -62,7 +62,7 @@ More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
 ## Key
 
-The `key` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
+The `keys` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
 
 The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions. The key handle stands in for both the key and its proof mechanism. The key handle does not need to be derived from the key ID, CN, or other identifying information found in the key itself. 
 
