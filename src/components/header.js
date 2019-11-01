@@ -45,7 +45,8 @@ const Header = ({ siteTitle, currentPage }) => (
             textDecoration: 'none',
           }}
         >
-          {siteTitle}
+          <img src="/xyz.png" alt="XYZ" className="logo" />
+          XYZ
         </Link>
       </h1>
           <nav>
