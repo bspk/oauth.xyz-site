@@ -13,14 +13,14 @@ class TransactionRequest extends React.Component {
       full: [{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
-          datatype: ["metadata", "images"]
+          datatypes: ["metadata", "images"]
       }],
       handle: ["dolphin-metadata"],
       both: [
         {
                   actions: ["read", "write", "dolphin"],
                   locations: ["https://server.example.net/", "https://resource.local/other"],
-                  datatype: ["metadata", "images"]
+                  datatypes: ["metadata", "images"]
         },
         "dolphin-metadata"        
       ],
