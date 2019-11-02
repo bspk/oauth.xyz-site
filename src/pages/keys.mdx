@@ -15,7 +15,7 @@ This client sends its public key to the server formatted as a JSON Web Key Set (
 <Code 
   from="client" to="as"
   language='json' codeString={`{
-    "kesy": {
+    "keys": {
         "jwks": {
             "keys": [
                 {
@@ -47,7 +47,7 @@ The client indicates its certificate as either an encoded certificate string, or
 <Code 
   from="client" to="as"
   language='json' codeString={`{
-    "key": {
+    "keys": {
         "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
     }
 }
