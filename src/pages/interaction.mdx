@@ -40,6 +40,24 @@ To use this mode, the client's transaction request includes a section that inclu
   }
 />
 
+By default, the callback return will use a `SHA3` 512-bit hash. The client can choose a different hash algorithm by sending a `hashMethod` parameter. In this example, a `SHA2` 512-bit hash is requested. If the AS doesn't support the client's requested hash method, it returns an error.
+
+<Code
+  from="client" to="as"
+  code={
+{
+  "interact": {
+    "redirect": true,
+    "callback": {
+		"uri": "https://client.foo",
+		"nonce": "VJLO6A4CAYLBXHTR0KRO",
+		"hashMethod": "SHA2"
+	}
+  }
+}
+  }
+/>
+
 The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The `nonce` must be a unique value for each transaction and cannot be re-used. The `nonce` value is opaque to the AS and should be random. The client remembers this `nonce` value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the `nonce` value is remembered in the application's current state.
 
 When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
@@ -77,7 +95,7 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the SHA3_512 hash:
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the hash based on the `hashMethod` in the client's initial transaction request (defaults to `SHA3` 512-bit):
  - the `nonce` value sent by the client in the initial transaction request
  - the `server_nonce` value returned in the initial transaction response
  - the unique interaction handle
@@ -103,20 +121,20 @@ If the AS determines that there is an error during the interaction, its response
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
  - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
-The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` handle parameter from the callback request. If these hash values don't match the client returns an error to the user and stops the transaction. 
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` reference parameter from the callback request, hashed using the client's chosen method from the initial transaction request (which defaults to `SHA3` 512 bit hash). If these hash values don't match the client returns an error to the user and stops the transaction. 
 
-The client then sends a transaction continue request to the AS including the interaction handle as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
+The client then sends a transaction continue request to the AS including the interaction reference as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
 
-> Here we've hashed the interaction handle before sending it. It's still in the air whether this hashing is helpful to security or is an unnecessary step.
+> We could hash the interaction reference before sending it. It's still in the air whether this hashing is helpful to security or is an unnecessary step.
 
 <Code
   from="client" to="as"
   code={{
     handle: "80UPRY5NM33OMUKMKSKU",
-    interact_handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
+    interact_ref: "4IFWWIKYBC2PQ6U56NL1"
   }} />
 
-The AS looks up the transaction from the transaction handle and fetches the interaction handle associated with that transaction. The AS compares the presented handle to hash of the stored interaction handle it appended to the client's callback. If they match, the AS continues processing as normal, likely issuing a token.
+The AS looks up the transaction from the transaction handle and fetches the interaction reference associated with that transaction. The AS compares the presented reference to the stored interaction reference it appended to the client's callback with `interact`. If they match, the AS continues processing as normal, likely issuing a token.
 
 ## User Code with Polling
 

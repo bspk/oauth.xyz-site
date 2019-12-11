@@ -90,16 +90,20 @@ The values in the `capabilities` array map to specific features or extensions.
 
 # Continuation Request
 
-A transaction continuation request is a form of transaction request that continues the transaction for one of a number of reasons.
+A transaction continuation request is a form of transaction request that continues the transaction for one of a number of reasons, based on the kind of interaction pattern that the client is capable of performing.
 
  - The client has received a callback on the front channel during <Link to="/interaction">Interaction</Link> with the user
  - The client is waiting for the user to take some action and is polling the transaction
  - The client has received information in response to a server challenge that will allow the transaction to progress
 
+A transaction continuation request always includes the current transaction handle. If the AS responds to a transaction continuation request with a <Link to="/transactionresponse">Transaction Response</Link>, the transaction handle in that response is different from the one used in the transaction continuation request. 
+
+In this example, the client passes its interaction reference from a front channel callback along with the transaction handle.
+
 <Code
   from="client" to="as"
   code={{
     handle: "80UPRY5NM33OMUKMKSKU",
-    interact_handle: "CuD9MrpSXVKvvI6dN1awtNLx-HhZy46hJFDBicG4KoZaCmBofvqPxtm7CDMTsUFuvcmLwi_zUN70cCvalI6ENw"
+    interact_ref: "4IFWWIKYBC2PQ6U56NL1"
   }} />
 
