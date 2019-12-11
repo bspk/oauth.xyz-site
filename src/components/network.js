@@ -5,36 +5,36 @@ import Alert from 'react-bootstrap/Alert'
 
 const Client = () => {
   return (
-    <Badge pill variant="info">Client</Badge>
+    <Badge pill variant="client">Client</Badge>
   );
 };
 
 const Browser = () => {
   return (
-    <Badge pill variant="secondary">Browser</Badge>
+    <Badge pill variant="browser">Browser</Badge>
   );
 };
 
 const AS = () => {
   return (
-    <Badge pill variant="warning">AS</Badge>
+    <Badge pill variant="as">AS</Badge>
   );
 };
 
 const RS = () => {
   return (
-    <Badge pill variant="dark">RS</Badge>
+    <Badge pill variant="rs">RS</Badge>
   );
 }
 
-const toBadge = (from) => {
-  if (from == 'client') {
+const asBadge = (el) => {
+  if (el == 'client') {
     return (<Client />);
-  } else if (from == 'browser') {
+  } else if (el == 'browser') {
     return (<Browser />);
-  } else if (from == 'as') {
+  } else if (el == 'as') {
     return (<AS />);
-  } else if (from == 'rs') {
+  } else if (el == 'rs') {
     return (<RS />);
   } else {
     return (<Badge pill variant="danger">?</Badge>);
@@ -43,15 +43,15 @@ const toBadge = (from) => {
 
 const Network = ({from, to}) => {
   const elements = [
-    toBadge(from),
+    asBadge(from),
     '➡',
-    toBadge(to)
+    asBadge(to)
   ];
 
   // TODO: change the network banner color based on the communication pair in play
   
   return (
-    <Alert variant="dark" className="alert-network">
+    <Alert variant="dark" className={'alert-network alert-network-' + from + '-' + to}>
       {elements}
     </Alert>
   );

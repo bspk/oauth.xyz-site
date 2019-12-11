@@ -704,6 +704,63 @@ blockquote::after{
   border-radius: 0.3rem 0.3rem 0 0;
 }
 
+.alert-network .badge-client {
+  background-color: #17A2B8;
+  color: white;
+  border: 1px solid #c6c8ca;;
+}
+
+.alert-network .badge-as {
+  background-color: #FFC107;
+  color: black;
+  border: 1px solid #c6c8ca;;
+}
+
+.alert-network .badge-browser {
+  background-color: #6c757d;
+  color: white;
+  border: 1px solid #c6c8ca;;
+}
+
+.alert-network .badge-rs {
+  background-color: #343a40;
+  color: white;
+  border: 1px solid #c6c8ca;;
+}
+
+.alert-network-client-as {
+  background: linear-gradient(to right, #17A2B8, #FFC107);
+}
+
+.alert-network-as-client {
+  background: linear-gradient(to right, #FFC107, #17A2B8);
+}
+
+.alert-network-client-browser {
+  background: linear-gradient(to right, #17A2B8, #6c757d);
+}
+
+.alert-network-browser-client {
+  background: linear-gradient(to right, #6c757d, #17A2B8);
+}
+
+.alert-network-browser-as {
+  background: linear-gradient(to right, #6c757d, #FFC107);
+}
+
+.alert-network-as-browser {
+  background: linear-gradient(to right, #FFC107, #6c757d);
+}
+
+.alert-network-client-rs {
+  background: linear-gradient(to right, #17A2B8, #343a40);
+}
+
+.alert-network-rs-client {
+  background: linear-gradient(to right, #343a40, #17A2B8);
+}
+
+
 h1,h2,h3,h4,h5,h6 {
   margin: 1.2em 0 0.67em;
   /*background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 90%, rgba(0, 0, 0, .75))*/
