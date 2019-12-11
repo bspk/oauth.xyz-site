@@ -7,19 +7,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './layout.css'
 
 const Layout = ({ children }) => (
-  <StaticQuery
-    query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-          }
-        }
-      }
-    `}
-    render={data => (
       <>
-        <Header siteTitle={data.site.siteMetadata.title} />
+        <Header/>
         <div
           style={{
             margin: '0 auto',
@@ -31,8 +20,6 @@ const Layout = ({ children }) => (
           {children}
         </div>
       </>
-    )}
-  />
 )
 
 Layout.propTypes = {

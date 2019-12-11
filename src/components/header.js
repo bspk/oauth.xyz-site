@@ -34,7 +34,7 @@ const menuLinks = [
       },
 ]
 
-const Header = ({ siteTitle, currentPage }) => (
+const Header = ({ location }) => (
   <div className="header">
     <div className="wrapper">
       <h1 style={{ margin: 0 }}>
@@ -46,13 +46,13 @@ const Header = ({ siteTitle, currentPage }) => (
           }}
         >
           <img src="/xyz.png" alt="XYZ" className="logo" />
-          XYZ
+          XYZ: Transactional Authorization
         </Link>
       </h1>
           <nav>
             {
               menuLinks.map(link =>
-                  <Link to={link.link}><span>&raquo;</span>&nbsp;{link.name}</Link>
+                  <Link to={link.link}><span>&raquo;</span> {link.name}</Link>
               )
             }
           </nav>
@@ -62,13 +62,5 @@ const Header = ({ siteTitle, currentPage }) => (
     </div>
   </div>
 )
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: '',
-}
 
 export default Header

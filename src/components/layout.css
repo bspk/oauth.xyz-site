@@ -633,15 +633,8 @@ pre tt:after {
   padding: 1.45rem 1.0875rem 0.05rem 1.0875rem;
 }
 
-/*
-[aria-current="page"] {
-  background: #772233;
-  padding-bottom: 5px;
-}
-*/
-
 .header .subnav {
-  background: #772233;
+  background: linear-gradient(#772233 90%, white);
   margin: 0 auto;
   padding: 0.7rem 1.0875rem;
 }
@@ -651,8 +644,8 @@ pre tt:after {
 }
 
 .header nav a {
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
   color: white;
   text-decoration: none;
 }
@@ -664,6 +657,12 @@ pre tt:after {
 .header nav a:hover {
   color: white;
   text-decoration: underline;
+}
+
+.header nav a[aria-current="page"] {
+  background: #772233;
+  padding-bottom: 5px;
+  border-radius: 4px 4px 0px 0px;
 }
 
 .selectorList li {
