@@ -10,21 +10,23 @@ The XYZ protocol is an attempt to pull together functionality from many differen
 
 ## Auth Code
 
-The `redirect` <Link to="/interaction">interaction mechanism</Link> allows a client to send a user to interact using HTTP redirects, and for the most part this should be indistinguishable from the authorization code flow in OAuth 2. The key difference is what gets sent in the front channel. In OAuth 2, the client has to send a lot of sensitive information through the browser, including the scopes it's asking for and its own identity. In XYZ, the client simply goes to an opaque URL that it is given in direct response to its transaction request. The interaction handle returned is equivalent to the authorizaiton code itself, and this handle is useful only in the context of a current transaction. 
+The `redirect` <Link to="/interaction">interaction mechanism</Link> with a `callback` return method allows a client to send a user to interact using HTTP redirects, and for the most part this should be indistinguishable from the authorization code flow in OAuth 2. The key difference is what gets sent in the front channel. In OAuth 2, the client has to send a lot of sensitive information through the browser, including the scopes it's asking for and its own identity. In XYZ, the client simply goes to an opaque URL that it is given in direct response to its transaction request. The interaction reference returned is equivalent to the authorization code itself, and this handle is useful only in the context of a current transaction. Furthermore, the interaction reference is cryptographically bound to a set of secrets known to the client and AS at runtime.
 
-This type of interaction can be used for web servers, SPA's, and native applications without modification. In fact, most of the differences between these types of clients are in the ways that they can manage keys and secrets. Since the binding of keys and the mode of interaction are separated in XYZ, they can be combined in ways that make the most sense for the client at hand.
+This type of interaction can be used for web servers, SPA's, and native applications without modification. In fact, most of the differences between these types of clients are in the ways that they can manage keys and secrets. Since the binding of keys and the mode of interaction are separated in XYZ, they can be combined in ways that make the most sense for the client at hand without changing to a different grant type like in OAuth 2.
 
 ## Device Flow
 
-Similarly to the authorization code grant, the device grant simply makes use of the `device` <Link to="/interaction">interaction mechanism</Link>. The only real difference from the authorization code grant is the means of interacting with the user. 
+Similarly to the authorization code grant, the device grant simply makes use of the `user_code` <Link to="/interaction">interaction mechanism</Link> along with polling. There is no longer a need for a separate "device" endpoint because the transaction endpoint covers both this functionality as well as token endpoint functionality. There also does not need to be a separate URL that combines the user code and its delivery URL because the arbitrary URL in the `redirect` method can fill this need without the same security issues that a combined URL would have.
 
 ## Client Credentials
 
 The client credentials grant in XYZ is simply one that does not require user interaction, nor does it require any information about the user. In other words, neither a `user` nor `interaction` section are included in the <Link to="/transactionrequest">transaction request</Link>. 
 
+> We could even include the `user` section with a value of `false` to specifically signal this mode.
+
 ## Resource Owner and Assertion
 
-The resource owner grant could be replicated in XYZ by presenting the user's credentials as part of the `user` section of the transaction request. However, even more powerfully, the client can present a wide variety of verifiable assertions in this section for the AS to validate and interpret as it sees fit. Chained authorization and authentication are possible in this way, as are forms of linked delegation for cases where the client already knows who the user is and has the authority to do something on their behalf, but needs to translate the authentication to something that can be used further downstream. 
+The resource owner grant could be replicated in XYZ by presenting the user's credentials as part of the `user` section of the transaction request. However, even more powerfully, the client can present a wide variety of verifiable assertions in this section for the AS to validate and interpret as it sees fit. Chained authorization and authentication are possible in this way, as are forms of linked delegation for cases where the client already knows who the user is and has the authority to do something on their behalf, but needs to translate the authentication to something that can be used further downstream. Additionally, the client could participate in a challenge-response protocol, prompting the user and user's device. These are all part of the various <Link to="/interaction">interaction methods</Link> for the client.
 
 ## Dynamic Registration
 
@@ -60,8 +62,14 @@ FAPI's request object endpoint allows a client to pre-register the request objec
 
 ## PKCE
 
-PKCE effectively creates an ephemeral key that the client can prove possession of at a later part of the process. With XYZ, the same results are an automatic side effect of the transactional process. The transaction handle is something known only to the client and is never passed through the front channel, and any interaction handle returned from the interaction endpoint makes sense only in the context of a specific transaction. Furthermore, the client's own keys can be bound to the transaction, making it even more difficult for an attacker to make use of a stolen interaction handle. 
+PKCE effectively creates an ephemeral key that the client can prove possession of at a later part of the process. With XYZ, the same results are an automatic side effect of the transactional process. The transaction handle is something known only to the client and is never passed through the front channel, and any interaction reference returned from the interaction endpoint makes sense only in the context of a specific transaction. Furthermore, the client's own keys can be bound to the transaction, making it even more difficult for an attacker to make use of a stolen interaction reference. 
 
 ## PoP
 
 The main goal of of OAuth 2's Proof of Possession extension work is to bind a set of runtime keys that the client can prove possession of to the token issued to the client. XYZ allows a client to bind keys during its transacton request, and these keys can be further bound to the access token. 
+
+## JAR, PAR, and RAR
+
+The JAR specification provides a means to protect content in the front channel, which XYZ avoids in the first place. However, in combination with the PAR specification, the two provide a way to do a back channel intent registration that is in line with XYZ's <Link to="/transactionrequest">transaction request</Link> pattern. 
+
+The RAR specification is being developed in parallel with XYZ, and its internal content is set to mimic the `resources` field of an XYZ transaction. A key difference is that XYZ does not also have to contend with `scope`, `resource`, `aud`, and other values that the RAR spec does in OAuth 2.
