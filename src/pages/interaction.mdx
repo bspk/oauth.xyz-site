@@ -40,7 +40,7 @@ To use this mode, the client's transaction request includes a section that inclu
   }
 />
 
-By default, the callback return will use a `SHA3` 512-bit hash. The client can choose a different hash algorithm by sending a `hashMethod` parameter. In this example, a `SHA2` 512-bit hash is requested. If the AS doesn't support the client's requested hash method, it returns an error.
+By default, the callback return will use a `SHA3` 512-bit hash. The client can choose a different hash algorithm by sending a `hash_method` parameter. In this example, a `SHA2` 512-bit hash is requested. If the AS doesn't support the client's requested hash method, it returns an error.
 
 <Code
   from="client" to="as"
@@ -51,7 +51,7 @@ By default, the callback return will use a `SHA3` 512-bit hash. The client can c
     "callback": {
 		"uri": "https://client.foo",
 		"nonce": "VJLO6A4CAYLBXHTR0KRO",
-		"hashMethod": "SHA2"
+		"hash_method": "SHA2"
 	}
   }
 }
@@ -95,7 +95,7 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the hash based on the `hashMethod` in the client's initial transaction request (defaults to `SHA3` 512-bit):
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the hash based on the `hash_method` in the client's initial transaction request (defaults to `SHA3` 512-bit):
  - the `nonce` value sent by the client in the initial transaction request
  - the `server_nonce` value returned in the initial transaction response
  - the unique interaction handle
