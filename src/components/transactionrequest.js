@@ -42,7 +42,7 @@ class TransactionRequest extends React.Component {
 		},
 		minimal: {
 			subject: true
-		}
+		},
 		handle: 'DWH8WNFDA7QLE691KDY5',
         options: {
           full: "Full",

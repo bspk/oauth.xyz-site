@@ -10,12 +10,13 @@ import Code from '../components/code'
 
 The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
 
-The transaction request contains five parts:
+The transaction request contains several parts:
  - `resources` contains a list of resources that the client is requesting access to
+ - `claims` contains a set of claims about the current end user that the client is requesting from the AS
  - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
  - `display` includes information about how the client software making the request
  - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
- - `user` contains assertions about the current user 
+ - `user` contains assertions about the current user that the client knows
  - `capabilities` allows a client to list large pieces of functionality and extensions that it can support
  
 Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or display information for a particular key handle. 

@@ -100,7 +100,7 @@ class TransactionRequest extends React.Component {
 	},
 	
 	claims_handle: {
-		label: 'Claims Handle'
+		label: 'Claims Handle',
 		on: {
 			value: "14XF3WKRPKW4RN9AROOC",
 			type: 'bearer'
