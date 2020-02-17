@@ -22,7 +22,7 @@ Each of these sections is detailed below.
 
 Foremost, the AS needs to tell the client what to do next. This may be getting the user to <Link to="/interaction">interact with the AS directly</Link>, waiting until polling again, or heading to the resource server to <Link to="/tokens">use the token</Link>. 
 
-Both the interaction and poll-wait style responses require the transaction handle, below. If a transaction handle is included with the access token response, the client can use this handle to get a new access token in the event the first one expires or is revoked, so long as the trnasaction handle is still valid. 
+Both the interaction and poll-wait style responses require the transaction handle, below, in order to continue. If a transaction handle is included with the access token response, the client can use this handle to get a new access token in the event the first one expires or is revoked, so long as the transaction handle is still valid. 
 
 ## Transaction Handle
 
@@ -38,7 +38,7 @@ If a `user_handle` is returned by the AS, the client can use this handle in lieu
 
 ## Resource Handle
 
-If a `resource_handle` is returned by the AS, the client can use this handle in lieu of the `resource` portions of the transaction request to request the same set of resources in a future transaction. 
+If a `resources_handle` is returned by the AS, the client can use this handle in lieu of the `resource` portions of the transaction request to request the same set of resources in a future transaction. 
 
 ## Key Handle
 
@@ -49,3 +49,11 @@ If a `key_handle` is returned by the AS, the client can use this handle in lieu 
 If a `capabilities` section is sent by the client, the AS parses it and returns an array of all the capabilities that this AS can support for this transaction. This allows the client to dynamically self-configure for the transaction. 
 
 > This piece is effectively a discovery response, but tied directly to the transaction endpoint. This means the client knows the AS as only its transaction endpoint URL and can get everything else it needs from there. 
+
+## Claims
+
+If a `claims` section is returned by the AS, it contains information about the user currently logged in to the AS. This information should be minimal to avoid privacy and data consistency problems. 
+
+## Claims Handle
+
+If a `claims_handle` is returned by the AS, the client can use this handle in lieu of the `claims` section of the transaction request to reference the same set of claims information in future requests.

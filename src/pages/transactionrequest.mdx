@@ -41,6 +41,7 @@ An AS can also dynamically generate a display handle and return it to the client
 The `resources` parameter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
 
 <Code code={{
+          type: "example.com/resource-set",
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
           datatypes: ["metadata", "images"]
@@ -51,6 +52,14 @@ An AS can publish pre-set resources as resource handles that can be passed by th
 An AS can also dynamically generate a resources handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify this same kind of request in future transactions.
 
 The client can send several of these objects of handles in a single request, which the AS interprets as the client requesting access to all of the resources. 
+
+> We could also have a means for the client to request multiple tokens using a different syntax. Instead of a top-level array, the top level could be an object whose keys are token identifiers decided by the client and whose values are the arrays from a single-token resource request.
+
+## Claims
+
+The `claims` parameter lets the client request information about the user. The presence of this field indicates to the AS that the client wants to know who is logged in at the AS during the interaction process. 
+
+This is distinct from the `user` parameter below, which contains information that the client already knows about the current user. 
 
 ## Interact
 
@@ -77,6 +86,8 @@ The `user` parameter lets the client pass information to the AS about the curren
 While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction in appropriately trusted scenarios.
 
 The AS can dynamically generate a user handle and return it to the client in the transaction response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
+
+This is distinct from the `claims` parameter above, which is about the client asking form information about the current user.
 
 ## Capabilities
 

@@ -31,6 +31,26 @@ class TransactionRequest extends React.Component {
         omit: "Off"
       }
     },
+	
+	claims: {
+		label: 'Claims',
+		full: {
+			subject: true,
+			email: true,
+			phone: true,
+			auth_time: true
+		},
+		minimal: {
+			subject: true
+		}
+		handle: 'DWH8WNFDA7QLE691KDY5',
+        options: {
+          full: "Full",
+  		  minimal: "Minimal",
+          handle: "Handle",
+          omit: "Off"
+        }
+	},
     
     keys: {
       label: 'Keys',
@@ -166,7 +186,8 @@ class TransactionRequest extends React.Component {
       interact: 'redirect',
       key: 'jwsd',
       user: 'omit',
-      capabilities: 'omit'
+      capabilities: 'omit',
+	  claims: 'omit'
     }
   }
 

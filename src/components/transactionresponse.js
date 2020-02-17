@@ -86,7 +86,26 @@ class TransactionRequest extends React.Component {
     capabilities: {
       label: 'Capabilities',
       on: ['mtls', 'jwsd']
-    }
+    },
+	
+	claims: {
+		label: 'Claims',
+		on: {
+			subject: 'I6W52R97IH',
+			email: 'user@example.com',
+			phone: '555-USER',
+			updated_at: '2020-01-01T12:43:29+0000',
+			auth_time: '2020-02-17T21:23:39+0000'
+		}
+	},
+	
+	claims_handle: {
+		label: 'Claims Handle'
+		on: {
+			value: "14XF3WKRPKW4RN9AROOC",
+			type: 'bearer'
+		}
+	}
   }
   
   state = {
@@ -97,7 +116,9 @@ class TransactionRequest extends React.Component {
       resources_handle: 'off',
       key_handle: 'on',
       user_handle: 'off',
-      capabilities: 'off'
+      capabilities: 'off',
+      claims: 'off',
+      claims_handle: 'off'
     }
   }
 
