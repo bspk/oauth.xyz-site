@@ -10,7 +10,7 @@ class TransactionRequest extends React.Component {
     
     resources: {
       label: 'Resources',
-      full: [{
+      single: [{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
           datatypes: ["metadata", "images"]
@@ -24,10 +24,23 @@ class TransactionRequest extends React.Component {
         },
         "dolphin-metadata"        
       ],
+      multiple: {
+          token1: [{
+            actions: ["read", "write", "dolphin"],
+            locations: ["https://server.example.net/", "https://resource.local/other"],
+            datatypes: ["metadata", "images"]
+          }],
+          token2: [{
+            actions: ["foo", "bar", "dolphin"],
+            locations: ["https://resource.other/"],
+            datatypes: ["data", "pictures"]
+          }]
+      },
       options: {
-        full: "Full",
+        single: "Single",
         handle: "Handle",
-        both: "Both",
+        both: "Combined",
+        multiple: "Multiple",
         omit: "Off"
       }
     },
