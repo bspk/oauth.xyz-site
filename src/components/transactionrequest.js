@@ -10,7 +10,7 @@ class TransactionRequest extends React.Component {
     
     resources: {
       label: 'Resources',
-      full: [{
+      single: [{
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
           datatypes: ["metadata", "images"]
@@ -24,10 +24,23 @@ class TransactionRequest extends React.Component {
         },
         "dolphin-metadata"        
       ],
+      multiple: {
+          token1: [{
+            actions: ["read", "write", "dolphin"],
+            locations: ["https://server.example.net/", "https://resource.local/other"],
+            datatypes: ["metadata", "images"]
+          }],
+          token2: [{
+            actions: ["foo", "bar", "dolphin"],
+            locations: ["https://resource.other/"],
+            datatypes: ["data", "pictures"]
+          }]
+      },
       options: {
-        full: "Full",
+        single: "Single",
         handle: "Handle",
-        both: "Both",
+        both: "Combined",
+        multiple: "Multiple",
         omit: "Off"
       }
     },
@@ -128,12 +141,23 @@ class TransactionRequest extends React.Component {
       didcommQuery: {
         didcomm_query: true
       },
+      all: {
+        redirect: true,
+        callback: {
+          uri: "https://client.example.net/return/123455",
+          nonce: "LKLTI25DK82FX4T4QFZC"
+        },
+        user_code: true,
+        didcomm: true,
+        didcomm_query: true
+      },
       options: {
         redirect: "Redirect",
         device: "Device",
         qrcode: "QR Code",
         didcomm: "DIDComm",
         didcommQuery: "DIDComm Query",
+        all: "All",
         omit: "Off"
       }
     },
@@ -184,7 +208,7 @@ class TransactionRequest extends React.Component {
       display: 'full',
       resources: 'handle',
       interact: 'redirect',
-      key: 'jwsd',
+      keys: 'jwsd',
       user: 'omit',
       capabilities: 'omit',
 	  claims: 'omit'

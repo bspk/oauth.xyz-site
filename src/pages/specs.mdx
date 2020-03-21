@@ -8,6 +8,12 @@ import SEO from '../components/seo'
 
 The XYZ protocol is an attempt to pull together functionality from many different extensions and deployments of OAuth 2. Here, we'll try to map specific concepts from these different protocols into the XYZ system. 
 
+## Scopes
+
+The `scope` parameter in OAuth 2 lets a client specify a set of strings to describe the kind of access it wants. While XYZ allows for a much richer set of authorization details to be requested, scopes are a nice simplification for client developers talking to a known API.
+
+XYZ allows this simplification through the use of resource handles, which can be specified by the AS and used in lieu of a resources object. After all, a scope value is nothing more than a shorthand for a specific set of authorizations being requested. So to translate an OAuth 2 request of `scope=foo bar baz`, you simply request `resources=[foo, bar, baz]` instead.
+
 ## Auth Code
 
 The `redirect` <Link to="/interaction">interaction mechanism</Link> with a `callback` return method allows a client to send a user to interact using HTTP redirects, and for the most part this should be indistinguishable from the authorization code flow in OAuth 2. The key difference is what gets sent in the front channel. In OAuth 2, the client has to send a lot of sensitive information through the browser, including the scopes it's asking for and its own identity. In XYZ, the client simply goes to an opaque URL that it is given in direct response to its transaction request. The interaction reference returned is equivalent to the authorization code itself, and this handle is useful only in the context of a current transaction. Furthermore, the interaction reference is cryptographically bound to a set of secrets known to the client and AS at runtime.
@@ -44,7 +50,7 @@ The main component that's missing would be to allow an RS to start a transaction
 
 ## Identity and OpenID Connect
 
-The main addition that OpenID Connect brings is the ability to pass identity information to the client. An XYZ-based OpenID Connect style protocol could be as simple as returning an identity assertion alongside the access token, much in the same way the ID Token is returned in OpenID Connect today. Similarly, the UserInfo Endpoint remains a standardized resource server that behaves the same as it does today.
+The main addition that OpenID Connect brings is the ability to pass identity information to the client. An XYZ-based identity protocol could be as simple as returning an identity assertion alongside the access token using the `claims` request, much in the same way the ID Token is returned in OpenID Connect today. Similarly, the UserInfo Endpoint remains a standardized resource server that behaves the same as it does today.
 
 Many of the additional mechanisms in OpenID Connect can be incorporated into the transaction request instead of being passed through the browser, including any `prompt`, `login_hint`, or vectors of trust parameters. Additionally, the `claims` mechanism can be readily incorporated into the `resources` portion of the request. 
 
@@ -73,3 +79,7 @@ The main goal of of OAuth 2's Proof of Possession extension work is to bind a se
 The JAR specification provides a means to protect content in the front channel, which XYZ avoids in the first place. However, in combination with the PAR specification, the two provide a way to do a back channel intent registration that is in line with XYZ's <Link to="/transactionrequest">transaction request</Link> pattern. 
 
 The RAR specification is being developed in parallel with XYZ, and its internal content is set to mimic the `resources` field of an XYZ transaction. A key difference is that XYZ does not also have to contend with `scope`, `resource`, `aud`, and other values that the RAR spec does in OAuth 2.
+
+## Client ID
+
+The client ID in OAuth 2 is important to the protocol because it allows the client to identify itself during the initial front channel requests where it cannot authenticate itself. In XYZ, the client starts talking in the back channel where it can always authenticate itself. If the AS recognizes the authentication of a specific key, it can tie the request to a set of policies bound to that key's ID. If the key has been registered with the server, the client can send the key handle instead. In this way, the key handle acts much like the client ID used to. If the AS chooses, it can associate an internal identifier to a client, or set of clients, but the protocol no longer needs to be exposed to this detail.

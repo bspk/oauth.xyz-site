@@ -50,11 +50,33 @@ The `resources` parameter contains a list of all resources and APIs the client w
 
 An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
 
+<Code code={[{
+          type: "example.com/resource-set",
+          actions: ["read", "write", "dolphin"],
+          locations: ["https://server.example.net/", "https://resource.local/other"],
+          datatypes: ["metadata", "images"]
+}, "dolphin-metadata"]} />
+
 An AS can also dynamically generate a resources handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify this same kind of request in future transactions.
 
-The client can send several of these objects of handles in a single request, which the AS interprets as the client requesting access to all of the resources. 
+The client can send several of these objects of handles in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
 
-> We could also have a means for the client to request multiple tokens using a different syntax. Instead of a top-level array, the top level could be an object whose keys are token identifiers decided by the client and whose values are the arrays from a single-token resource request.
+To request multiple access tokens, the client sends an object instead of an array for the value of the `resources` parameter. The keys of this object are access token identifiers chosen by the client, and they must be unique within the request. The member values of this object are lists of resources, just as above. These lists can be combinations of objects and handle strings. Each item in the `resources` object will correspond to a different named access token in the response. 
+
+<Code code={{
+  token1: [{
+    actions: ["read", "write", "dolphin"],
+    locations: ["https://server.example.net/", "https://resource.local/other"],
+    datatypes: ["metadata", "images"]
+  }],
+  token2: [{
+    actions: ["foo", "bar", "dolphin"],
+    locations: ["https://resource.other/"],
+    datatypes: ["data", "pictures"]
+  }]
+}} />
+
+In this specific example, the client is requesting `token1` to access the first resource and `token2` to access the second resource. See more about what this means in the <Link to="/tokens">section on tokens</Link>.
 
 ## Claims
 

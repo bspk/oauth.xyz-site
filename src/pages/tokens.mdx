@@ -120,3 +120,37 @@ A client can request the revocation of a token by sending a `DELETE` request to 
 &nbsp;
 
 > The semantics of a body with a `DELETE` request are iffy at best, but as an alternative, the AS could issue a token-management URL alongside the access token. This kind of URL could be used for introspection by the RS, if the RS had a way to get the URL along with the token itself. 
+
+## Multiple access tokens
+
+A client can make a <Link to="/transactionrequest">transaction request</Link> with a multi-part `resources` section, which is formatted as a JSON object with the field names chosen by the client to differentiate the access being requested. A request would look like this.
+
+<Code code={{
+  token1: [{
+    actions: ["read", "write", "dolphin"],
+    locations: ["https://server.example.net/", "https://resource.local/other"],
+    datatypes: ["metadata", "images"]
+  }],
+  token2: [{
+    actions: ["foo", "bar", "dolphin"],
+    locations: ["https://resource.other/"],
+    datatypes: ["data", "pictures"]
+  }]
+}} />
+
+For this request, the server can return multiple access tokens like this.
+
+<Code code={{
+    multiple_access_tokens: {
+      token1: {
+        value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        type: "bearer"
+      },
+      token2: {
+        value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
+        type: "bearer"
+      }
+    }
+}} />
+
+The `token1` access token in the response corresponds directly to the `token1` portion of the `resources` request, and the same applies to `token2`. The AS can't add an additional access token that the client did not specifically request, but it can omit a requested access token in case it was not issued. This could be because the user denied the authorization request or some other policy decision demanded it.

@@ -7,43 +7,71 @@ import SelectorList from '../components/selectorlist'
 class TransactionRequest extends React.Component {
 
   
-  interactionValues = {
-    label: 'Next Step',
-    redirect: {
-      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-      server_nonce: "MBDOFXG4Y5CVJCX821LH"
-    },
-    user_code: {
-      user_code: {
-        url: "https://server.example.com/interact/device",
-        code: "A1BC-3DFF"
-      }
-    },
-    both: {
-      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-      server_nonce: "MBDOFXG4Y5CVJCX821LH",
-      user_code: {
-        url: "https://server.example.com/interact/device",
-        code: "A1BC-3DFF"
-      }
-    },
-    didcomm: {
-      didcomm: {
-        "...": "..."
-      }
-    },
-    wait: {
-      wait: 30
-    },
-    access_token: {
-      access_token: {
-          value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-          type: "bearer"
-      }
-    }
-  }
-
   codeValues = {
+    interaction: {
+      label: 'Interaction',
+      redirect: {
+        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+        server_nonce: "MBDOFXG4Y5CVJCX821LH"
+      },
+      user_code: {
+        user_code: {
+          url: "https://server.example.com/interact/device",
+          code: "A1BC-3DFF"
+        }
+      },
+      both: {
+        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+        user_code: {
+          url: "https://server.example.com/interact/device",
+          code: "A1BC-3DFF"
+        }
+      },
+      didcomm: {
+        didcomm: {
+          "...": "..."
+        }
+      },
+      wait: {
+        wait: 30
+      },
+      options: {
+        redirect: "Redirect",
+        user_code: "User Code",
+        both: "QR Code",
+        didcomm: "DIDComm",
+        wait: "Wait",
+        off: 'Off'
+      }
+    },
+    
+    access_token: {
+      label: 'Access Token',
+      single: {
+        access_token: {
+            value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+            type: "bearer"
+        }
+      },
+      multiple: {
+        multiple_access_tokens: {
+          token1: {
+            value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+            type: "bearer"
+          },
+          token2: {
+            value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
+            type: "bearer"
+          }
+        }
+      },
+      options: {
+        single: 'Single',
+        multiple: 'Multiple',
+        off: 'Off'
+      }
+    },
+    
     handle: {
       label: 'Transaction Handle',
       on: {
@@ -88,30 +116,31 @@ class TransactionRequest extends React.Component {
       on: ['mtls', 'jwsd']
     },
 	
-	claims: {
-		label: 'Claims',
-		on: {
-			subject: 'I6W52R97IH',
-			email: 'user@example.com',
-			phone: '555-USER',
-			updated_at: '2020-01-01T12:43:29+0000',
-			auth_time: '2020-02-17T21:23:39+0000'
-		}
-	},
+  	claims: {
+  		label: 'Claims',
+  		on: {
+  			subject: 'I6W52R97IH',
+  			email: 'user@example.com',
+  			phone: '555-USER',
+  			updated_at: '2020-01-01T12:43:29+0000',
+  			auth_time: '2020-02-17T21:23:39+0000'
+  		}
+  	},
 	
-	claims_handle: {
-		label: 'Claims Handle',
-		on: {
-			value: "14XF3WKRPKW4RN9AROOC",
-			type: 'bearer'
-		}
-	}
+  	claims_handle: {
+  		label: 'Claims Handle',
+  		on: {
+  			value: "14XF3WKRPKW4RN9AROOC",
+  			type: 'bearer'
+  		}
+  	}
   }
   
   state = {
     selected: {
       handle: 'on',
       interaction: 'redirect',
+      access_token: 'off',
       display_handle: 'off',
       resources_handle: 'off',
       key_handle: 'on',
@@ -129,10 +158,11 @@ class TransactionRequest extends React.Component {
     s[field] = value;
     
     if (field === 'handle' && value === 'off') {
-      s.interaction = 'access_token';
+      s.access_token = 'single';
+      s.interaction = 'off';
     }
     
-    if (field === 'interaction' && value !== 'access_token') {
+    if (field === 'interaction' && value !== 'off') {
       s.handle = 'on';
     }
     
@@ -146,34 +176,23 @@ class TransactionRequest extends React.Component {
 
     // build the transaction object based on the current selection
     const transaction = Object.keys(this.codeValues).reduce((result, key) => {
-      result[key] = this.codeValues[key][this.state.selected[key]];
+      if (key == 'interaction' || key == 'access_token') {
+        //debugger;
+        result = {...result, ...this.codeValues[key][this.state.selected[key]]};
+      } else {
+        result[key] = this.codeValues[key][this.state.selected[key]];
+      }
       return result;
     }, {});
     
-    const interact = this.interactionValues[this.state.selected.interaction];
-    
-    const response = {...interact, ...transaction};
-    
-    
-    // build next-step selector first
-    const nextOptions = {
-      redirect: "Redirect",
-      user_code: "User Code",
-      both: "Both",
-      didcomm: "DIDComm",
-      wait: "Wait",
-      access_token: "Token"
-    }
+    const response = {...transaction};
     
     // build the selectors
-    const selectors = [
-      <Selector onChange={this.change('interaction')} label={this.interactionValues.label} selected={this.state.selected.interaction} options={nextOptions} />
-    ]
-    .concat(Object.keys(this.codeValues).map((field) => {
+    const selectors = Object.keys(this.codeValues).map((field) => {
       return (
-        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} />
+        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} />
       );
-    }));
+    });
 
     
     
