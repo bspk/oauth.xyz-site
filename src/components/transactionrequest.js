@@ -109,7 +109,7 @@ class TransactionRequest extends React.Component {
       },
       handle: "7C7C4AZ9KHRS6X63AJAO",
       options: {
-        jwsd: "JWS",
+        jwsd: "JWS (Detached)",
         httpsig: "HTTP Signature",
         mtls: "MTLS",
         thumbprint: "MTLS (Thumbprint)",

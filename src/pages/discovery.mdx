@@ -50,3 +50,5 @@ Host: server.example.com`} />
 }} />
 
 Clients can use this information to pre-configure an optimized request to the AS, if desired. However, note that this method of discovery is not required to start a transaction.
+
+Also note that presence of a value in the discovery document is not a guarantee that a client can use that feature. An AS is not obligated to allow any particular client or transaction request to use a given feature. For example, a client might be registered with a particular key proofing type and can therefore only use that type, even if the server supports others.
