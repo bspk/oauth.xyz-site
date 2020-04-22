@@ -25,6 +25,10 @@ const menuLinks = [
         link: '/tokens/'
       },
       {
+        name: 'Discovery',
+        link: '/discovery/'
+      },
+      {
         name: 'Other Specs',
         link: '/specs/'
       },

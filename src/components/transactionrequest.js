@@ -193,7 +193,7 @@ class TransactionRequest extends React.Component {
     capabilities: {
       label: 'Capabilities',
       full: [
-        'jwsd', 'mtls', 'extension-B'
+        'foo', 'bar', 'extension-B'
       ],
       options: {
         full: "On",
