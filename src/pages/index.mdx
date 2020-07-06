@@ -2,40 +2,61 @@ import { Link } from 'gatsby'
 
 import SEO from '../components/seo'
 
-<SEO title="Home" keywords={['oauth', 'authorization', 'security']} />
+<SEO title="Home" keywords={['oauth', 'authorization', 'security', 'xyz', 'gnap']} />
 
-# The proposal
+# What is XYZ?
 
-OAuth 2 is one of the most successful security protocols in use today. Even so, in its wide use, the protocol has come up against some of its own limitations. This is a proposal for a transactional authorization protocol XYZ to address the things that OAuth 2 doesn't handle well on its own. Optimizations and decisions that made sense in OAuth 2 don't make as much sense today. We are in a different world, and <a href="https://medium.com/@justinsecurity/moving-on-from-oauth-2-629a00133ade">perhaps it's time we started to look to a different protocol</a>.
+XYZ is a proposed delegation protocol in the spirit of OAuth 2, but designed with the decade of experience that we have now with OAuth 2 and its extensions. The XYZ protocol is ***not intended to be directly compatible with OAuth 2***, much in the same way that OAuth 2 was not directly compatible with OAuth 1. However, the concepts and many of the goals should feel familiar to developers used to these existing protocols and their extensions. Concepts from OAuth 2, OIDC, PKCE, UMA, CIBA, OBUK, FAPI, and a host of other extensions and profiles were analyzed and adapted in the design of XYZ, but with a mind toward taking the best aspects of all of them and applying them in a consistent way. 
 
-But we're not trying to invent something in a vacuum. In particular, OAuth 2 has been extended to cover a wide variety of client applications, deployments, and use cases. While this flexibility and extensibility is one of OAuth 2's strengths, this has unfortunately led to a number of components that are almost--but not quite--solving the same problems in similar ways. PKCE, UMA, CIBA, OBUK, FAPI, and a host of other extensions to OAuth 2 make use of temporary credentials to let the protocol behave in new ways. 
+XYZ has several core features that drive its design principles, and these are key to providing a consistent data model:
 
-This protocol, which I'm calling "XYZ" for the moment, is based on a transactional model. The client of the API declares who it is and what it wants, the AS figures out what information it needs to fulfill that (which might include interacting with a user), and ultimately a token is produced. All along the way, components have the opportunity to bind keys to different parts of the transaction so that attackers can't take over. This intent-based system takes in experience and feedback from other similar projects and protocols, but in a way that pulls together many different aspects. 
+ - Intent registration. This allows the client to start the process off the same way every time by doing <Link to="/transactionrequest/">requeset to the authorization server</Link>.
+ - Don't assume the user has a browser. Interaction needs to happen in a <Link to="/interaction/">variety of ways depending on the capabilities of the client</Link>, and only sometimes will a browser be involved.
+ - Minimize the front channel. When a browser *is involved*, the protocol seeks to minimize the amount and kind of information that passes through the URLs of the front channel.
+ - Polymorphic JSON. The protocol elements have different data types that convey additional contextual meaning, allowing us to avoid mutually exclusive protocol elements and design a more succinct and readable protocol. This lets us pass things by reference or by value using the same element field, among other things.
+ - Key proofing and presentation. While OAuth 2 thrived on client secrets and bearer tokens, XYZ seeks to <Link to="/keys/">move beyond that at the base level</Link>, making use of a variety of security technologies.
+ - Ease of transition from OAuth 2. Even though this is not backwards compatible, there should be a <Link to="/specs/">clear translation path from OAuth 2 based systems to XYZ</Link>.
+ - Inline negotiation. Whenever possible, the protocol is designed such that <Link to="/discovery/">discovery and registration are not needed</Link>, but they can still be supported.
 
-The XYZ protocol is *not intended to be directly compatible with OAuth 2*, much in the same way that OAuth 2 was not directly compatible with OAuth 1. However, the concepts and many of the goals should feel familiar to developers used to these existing protocols and their extensions. The XYZ protocol seeks to make minimal use of the front-channel for passing information. 
+And most importantly, XYZ seeks to build out a protocol that **doesn't have the same assumptions as OAuth 2** by carefully examining and questioning all aspects of OAuth 2 and its extensions. Nothing is considered *sacred*, even as we build in a world already full of OAuth 2. This lets us question the utility of protocol elements like the `client_id` and figure out if and how they fit into the new world.
 
-# The process
+# GNAP
 
-In XYZ, a client that needs to talk to an API first <Link to="/transactionrequest">begins an authorization transaction</Link> with the authorization server. This request includes information about the client, the user, the API being requested, the ways the client can interact with the user, and any <Link to="/keys">keys the client can prove possession of</Link>.
+The XYZ protocol is one of the inputs in the newly-formed [Grant Negotiation Authorization Protocol (GNAP)](https://datatracker.ietf.org/wg/gnap/about/) working group in the IETF. This is a new working group, and discussion is happening now on the [txauth@ietf.org](https://www.ietf.org/mailman/listinfo/txauth) mailing list. The XYZ protocol has been [submitted as an individual draft](https://tools.ietf.org/html/draft-richer-transactional-authz), but the GNAP protocol will take its own shape after the working group is officially formed.
 
-The authorization server processes this request and indicates to the client what its next steps are. If the authorization server requires external input from an authorized user, it will indicate that the client <Link to="/interaction">interact with the user</Link> or wait for a server-side action, depending on the nature of the client and what the authorization server needs. If the client is told to wait (as in a multi-device or multi-party authorization process), it can poll the transaction endpoint again after the indicated time window. After successful interaction, the client will continue a transaction with the authorization server. This can result in additional responses to continue the transaction, as needed.
+GNAP will one day be a formal standard, and as that standardization process takes place, XYZ will transition to being an implementation of that standard. 
 
-The AS might instead determine that no interaction from a user is required, such as is the case in OAuth 2's client credentials and assertion flows, and UMA 2's push-based claims flows. In any of these cases, the AS can determine that the presentation of a particular set of keys and assertions for a certain set of resources is sufficient for issuance of an access token, and the process can continue.
+# Presentations and Materials
 
-Upon successful authorization, the authorization server will <Link to="/tokens">issue an access token for use at the API</Link>. 
+This website is the most comprehensive and complete collections of information about the XYZ project, and it tends to get updated before other artifacts do. 
 
-# Presentations
-
-I've been fortunate to present XYZ and its concepts at a few different places so far. 
+In addition to the website, I've been fortunate to present XYZ and its concepts at a few different places so far. 
 
  - [Identiverse 2019, Transactional Authorization](https://www.youtube.com/watch?v=U9i7YaN8v9c)
  - [IETF 105 Montreal 2019, OAuth Working Group](https://www.youtube.com/watch?v=TE3Fzb5-Jz0&t=3764)
  - [IETF 106 Singapore, TXAuth BoF Meeting](https://www.youtube.com/watch?v=q096sY6L9-E)
 
-# Please help
+I've also written a number of articles on the topic of XYZ and the choices behind the protocol design.
 
-This proposal is far from perfect, and I'm not going to pretend it is. There are a lot of things that are under-defined, and a lot of things that might not make sense in real deployments. While I've been able to pull together a few test implementations, there is still a lot to be learned. I think there might be a grand unified authorization theory to be found, and this is just one early attempt at it, and this attempt is not alone. There have been some fantastic ideas on how to <a href="https://medium.com/oauth-2/transaction-authorization-or-why-we-need-to-re-think-oauth-scopes-2326e2038948">represent resources, actions, and scopes</a>, some fresh thinking on how to bind keys, not to mention all of the existing work on intent-based security protocols in the past. 
+ - [Moving On from OAuth 2](https://medium.com/@justinsecurity/moving-on-from-oauth-2-629a00133ade)
+ - [The Case for OAuth 3](https://medium.com/@justinsecurity/the-case-for-oauth-3-0-5c7537e3f9c3)
+ - [XYZ: Why?](https://medium.com/@justinsecurity/xyz-why-b855970fdd89)
+ - [XYZ: Handles, Passing by Reference, and Polymorphic JSON](https://medium.com/@justinsecurity/xyz-handles-passing-by-reference-and-polymorphic-json-e1af8892f371)
+ - [XYZ: Interaction](https://medium.com/@justinsecurity/xyz-interaction-a84091d2a8c8)
+ - [XYZ: Compatibility with OAuth 2](https://medium.com/@justinsecurity/xyz-compatibility-with-oauth-2-f7b490be536d)
+ - [XYZ: Cryptographic Binding and Agility](https://medium.com/@justinsecurity/xyz-cryptographic-binding-db367f6581e6)
 
-There's an <a href="https://github.com/bspk/oauth.xyz-java">implementation of XYZ in Java</a>. This project has both the client and AS portions, and they do not share data internally and only interact through the protocol. It's written in Java Spring Boot with a React front end and almost certainly has errors in it. But at least it will show a bit of the protocol working on its own. SecureKey has contributed an <a href="https://github.com/securekey/oauth-xyz-nodejs">implementation of XYZ in NodeJS</a> that also covers both the client and server portions. Both the Java and NodeJS implementations have been shown to interoperate with each other. Dmitri Zagidulin has contributed an in-browser <a href="https://github.com/interop-alliance/oauth-xyz-client-js">implementation in JavaScript</a> that acts as a client library for single-page applications.
+Several others in the wider OAuth community have also provided some great discussions on XYZ and the concepts driving this new work.
 
-The protocol and this site are not intended to be static. I want people to dig into the ideas collected here, improve them, adapt them, break them, and build them up again. Go <a href="https://tools.ietf.org/html/draft-richer-transactional-authz">read the draft specification text</a>, <a href="https://github.com/bspk/oauth.xyz-site">propose changes to the site</a>, and <a href="https://www.ietf.org/mailman/listinfo/txauth">join the IETF's new TXAuth mailing list</a>.
+ - [Transaction Authorization: Or why we need to re-think OAuth scopes](https://medium.com/oauth-2/transaction-authorization-or-why-we-need-to-re-think-oauth-scopes-2326e2038948)
+ - [Adding Identity to XYZ](https://aaronparecki.com/2019/07/18/17/adding-identity-to-xyz)
+
+# Implementations
+
+Protocol proposals without implementations are merely thought experiments, and XYZ has always sought to ground all of its ideas in trial implementations. To date there are several code bases that can be downloaded, examined, and tried out. These have changed as the protocol has changed, and will continue to do so as GNAP takes shape. As such, things might be quirky or in a somewhat unfinished, experimental state at any time.
+
+ - [AS and Client in Java, with SPA in React](https://github.com/bspk/oauth.xyz-java)
+ - [AS and Client in NodeJS](https://github.com/securekey/oauth-xyz-nodejs)
+ - [Client in JavaScript for SPAs](https://github.com/interop-alliance/oauth-xyz-client-js)
+
+If you have feedback for this website, please see [its repository](https://github.com/bspk/oauth.xyz-site) or [get in touch directly](https://bspk.io/contact/).
