@@ -6,11 +6,11 @@ import Code from '../components/code'
 
 <SEO title="Transaction Response" keywords={['oauth', 'authorization', 'security']} />
 
-# Transaction Response
+# Grant Response
 
-The response from the transaction endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
+The response from the grant endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
 
-If the transaction can be continued by the client, the AS includes a transaction handle in the response as well. This handle is used by the client for any subsequent references to this transaction. 
+If the transaction can be continued by the client, the AS includes a `continue` handle in the response as well. This handle is used by the client for any subsequent references to this transaction. 
 
 The response can also include handles that the client can use in future transactions in lieu of any of the request sections.
 
@@ -22,35 +22,28 @@ Each of these sections is detailed below.
 
 Foremost, the AS needs to tell the client what to do next. If the user needs to interact with the AS, it will indicate how the user can do that as described in the <Link to="/interaction">interaction section</Link>, which could include waiting until polling again.
 
-If the transaction is successful, the result could contain one or more <Link to="/tokens">access tokens</Link> for use at the resource server as well as some `claims` about the end user.
+## Tokens and Subject 
 
-If a `claims` section is returned by the AS, it contains information about the user currently logged in to the AS. This information should be minimal to avoid privacy and data consistency problems. 
+If the transaction is successful, the result could contain one or more <Link to="/tokens">access tokens</Link> for use at the resource server as well as some `subject` data about the end user. 
 
-Both the interaction and poll-wait style responses require the transaction handle, below, in order to continue. If a transaction handle is included with the access token response, the client can use this handle to get a new access token in the event the first one expires or is revoked, so long as the transaction handle is still valid. 
+If a `subject` section is returned by the AS, it contains information about the user currently logged in to the AS. This information should be minimal to avoid privacy and data consistency problems. 
 
-## Transaction Handle
+## Continuation
 
-This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. This is used in the <Link to="/transactionrequest">transaction continuation request</Link>. 
+Both the interaction and poll-wait style responses require the the `continue` response in order to continue. If a transaction handle is included with the access token response, the client can use this handle to get a new access token in the event the first one expires or is revoked, so long as the transaction handle is still valid. The `continue` response also includes the URL at which the client needs to make its continuation requests, and can include information about how long the client should `wait` before trying again.
 
-## Display Handle
+This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. This is used in the <Link to="/transactionrequest">continuation request</Link>. 
+
+
+## Dynamic Handles
+
+Parts of the client's request can be assigned reference identifier handles by the AS so that the client can use these in future requests.
 
 If a `display_handle` is returned by the AS, the client can use this handle in lieu of the information sent in the `display` block in the request for future transactions. 
 
-## User Handle
-
 If a `user_handle` is returned by the AS, the client can use this handle in lieu of the `user` portion of the transaction request to represent the same user in future requests, akin to UMA 2's PCT.
 
-## Resource Handle
-
-If a `resources_handle` is returned by the AS, the client can use this handle in lieu of the `resource` portions of the transaction request to request the same set of resources in a future transaction. 
-
-## Key Handle
-
 If a `key_handle` is returned by the AS, the client can use this handle in lieu of the `key` section of the transaction request to reference the same key presented and proved by the client in this transaction. When presenting such key handles in a future request, the client must still <Link to="/keys">bind the request to the referenced key</Link>.
-
-## Claims Handle
-
-If a `claims_handle` is returned by the AS, the client can use this handle in lieu of the `claims` section of the transaction request to reference the same set of claims information in future requests.
 
 ## Capabilities
 

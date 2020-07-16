@@ -5,7 +5,7 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 
 
 
-const Selector = ({onChange, label, selected, all, options}) => {
+const Selector = ({onChange, label, selected, all, options, type}) => {
   
   if (!options) {
     options = {
@@ -22,7 +22,7 @@ const Selector = ({onChange, label, selected, all, options}) => {
   }));
   
   return (
-    <ToggleButtonGroup name={label} value={all ? "" : selected} onChange={onChange} size="sm" className="selector">
+    <ToggleButtonGroup name={label} type={ type ? type : 'radio' } value={all ? "" : selected} onChange={onChange} size="sm" className="selector">
       {elements}
     </ToggleButtonGroup>
   );

@@ -6,14 +6,14 @@ import Code from '../components/code'
 
 <SEO title="Transaction Request" keywords={['oauth', 'authorization', 'security']} />
 
-# Transaction Request
+# Grant Request
 
-The client begins the transaction by creating a transaction request. This is a `JSON` document `POST`ed to the authorization server's transaction endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
+The client begins the transaction by creating a grant request. This is a `JSON` document `POST`ed to the authorization server's grant endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
 
-The transaction request contains several parts:
+The request contains several parts:
+ - `key` identifies the client software using a key the client is able to provide proof of possession for during this transaction and any related actions
  - `resources` contains a list of resources that the client is requesting access to
- - `claims` contains a set of claims about the current end user that the client is requesting from the AS
- - `key` contains information about the key the client is able to provide proof of possession for during this transaction and any related actions
+ - `subject` contains a set of claims about the current end user that the client is requesting from the AS
  - `display` includes information about how the client software making the request
  - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
  - `user` contains assertions about the current user that the client knows
@@ -21,21 +21,13 @@ The transaction request contains several parts:
  
 Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or display information for a particular key handle. 
 
-Note that the JSON in all sections is potentially multimodal. That is to say, when sent as a fully-formed request, it is a JSON `object`. When sent as a handle, it is sent as a JSON `string`. 
+Note that the JSON in many sections is potentially polymorphic. That is to say, when sent as a fully-formed request, it is a JSON `object`. When sent as a handle, it is sent as a JSON `string`. 
 
-This example shows how the different sections can be composed with each other in a transaction request.
+This example shows how the different sections can be composed with each other in a request.
 
 <TransactionRequest />
 
-Each of the sections is detailed below. The AS will send a <Link to="/transactionresponse">transaction response</Link> in response.
-
-## Display
-
-The `display` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
-
-The AS can statically issue a display handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
-
-An AS can also dynamically generate a display handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify itself in future transactions.
+Each of the sections is detailed below. The AS will send a <Link to="/transactionresponse">grant response</Link> in response.
 
 ## Resources
 
@@ -57,19 +49,19 @@ An AS can publish pre-set resources as resource handles that can be passed by th
           datatypes: ["metadata", "images"]
 }, "dolphin-metadata"]} />
 
-An AS can also dynamically generate a resources handle and return it to the client during the initial transaction response. This handle can be used by the same piece of software to identify this same kind of request in future transactions.
-
-The client can send several of these objects of handles in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
+The client can send several of these objects or handles in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
 
 To request multiple access tokens, the client sends an object instead of an array for the value of the `resources` parameter. The keys of this object are access token identifiers chosen by the client, and they must be unique within the request. The member values of this object are lists of resources, just as above. These lists can be combinations of objects and handle strings. Each item in the `resources` object will correspond to a different named access token in the response. 
 
 <Code code={{
   token1: [{
+    type: "example.com/resource-set",
     actions: ["read", "write", "dolphin"],
     locations: ["https://server.example.net/", "https://resource.local/other"],
     datatypes: ["metadata", "images"]
   }],
   token2: [{
+    type: "example.com/resource-set",
     actions: ["foo", "bar", "dolphin"],
     locations: ["https://resource.other/"],
     datatypes: ["data", "pictures"]
@@ -78,9 +70,27 @@ To request multiple access tokens, the client sends an object instead of an arra
 
 In this specific example, the client is requesting `token1` to access the first resource and `token2` to access the second resource. See more about what this means in the <Link to="/tokens">section on tokens</Link>.
 
-## Claims
+## Key
 
-The `claims` parameter lets the client request information about the user. The presence of this field indicates to the AS that the client wants to know who is logged in at the AS during the interaction process. 
+The `key` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction, thereby identifying the client making the call. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
+
+The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions. The key handle stands in for both the key and its proof mechanism. The key handle does not need to be derived from the key ID, CN, or other identifying information found in the key itself. 
+
+Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
+
+> We need a mechanism for the AS to issue keys to the client during this process, and to acknowledge that it's accepted the presentation and proof of any keys sent by the client.
+
+## Display
+
+The `display` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
+
+The AS can statically issue a display handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
+
+An AS can also dynamically generate a display handle and return it to the client during the initial response. This handle can be used by the same piece of software to identify itself in future transactions.
+
+## Subject
+
+The `subject` parameter lets the client request information about the user. The presence of this field indicates to the AS that the client wants to know who is logged in at the AS during the interaction process. 
 
 This is distinct from the `user` parameter below, which contains information that the client already knows about the current user. 
 
@@ -92,23 +102,13 @@ More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
 > Do we care about an interact handle? Redirect based clients need to send a new `nonce` parameter every time anyway, and could potentially send a new callback URL while they're at it. Any matching on callback URI's can be tied to keys and would need to have the same rules as a dynamic registration system would have anyway. 
 
-## Key
-
-The `keys` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
-
-The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions. The key handle stands in for both the key and its proof mechanism. The key handle does not need to be derived from the key ID, CN, or other identifying information found in the key itself. 
-
-Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
-
-> We need a mechanism for the AS to issue keys to the client during this process, and to acknowledge that it's accepted the presentation and proof of any keys sent by the client.
-
 ## User
 
-The `user` parameter lets the client pass information to the AS about the current user in the form of an assertion or other set of claims gathered from a trusted source. These claims need to be able to be validated by the AS, and it should be additionally validated that the client is an authorized holder of this information. 
+The `user` parameter lets the client pass information to the AS about the current user in the form of an assertion or other set of claims gathered from a trusted source. These claims need to be able to be validated by the AS, and it should be additionally validated that the client is an authorized holder of this information.  The client can also present a set of possible identifiers that the AS may know the user by, though these are hints and can't be taken as proof that the user is present.
 
 While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction in appropriately trusted scenarios.
 
-The AS can dynamically generate a user handle and return it to the client in the transaction response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
+The AS can dynamically generate a user handle and return it to the client in the response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
 
 This is distinct from the `claims` parameter above, which is about the client asking for information about the current user.
 
@@ -124,13 +124,13 @@ The values in the `capabilities` array map to specific features or extensions.
 
 # Continuation Request
 
-A transaction continuation request is a form of transaction request that continues the transaction for one of a number of reasons, based on the kind of interaction pattern that the client is capable of performing.
+A continuation request is a form of request that continues the transaction for one of a number of reasons, based on the kind of interaction pattern that the client is capable of performing. 
 
  - The client has received a callback on the front channel during <Link to="/interaction">Interaction</Link> with the user
  - The client is waiting for the user to take some action and is polling the transaction
  - The client has received information in response to a server challenge that will allow the transaction to progress
 
-A transaction continuation request always includes the current transaction handle. If the AS responds to a transaction continuation request with a <Link to="/transactionresponse">Transaction Response</Link>, the transaction handle in that response is different from the one used in the transaction continuation request. 
+A continuation request always includes the current transaction handle. If the AS responds to a transaction continuation request with a <Link to="/transactionresponse">Response</Link>, the transaction handle in that response is different from the one used in the transaction continuation request. The client makes this request to the continuation URL given in the `continue` field of the <Link to="/transactionresponse">Response</Link>.
 
 In this example, the client passes its interaction reference from a front channel callback along with the transaction handle.
 

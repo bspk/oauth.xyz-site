@@ -5,19 +5,19 @@ import SEO from '../components/seo'
 
 # Interaction
 
-During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the transaction request, the client tells the AS how it is able to interact with the user. Several modes of interaction are defined, and a client can support multiple forms of interaction simultaneously.
+During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the request, the client tells the AS how it is able to interact with the user. Several modes of interaction are defined, and a client can support multiple forms of interaction simultaneously.
 
- - The `redirect` mode is used when the client is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
- - The `user_code` mode is used when the client cannot open a browser for the user but can communicate an out-of-band code for the user to provide to the AS.
- - The `didcomm` mode is used when the client can relay a DIDComm message to the user's Agent.
- - The `didcomm_query` mode is used when the client can relay a query to a DIDComm Agent. 
+ - The `redirect` and `short_redirect` capability is used when the client is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
+ - The `user_code` capability is used when the client can communicate an out-of-band code for the user to provide to the AS.
  
-In addition, the client can indicate how it can receive responses from the interaction request. Currently, there are two modes of getting a response:
+In addition, the client can indicate how it can receive responses from the interaction request. Currently, there are two modes of getting a response defined and they can be declared independently:
 
- - The client can set a `callback` section including a URL that the AS can send the user back to when done interacting
- - The client can poll the AS using a transaction handle
+ - The client can set a `callback` capability including a URL that the AS can send the user back to when done interacting
+ - The client can set a `pushback` capability including a URL that the AS can send an HTTP message to when the user is done interacting
 
-These can be used independently of the interaction method, but it will likely be most common to use a callback with the redirect method, polling with the device method, and in limited cases polling with the redirect method. These combinations are shown here.
+The client can poll the AS using a continuation handle as well.
+
+These can be used independently of other interaction capabilities, but it will likely be most common to use a callback with the redirect method, polling with the user code capability, and a few others. Common combinations are shown here.
 
 ## Redirect with Callback
 
@@ -32,7 +32,7 @@ To use this mode, the client's transaction request includes a section that inclu
   "interact": {
     "redirect": true,
     "callback": {
-		"uri": "https://client.foo",
+		"uri": "https://client.example.net/return/123455",
 		"nonce": "VJLO6A4CAYLBXHTR0KRO"
 	}
   }
@@ -49,7 +49,7 @@ By default, the callback return will use a `SHA3` 512-bit hash. The client can c
   "interact": {
     "redirect": true,
     "callback": {
-		"uri": "https://client.foo",
+		"uri": "https://client.example.net/return/123455",
 		"nonce": "VJLO6A4CAYLBXHTR0KRO",
 		"hash_method": "SHA2"
 	}
@@ -66,10 +66,10 @@ When the AS determines that the client's request needs user interaction, it crea
   from="as" to="client"
   code={{
 interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-server_nonce: "MBDOFXG4Y5CVJCX821LH",
-handle: {
-  value: "80UPRY5NM33OMUKMKSKU",
-  type: "bearer"
+callback_server_nonce: "MBDOFXG4Y5CVJCX821LH",
+continue: {
+        handle: "80UPRY5NM33OMUKMKSKU",
+        uri: "https://server.example.com/continue"
 }
   }}
 />
@@ -95,21 +95,21 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatentating the following values with a newline `\n` character and computing the hash based on the `hash_method` in the client's initial transaction request (defaults to `SHA3` 512-bit):
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatenating the following values with a newline `\n` character and computing the hash based on the `hash_method` in the client's initial transaction request (defaults to `SHA3` 512-bit):
  - the `nonce` value sent by the client in the initial transaction request
- - the `server_nonce` value returned in the initial transaction response
- - the unique interaction handle
+ - the `callback_server_nonce` value returned in the initial transaction response
+ - the unique interaction reference
 
 The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
  - the Base64 URL encoded `hash` value calculated above
- - a unique interaction handle, in this example `4IFWWIKYBC2PQ6U56NL1`
+ - a unique interaction reference, in this example `4IFWWIKYBC2PQ6U56NL1`
 
 <Code 
   from="as" to="browser"
   language='http' codeString={`HTTP 302 Found
-Location: https://client.foo/
+Location: https://client.example.net/return/123455
   ?hash=p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A
-  &interact=4IFWWIKYBC2PQ6U56NL1`} />
+  &interact_ref=4IFWWIKYBC2PQ6U56NL1`} />
 
 Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
 
@@ -121,9 +121,9 @@ If the AS determines that there is an error during the interaction, its response
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
  - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
-The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `server_nonce` value from the original transaction request, and the value of the `interact` reference parameter from the callback request, hashed using the client's chosen method from the initial transaction request (which defaults to `SHA3` 512 bit hash). If these hash values don't match the client returns an error to the user and stops the transaction. 
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `callback_server_nonce` value from the original transaction request, and the value of the `interact` reference parameter from the callback request, hashed using the client's chosen method from the initial transaction request (which defaults to `SHA3` 512 bit hash). If these hash values don't match the client returns an error to the user and stops the transaction. 
 
-The client then sends a transaction continue request to the AS including the interaction reference as a parameter. The client also includes the current value of the transaction handle (here as a bearer key) as well as any proofs for keys presented during the transaction start.
+The client then sends a transaction continue request to the AS including the interaction reference as a parameter. The client also includes the current value of the transaction handle as well as any proofs for keys presented during the transaction start.
 
 > We could hash the interaction reference before sending it. It's still in the air whether this hashing is helpful to security or is an unnecessary step.
 
@@ -160,9 +160,10 @@ user_code: {
 	url: "https://server.example.com/interact/device",
 	code: "A1BC-3DFF"
 },
-handle: {
-  value: "80UPRY5NM33OMUKMKSKU",
-  type: "bearer"
+continue: {
+        handle: "80UPRY5NM33OMUKMKSKU",
+        uri: "https://server.example.com/continue",
+        wait: 60
 }
   }}
 />
@@ -210,15 +211,16 @@ For some kinds of clients, it is possible to show the user a visual signal such 
   }}
 />
 
-As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS. Note that because the client did not send a `callback` to the AS, the AS does not generate or return a `server_nonce` parameter.
+As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS. Note that because the client did not send a `callback` to the AS, the AS does not generate or return a `callback_server_nonce` parameter.
 
 <Code
   from="as" to="client"
   code={{
 interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-handle: {
-  value: "80UPRY5NM33OMUKMKSKU",
-  type: "bearer"
+continue: {
+        handle: "80UPRY5NM33OMUKMKSKU",
+        uri: "https://server.example.com/continue",
+        wait: 60
 }
   }}
 />
@@ -240,16 +242,16 @@ If the user has yet to approve the transaction, the AS sends back a response tel
 <Code
   from="as" to="client"
   code={{
-  wait: 30,
-  handle: {
-    value: "ZI9QNW6V9W3XFJK4R02D",
-    method: "bearer"
+  continue: {
+    handle: "ZI9QNW6V9W3XFJK4R02D",
+    wait: 30,
+    proof: "bearer"
   }
 }} />
 
 ## DIDComm Messages and Queries
 
-Some clients will be able to pass a message from the AS to another piece of software using a secondary protocol, such as DIDComm. 
+In extensions to the protocol, some clients will be able to pass a message from the AS to another piece of software using a secondary protocol, such as DIDComm. 
 
 If the client can pass a complete DIDComm message to the agent, it sends the `didcomm` flag. If it can pass along a query, it sends the `didcomm_query` flag. 
 
@@ -263,7 +265,7 @@ If the client can pass a complete DIDComm message to the agent, it sends the `di
   }}
 />
 
-In either case, the agent might send its response directly to the AS through some external means, or the client might get a message back from the agent. This message is to be included in its transaction continuation request.
+In either case, the agent might send its response directly to the AS through some external means, or the client might get a message back from the agent. This message is to be included in its continuation request.
 
 <Code
   from="client" to="as"

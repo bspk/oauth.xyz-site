@@ -10,38 +10,20 @@ class TransactionRequest extends React.Component {
   codeValues = {
     interaction: {
       label: 'Interaction',
-      redirect: {
-        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-        server_nonce: "MBDOFXG4Y5CVJCX821LH"
-      },
+      type: 'checkbox',
+      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+      callback_server_nonce: "MBDOFXG4Y5CVJCX821LH",
+      pushback_server_nonce: "Y5CVJCX821LHMBDOFXG4",
       user_code: {
-        user_code: {
           url: "https://server.example.com/interact/device",
           code: "A1BC-3DFF"
-        }
-      },
-      both: {
-        interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-        user_code: {
-          url: "https://server.example.com/interact/device",
-          code: "A1BC-3DFF"
-        }
-      },
-      didcomm: {
-        didcomm: {
-          "...": "..."
-        }
-      },
-      wait: {
-        wait: 30
       },
       options: {
-        redirect: "Redirect",
-        user_code: "User Code",
-        both: "QR Code",
-        didcomm: "DIDComm",
-        wait: "Wait",
-        off: 'Off'
+        interaction_url: "Redirect",
+        callback_server_nonce: "Callback",
+        pushback_server_nonce: "Pushback",
+        user_code: "Device",
+        omit: 'Off'
       }
     },
     
@@ -50,18 +32,18 @@ class TransactionRequest extends React.Component {
       single: {
         access_token: {
             value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-            type: "bearer"
+            proof: "bearer"
         }
       },
       multiple: {
         multiple_access_tokens: {
           token1: {
             value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-            type: "bearer"
+            proof: "bearer"
           },
           token2: {
             value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
-            type: "bearer"
+            proof: "bearer"
           }
         }
       },
@@ -72,90 +54,83 @@ class TransactionRequest extends React.Component {
       }
     },
     
-    handle: {
-      label: 'Transaction Handle',
+    continue: {
+      label: 'Continue',
       on: {
-        value: "80UPRY5NM33OMUKMKSKU",
-        type: "bearer"
+        handle: "80UPRY5NM33OMUKMKSKU",
+        uri: "https://server.example.com/continue",
+        wait: 60
       }
     },
     
-    display_handle: {
-      label: 'Display Handle',
-      on: {
-        value: "VBUEOIQA82PBY2ZDJW7Q",
-        type: 'bearer'
-      }
-    },
-    user_handle: {
-      label: 'User Handle',
-      on: {
-        value: "XUT2MFM1XBIKJKSDU8QM",
-        type: 'bearer'
-      }
-    },
-    
-    resources_handle: {
-      label: 'Resources Handle',
-      on: {
-        value: "KLKP36N7GPOKRF3KGH5N",
-        type: 'bearer'
-      }
-    },
-    
-    key_handle: {
-      label: 'Key Handle',
-      on: {
-        value: "7C7C4AZ9KHRS6X63AJAO",
-        type: 'bearer'
+    handles: {
+      label: 'Handles',
+      type: 'checkbox',
+      display_handle: "VBUEOIQA82PBY2ZDJW7Q",
+      user_handle: "XUT2MFM1XBIKJKSDU8QM",
+      key_handle: "7C7C4AZ9KHRS6X63AJAO",
+      options: {
+        display_handle: 'Display',
+        user_handle: 'User',
+        key_handle: 'Key (client)'
       }
     },
     
     capabilities: {
       label: 'Capabilities',
-      on: ['mtls', 'jwsd']
+      on: ['ext1', 'ext2']
     },
 	
-  	claims: {
-  		label: 'Claims',
+  	subject: {
+  		label: 'Subject',
   		on: {
-  			subject: 'I6W52R97IH',
-  			email: 'user@example.com',
-  			phone: '555-USER',
+        "sub-ids": [ {
+           "subject_type": "email",
+           "email": "user@example.com",
+        } ],
+        assertions: {
+           "oidc-id-token": "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ"
+        },
   			updated_at: '2020-01-01T12:43:29+0000',
   			auth_time: '2020-02-17T21:23:39+0000'
   		}
-  	},
-	
-  	claims_handle: {
-  		label: 'Claims Handle',
-  		on: {
-  			value: "14XF3WKRPKW4RN9AROOC",
-  			type: 'bearer'
-  		}
   	}
+	
   }
   
   state = {
     selected: {
-      handle: 'on',
-      interaction: 'redirect',
+      continue: 'on',
+      interaction: ['interaction_url', 'callback_server_nonce'],
       access_token: 'off',
-      display_handle: 'off',
-      resources_handle: 'off',
-      key_handle: 'on',
-      user_handle: 'off',
+      handles: [],
       capabilities: 'off',
-      claims: 'off',
-      claims_handle: 'off'
+      subject: 'off'
     }
   }
 
   
   change = (field) => (value) => {
 
+    // if we're toggling everything at once
+    if (field === 'all') {
+      Object.keys(this.state.selected).forEach((field) => {
+        this.change(field)(value);
+      });
+      return;
+    }
+	
     const s = this.state.selected;
-    s[field] = value;
+	
+    if (this.codeValues[field]) {
+      if (this.codeValues[field].type === 'checkbox'
+        && value.indexOf('omit') !== -1) {
+        // turn off everything
+        s[field] = [];
+      } else {
+        s[field] = value;
+      }
+    }
     
     if (field === 'handle' && value === 'off') {
       s.access_token = 'single';
@@ -165,7 +140,7 @@ class TransactionRequest extends React.Component {
     if (field === 'interaction' && value !== 'off') {
       s.handle = 'on';
     }
-    
+
     this.setState({
       selected: s
     });
@@ -176,8 +151,18 @@ class TransactionRequest extends React.Component {
 
     // build the transaction object based on the current selection
     const transaction = Object.keys(this.codeValues).reduce((result, key) => {
-      if (key == 'interaction' || key == 'access_token') {
-        //debugger;
+      if (this.codeValues[key].type === 'checkbox') {
+        //result = {...result, ...this.codeValues[key][this.state.selected[key]]};
+        if (this.state.selected[key].length > 0) {
+  		    const res = Object.keys(this.codeValues[key])
+            .filter(k => this.state.selected[key].indexOf(k) !== -1)
+            .reduce((r, k) => {
+              r[k] = this.codeValues[key][k];
+              return r;
+            }, {});
+          result = {...result, ...res};
+        }
+      } else if (key === 'access_token') {
         result = {...result, ...this.codeValues[key][this.state.selected[key]]};
       } else {
         result[key] = this.codeValues[key][this.state.selected[key]];
@@ -190,7 +175,7 @@ class TransactionRequest extends React.Component {
     // build the selectors
     const selectors = Object.keys(this.codeValues).map((field) => {
       return (
-        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} />
+        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
       );
     });
 

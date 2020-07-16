@@ -11,26 +11,31 @@ class TransactionRequest extends React.Component {
     resources: {
       label: 'Resources',
       single: [{
+          type: "example.com/resource-set",
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
           datatypes: ["metadata", "images"]
       }],
-      handle: ["dolphin-metadata"],
+      handle: ["dolphin-metadata", "and another thing"],
       both: [
+        "foo", "bar",
         {
-                  actions: ["read", "write", "dolphin"],
-                  locations: ["https://server.example.net/", "https://resource.local/other"],
-                  datatypes: ["metadata", "images"]
+          type: "example.com/resource-set",
+          actions: ["read", "write", "dolphin"],
+          locations: ["https://server.example.net/", "https://resource.local/other"],
+          datatypes: ["metadata", "images"]
         },
         "dolphin-metadata"        
       ],
       multiple: {
           token1: [{
+            type: "example.com/resource-set",
             actions: ["read", "write", "dolphin"],
             locations: ["https://server.example.net/", "https://resource.local/other"],
             datatypes: ["metadata", "images"]
           }],
           token2: [{
+            type: "example.com/another-api",
             actions: ["foo", "bar", "dolphin"],
             locations: ["https://resource.other/"],
             datatypes: ["data", "pictures"]
@@ -45,28 +50,24 @@ class TransactionRequest extends React.Component {
       }
     },
 	
-	claims: {
-		label: 'Claims',
-		full: {
-			subject: true,
-			email: true,
-			phone: true,
-			auth_time: true
-		},
-		minimal: {
-			subject: true
-		},
-		handle: 'DWH8WNFDA7QLE691KDY5',
-        options: {
-          full: "Full",
-  		  minimal: "Minimal",
-          handle: "Handle",
-          omit: "Off"
-        }
-	},
+  	subject: {
+  		label: 'Subject',
+  		full: {
+  			"sub-ids": [ "iss-sub", "email", "phone" ],
+  			"assertions": [ "oidc_id_token", "verfiable-credential" ]
+  		},
+  		minimal: {
+  			"sub-ids": [ "email" ],
+  		},
+      options: {
+        full: "Full",
+		    minimal: "Minimal",
+        omit: "Off"
+      }
+  	},
     
-    keys: {
-      label: 'Keys',
+    key: {
+      label: 'Key',
       jwsd: {
         proof: "jwsd",
         jwk: {
@@ -95,17 +96,12 @@ class TransactionRequest extends React.Component {
         proof: "mtls",
         "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
       },
-      did: {
-        proof: "httpsig",
-        did: "did:example:CV3BVVXK2PWWLCRQLRFU#xyz-1"
-      },
       handle: "7C7C4AZ9KHRS6X63AJAO",
       options: {
         jwsd: "JWS (Detached)",
         httpsig: "HTTP Signature",
         mtls: "MTLS",
         thumbprint: "MTLS (Thumbprint)",
-        did: "DID",
         handle: "Handle",
         omit: "Off"
       }
@@ -113,43 +109,26 @@ class TransactionRequest extends React.Component {
 
     interact: {
       label: 'Interact',
-      redirect: {
-        redirect: true,
-        callback: {
-          uri: "https://client.example.net/return/123455",
-          nonce: "LKLTI25DK82FX4T4QFZC"
-        }
+      type: 'checkbox',
+      redirect: true,
+      callback: {
+        uri: "https://client.example.net/return/123455",
+        nonce: "LKLTI25DK82FX4T4QFZC"
       },
-      device: {
-        user_code: true
+      pushback: {
+        uri: "https://client.example.net/push/554321",
+        nonce: "K82FX4T4QFZLKLTI25DC"
       },
-      qrcode: {
-        redirect: true,
-        user_code: true
-      },
-      didcomm: {
-        didcomm: true
-      },
-      didcommQuery: {
-        didcomm_query: true
-      },
-      all: {
-        redirect: true,
-        callback: {
-          uri: "https://client.example.net/return/123455",
-          nonce: "LKLTI25DK82FX4T4QFZC"
-        },
-        user_code: true,
-        didcomm: true,
-        didcomm_query: true
-      },
+      short_redirect: true,
+      app: true,
+      user_code: true,
       options: {
         redirect: "Redirect",
-        device: "Device",
-        qrcode: "QR Code",
-        didcomm: "DIDComm",
-        didcommQuery: "DIDComm Query",
-        all: "All",
+        short_redirect: "Short Redirect",
+        app: "Launch App",
+        callback: "Callback",
+        pushback: "Push",
+        user_code: "User Code",
         omit: "Off"
       }
     },
@@ -171,8 +150,13 @@ class TransactionRequest extends React.Component {
     user: {
       label: 'User',
       full: {
-          assertion: "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ",
-          type: "oidc_id_token"
+        "sub-ids": [ {
+          "subject_type": "email",
+          "email": "user@example.com"
+        } ],
+        "assertions": {
+          "oidc-id-token": "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ"
+        }
       },
       handle: "XUT2MFM1XBIKJKSDU8QM",
       options: {
@@ -199,11 +183,11 @@ class TransactionRequest extends React.Component {
     selected: {
       display: 'full',
       resources: 'handle',
-      interact: 'redirect',
-      keys: 'jwsd',
+      interact: ['redirect', 'callback'],
+      key: 'jwsd',
       user: 'omit',
       capabilities: 'omit',
-	  claims: 'omit'
+      subject: 'omit'
     }
   }
 
@@ -217,9 +201,18 @@ class TransactionRequest extends React.Component {
       });
       return;
     }
-
+	
     const s = this.state.selected;
-    s[field] = value;
+	
+    if (this.codeValues[field]) {
+      if (this.codeValues[field].type === 'checkbox'
+        && value.indexOf('omit') !== -1) {
+        // turn off everything
+        s[field] = [];
+      } else {
+        s[field] = value;
+      }
+    }
     
     this.setState({
       selected: s
@@ -231,7 +224,20 @@ class TransactionRequest extends React.Component {
 
     // build the transaction object based on the current selection
     const transaction = Object.keys(this.codeValues).reduce((result, key) => {
-      result[key] = this.codeValues[key][this.state.selected[key]];
+	    if (this.codeValues[key].type === 'checkbox') {
+	  	  // build the whole value set
+        if (this.state.selected[key].length > 0) {
+  		    result[key] = Object.keys(this.codeValues[key])
+            .filter(k => this.state.selected[key].indexOf(k) !== -1)
+            .reduce((r, k) => {
+              r[k] = this.codeValues[key][k];
+              return r;
+            }, {});
+          }
+	    } else {
+	      // otherwise just copy the value
+        result[key] = this.codeValues[key][this.state.selected[key]];
+	    }
       return result;
     }, {});
     
@@ -245,7 +251,7 @@ class TransactionRequest extends React.Component {
     const selectors = Object.keys(this.codeValues).map((field) => {
         {
           return (
-            <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} />
+            <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
           );
         }
     })
