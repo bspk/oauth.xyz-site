@@ -1,0 +1,2783 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>XYZ: Grant Negotiation Access Protocol</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Protocol">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Parties">
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Sequences">
+<link href="#rfc.section.2" rel="Chapter" title="2 Requesting Access">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Requesting Resources">
+<link href="#rfc.section.2.1.1" rel="Chapter" title="2.1.1 Requesting a Single Access Token">
+<link href="#rfc.section.2.1.2" rel="Chapter" title="2.1.2 Requesting Multiple Access Tokens">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Requesting User Information">
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Identifying the Client">
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 Identifying the User">
+<link href="#rfc.section.2.5" rel="Chapter" title="2.5 Interacting with the User">
+<link href="#rfc.section.2.5.1" rel="Chapter" title="2.5.1 Redirect to an Arbitrary URL">
+<link href="#rfc.section.2.5.2" rel="Chapter" title="2.5.2 Redirect to an Arbitrary Short URL">
+<link href="#rfc.section.2.5.3" rel="Chapter" title="2.5.3 Open an Application-specific URL">
+<link href="#rfc.section.2.5.4" rel="Chapter" title="2.5.4 Receive a Browser-based Callback">
+<link href="#rfc.section.2.5.5" rel="Chapter" title="2.5.5 Receive an HTTP Direct Callback">
+<link href="#rfc.section.2.5.6" rel="Chapter" title="2.5.6 Display a Short Code">
+<link href="#rfc.section.2.5.7" rel="Chapter" title="2.5.7 Extending Interaction Capabilities">
+<link href="#rfc.section.2.6" rel="Chapter" title="2.6 Providing Displayable Client Information">
+<link href="#rfc.section.2.7" rel="Chapter" title="2.7 Declaring Client Capabilities">
+<link href="#rfc.section.2.8" rel="Chapter" title="2.8 Referencing an Existing Grant Request">
+<link href="#rfc.section.2.9" rel="Chapter" title="2.9 Extending The Grant Request">
+<link href="#rfc.section.3" rel="Chapter" title="3 Grant Response">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Request Continuation Handle">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Access Tokens">
+<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Single Access Token">
+<link href="#rfc.section.3.2.2" rel="Chapter" title="3.2.2 Multiple Access Tokens">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Interaction Capabilities">
+<link href="#rfc.section.3.3.1" rel="Chapter" title="3.3.1 Redirection to an arbitrary URL">
+<link href="#rfc.section.3.3.2" rel="Chapter" title="3.3.2 Redirection to a short URL">
+<link href="#rfc.section.3.3.3" rel="Chapter" title="3.3.3 Launch of an application URL">
+<link href="#rfc.section.3.3.4" rel="Chapter" title="3.3.4 Callback to a Client URL">
+<link href="#rfc.section.3.3.5" rel="Chapter" title="3.3.5 Push to a Client URL">
+<link href="#rfc.section.3.3.6" rel="Chapter" title="3.3.6 Display of a Short Code">
+<link href="#rfc.section.3.3.7" rel="Chapter" title="3.3.7 Extending Interaction Capability Responses">
+<link href="#rfc.section.3.4" rel="Chapter" title="3.4 Returning User Information">
+<link href="#rfc.section.3.5" rel="Chapter" title="3.5 Returning Dynamically-bound Reference Handles">
+<link href="#rfc.section.3.6" rel="Chapter" title="3.6 Error response">
+<link href="#rfc.section.3.7" rel="Chapter" title="3.7 Extending the Response">
+<link href="#rfc.section.4" rel="Chapter" title="4 Interaction at the AS">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Interaction at a Redirected URI">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Interaction at the User Code URI">
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Interaction through an Application URI">
+<link href="#rfc.section.4.4" rel="Chapter" title="4.4 Finalizing Interaction">
+<link href="#rfc.section.4.4.1" rel="Chapter" title="4.4.1 Finalizing Interaction with a Callback URI">
+<link href="#rfc.section.4.4.2" rel="Chapter" title="4.4.2 Finalizing Interaction with a Pushback URI">
+<link href="#rfc.section.4.4.3" rel="Chapter" title="4.4.3 Calculating the interaction hash">
+<link href="#rfc.section.5" rel="Chapter" title="5 Continuing a Grant Request">
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Continuing after a Finalized Interaction">
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Continuing after Tokens are Issued">
+<link href="#rfc.section.6" rel="Chapter" title="6 Token Management">
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 Rotating the Access Token">
+<link href="#rfc.section.6.2" rel="Chapter" title="6.2 Revoking the Access Token">
+<link href="#rfc.section.7" rel="Chapter" title="7 Sending Access Tokens">
+<link href="#rfc.section.8" rel="Chapter" title="8 Binding Keys">
+<link href="#rfc.section.8.1" rel="Chapter" title="8.1 Detached JWS">
+<link href="#rfc.section.8.2" rel="Chapter" title="8.2 Attached JWS">
+<link href="#rfc.section.8.3" rel="Chapter" title="8.3 Mutual TLS">
+<link href="#rfc.section.8.4" rel="Chapter" title="8.4 DPoP">
+<link href="#rfc.section.8.5" rel="Chapter" title="8.5 HTTP Signing">
+<link href="#rfc.section.8.6" rel="Chapter" title="8.6 OAuth PoP">
+<link href="#rfc.section.9" rel="Chapter" title="9 Discovery">
+<link href="#rfc.section.10" rel="Chapter" title="10 Requesting a Resources Without a Token">
+<link href="#rfc.section.11" rel="Chapter" title="11 Acknowledgements">
+<link href="#rfc.section.12" rel="Chapter" title="12 IANA Considerations">
+<link href="#rfc.section.13" rel="Chapter" title="13 Security Considerations">
+<link href="#rfc.section.14" rel="Chapter" title="14 Privacy Considerations">
+<link href="#rfc.references" rel="Chapter" title="15 Normative References">
+<link href="#rfc.appendix.A" rel="Chapter" title="A Document History">
+<link href="#rfc.appendix.B" rel="Chapter" title="B Example Protocol Flows">
+<link href="#rfc.appendix.B.1" rel="Chapter" title="B.1 Redirect-Based User Interaction">
+<link href="#rfc.appendix.B.2" rel="Chapter" title="B.2 Secondary Device Interaction">
+<link href="#rfc.appendix.B.3" rel="Chapter" title="B.3 No User Involvement">
+<link href="#rfc.appendix.B.4" rel="Chapter" title="B.4 Asynchronous Authorization">
+<link href="#rfc.appendix.B.5" rel="Chapter" title="B.5 Applying OAuth 2 Scopes and Client IDs">
+<link href="#rfc.authors" rel="Chapter">
+
+
+  <meta name="generator" content="xml2rfc version 2.46.0 - https://tools.ietf.org/tools/xml2rfc">
+  <link rel="schema.dct" href="http://purl.org/dc/terms/">
+
+  <meta name="dct.creator" content="Richer, J., Ed.">
+  <meta name="dct.identifier" content="urn:ietf:id:draft-richer-transactional-authz-09">
+  <meta name="dct.issued" scheme="ISO8601" content="2020-07-15">
+  <meta name="dct.abstract" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software. This document is input into the GNAP working group and should be referred to as &quot;XYZ&quot; to differentiate it from other proposals. ">
+  <meta name="description" content="This document defines a mechanism for delegating authorization to a piece of software, and conveying that delegation to the software. This document is input into the GNAP working group and should be referred to as &quot;XYZ&quot; to differentiate it from other proposals. ">
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+<td class="left">Network Working Group</td>
+<td class="right">J. Richer, Ed.</td>
+</tr>
+<tr>
+<td class="left">Internet-Draft</td>
+<td class="right">Bespoke Engineering</td>
+</tr>
+<tr>
+<td class="left">Intended status: Standards Track</td>
+<td class="right">July 15, 2020</td>
+</tr>
+<tr>
+<td class="left">Expires: January 16, 2021</td>
+<td class="right"></td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">XYZ: Grant Negotiation Access Protocol<br>
+  <span class="filename">draft-richer-transactional-authz-09</span></p>
+  
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>This document defines a mechanism for delegating authorization to a 
+piece of software, and conveying that delegation to the software.</p>
+<p>This document is input into the GNAP working group and should be referred to as "XYZ" to differentiate it from other proposals.</p>
+<h1><a>Requirements Language</a></h1>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", 
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and 
+"OPTIONAL" in this document are to be interpreted as described in BCP 14
+ <a href="#RFC2119" class="xref">RFC 2119</a> <a href="#RFC8174" class="xref">RFC 8174</a> when, and only when, they appear in all capitals, as shown here.</p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering 
+Task Force (IETF).  Note that other groups may also distribute working 
+documents as Internet-Drafts.  The list of current Internet-Drafts is at
+ https://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months
+ and may be updated, replaced, or obsoleted by other documents at any 
+time.  It is inappropriate to use Internet-Drafts as reference material 
+or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on January 16, 2021.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
+<p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal 
+Provisions Relating to IETF Documents 
+(https://trustee.ietf.org/license-info) in effect on the date of 
+publication of this document.  Please review these documents carefully, 
+as they describe your rights and restrictions with respect to this 
+document.  Code Components extracted from this document must include 
+Simplified BSD License text as described in Section 4.e of the Trust 
+Legal Provisions and are provided without warranty as described in the 
+Simplified BSD License.</p>
+
+  
+  <hr class="noprint">
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Protocol</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Parties</a>
+</li>
+<li>1.2.   <a href="#rfc.section.1.2">Sequences</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Requesting Access</a>
+</li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Requesting Resources</a>
+</li>
+<ul><li>2.1.1.   <a href="#rfc.section.2.1.1">Requesting a Single Access Token</a>
+</li>
+<li>2.1.2.   <a href="#rfc.section.2.1.2">Requesting Multiple Access Tokens</a>
+</li>
+</ul><li>2.2.   <a href="#rfc.section.2.2">Requesting User Information</a>
+</li>
+<li>2.3.   <a href="#rfc.section.2.3">Identifying the Client</a>
+</li>
+<li>2.4.   <a href="#rfc.section.2.4">Identifying the User</a>
+</li>
+<li>2.5.   <a href="#rfc.section.2.5">Interacting with the User</a>
+</li>
+<ul><li>2.5.1.   <a href="#rfc.section.2.5.1">Redirect to an Arbitrary URL</a>
+</li>
+<li>2.5.2.   <a href="#rfc.section.2.5.2">Redirect to an Arbitrary Short URL</a>
+</li>
+<li>2.5.3.   <a href="#rfc.section.2.5.3">Open an Application-specific URL</a>
+</li>
+<li>2.5.4.   <a href="#rfc.section.2.5.4">Receive a Browser-based Callback</a>
+</li>
+<li>2.5.5.   <a href="#rfc.section.2.5.5">Receive an HTTP Direct Callback</a>
+</li>
+<li>2.5.6.   <a href="#rfc.section.2.5.6">Display a Short Code</a>
+</li>
+<li>2.5.7.   <a href="#rfc.section.2.5.7">Extending Interaction Capabilities</a>
+</li>
+</ul><li>2.6.   <a href="#rfc.section.2.6">Providing Displayable Client Information</a>
+</li>
+<li>2.7.   <a href="#rfc.section.2.7">Declaring Client Capabilities</a>
+</li>
+<li>2.8.   <a href="#rfc.section.2.8">Referencing an Existing Grant Request</a>
+</li>
+<li>2.9.   <a href="#rfc.section.2.9">Extending The Grant Request</a>
+</li>
+</ul><li>3.   <a href="#rfc.section.3">Grant Response</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Request Continuation Handle</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">Access Tokens</a>
+</li>
+<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Single Access Token</a>
+</li>
+<li>3.2.2.   <a href="#rfc.section.3.2.2">Multiple Access Tokens</a>
+</li>
+</ul><li>3.3.   <a href="#rfc.section.3.3">Interaction Capabilities</a>
+</li>
+<ul><li>3.3.1.   <a href="#rfc.section.3.3.1">Redirection to an arbitrary URL</a>
+</li>
+<li>3.3.2.   <a href="#rfc.section.3.3.2">Redirection to a short URL</a>
+</li>
+<li>3.3.3.   <a href="#rfc.section.3.3.3">Launch of an application URL</a>
+</li>
+<li>3.3.4.   <a href="#rfc.section.3.3.4">Callback to a Client URL</a>
+</li>
+<li>3.3.5.   <a href="#rfc.section.3.3.5">Push to a Client URL</a>
+</li>
+<li>3.3.6.   <a href="#rfc.section.3.3.6">Display of a Short Code</a>
+</li>
+<li>3.3.7.   <a href="#rfc.section.3.3.7">Extending Interaction Capability Responses</a>
+</li>
+</ul><li>3.4.   <a href="#rfc.section.3.4">Returning User Information</a>
+</li>
+<li>3.5.   <a href="#rfc.section.3.5">Returning Dynamically-bound Reference Handles</a>
+</li>
+<li>3.6.   <a href="#rfc.section.3.6">Error response</a>
+</li>
+<li>3.7.   <a href="#rfc.section.3.7">Extending the Response</a>
+</li>
+</ul><li>4.   <a href="#rfc.section.4">Interaction at the AS</a>
+</li>
+<ul><li>4.1.   <a href="#rfc.section.4.1">Interaction at a Redirected URI</a>
+</li>
+<li>4.2.   <a href="#rfc.section.4.2">Interaction at the User Code URI</a>
+</li>
+<li>4.3.   <a href="#rfc.section.4.3">Interaction through an Application URI</a>
+</li>
+<li>4.4.   <a href="#rfc.section.4.4">Finalizing Interaction</a>
+</li>
+<ul><li>4.4.1.   <a href="#rfc.section.4.4.1">Finalizing Interaction with a Callback URI</a>
+</li>
+<li>4.4.2.   <a href="#rfc.section.4.4.2">Finalizing Interaction with a Pushback URI</a>
+</li>
+<li>4.4.3.   <a href="#rfc.section.4.4.3">Calculating the interaction hash</a>
+</li>
+</ul></ul><li>5.   <a href="#rfc.section.5">Continuing a Grant Request</a>
+</li>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Continuing after a Finalized Interaction</a>
+</li>
+<li>5.2.   <a href="#rfc.section.5.2">Continuing after Tokens are Issued</a>
+</li>
+</ul><li>6.   <a href="#rfc.section.6">Token Management</a>
+</li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">Rotating the Access Token</a>
+</li>
+<li>6.2.   <a href="#rfc.section.6.2">Revoking the Access Token</a>
+</li>
+</ul><li>7.   <a href="#rfc.section.7">Sending Access Tokens</a>
+</li>
+<li>8.   <a href="#rfc.section.8">Binding Keys</a>
+</li>
+<ul><li>8.1.   <a href="#rfc.section.8.1">Detached JWS</a>
+</li>
+<li>8.2.   <a href="#rfc.section.8.2">Attached JWS</a>
+</li>
+<li>8.3.   <a href="#rfc.section.8.3">Mutual TLS</a>
+</li>
+<li>8.4.   <a href="#rfc.section.8.4">DPoP</a>
+</li>
+<li>8.5.   <a href="#rfc.section.8.5">HTTP Signing</a>
+</li>
+<li>8.6.   <a href="#rfc.section.8.6">OAuth PoP</a>
+</li>
+</ul><li>9.   <a href="#rfc.section.9">Discovery</a>
+</li>
+<li>10.   <a href="#rfc.section.10">Requesting a Resources Without a Token</a>
+</li>
+<li>11.   <a href="#rfc.section.11">Acknowledgements</a>
+</li>
+<li>12.   <a href="#rfc.section.12">IANA Considerations</a>
+</li>
+<li>13.   <a href="#rfc.section.13">Security Considerations</a>
+</li>
+<li>14.   <a href="#rfc.section.14">Privacy Considerations</a>
+</li>
+<li>15.   <a href="#rfc.references">Normative References</a>
+</li>
+<li>Appendix A.   <a href="#rfc.appendix.A">Document History</a>
+</li>
+<li>Appendix B.   <a href="#rfc.appendix.B">Example Protocol Flows</a>
+</li>
+<ul><li>B.1.   <a href="#rfc.appendix.B.1">Redirect-Based User Interaction</a>
+</li>
+<li>B.2.   <a href="#rfc.appendix.B.2">Secondary Device Interaction</a>
+</li>
+<li>B.3.   <a href="#rfc.appendix.B.3">No User Involvement</a>
+</li>
+<li>B.4.   <a href="#rfc.appendix.B.4">Asynchronous Authorization</a>
+</li>
+<li>B.5.   <a href="#rfc.appendix.B.5">Applying OAuth 2 Scopes and Client IDs</a>
+</li>
+</ul><li><a href="#rfc.authors">Author's Address</a>
+</li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> Protocol</h1>
+<p id="rfc.section.1.p.1">This protocol allows a piece of software to 
+request delegated authorization to an API, protected by an authorization
+ server usually on behalf of a resource owner. The user operating the 
+software may interact with the authorization server to authenticate, 
+provide consent, and authorize the request.</p>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Parties</h1>
+<p id="rfc.section.1.1.p.1">The Authorization Server (AS) manages the 
+transactions. It is defined by its grant endpoint, a single URL that 
+accepts a POST request with a JSON payload. The AS MAY also have other 
+endpoints, including interaction endpoints and user code endpoints, and 
+these are introduced to the RC as needed during the transaction process.</p>
+<p id="rfc.section.1.1.p.2">The Resource Client (RC, aka "client") requests tokens from the AS and uses tokens at the RS.</p>
+<p id="rfc.section.1.1.p.3">The Resource Server (RS) accepts tokens from the RC and validates them (potentially at the AS).</p>
+<p id="rfc.section.1.1.p.4">The Resource Owner (RO) authorizes the request from the RC to the RS, often interactively at the AS.</p>
+<p id="rfc.section.1.1.p.5">The User operates the RC and may be the same party as the RO.</p>
+<h1 id="rfc.section.1.2">
+<a href="#rfc.section.1.2">1.2.</a> Sequences</h1>
+<p id="rfc.section.1.2.p.1">The RC requests access to an RS, and the AS determines that it needs to interact with the user directly to get the RO's consent:</p>
+
+<ol>
+<li>The RC <a href="#request" class="xref">creates a grant request and sends it to the AS</a>
+</li>
+<li>The AS <a href="#response" class="xref">processes the grant request and determines if the RO needs to interact and sends its response</a>
+</li>
+<li>If interaction is required, the <a href="#user-interaction" class="xref">AS interacts with the RO</a>, possibly by directing the RC to send the RO there </li>
+<li>The RC <a href="#continue-request" class="xref">continues the grant at the AS</a>
+</li>
+<li>The AS processes the transaction again, determining that a token can be issued</li>
+<li>The AS issues a token to the RC</li>
+<li>The RC uses the token with the RS</li>
+</ol>
+<p id="rfc.section.1.2.p.2">[[ Editor's note: More sequences and common connections are needed.  See <a href="#examples" class="xref">Appendix B</a> for more specific examples. ]]</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#request" id="request">Requesting Access</a>
+</h1>
+<p id="rfc.section.2.p.1">To start a request, the client sends <a href="#RFC8259" class="xref">JSON</a> document with an object as its root. Each member of the request object represents a different aspect of the client's request.</p>
+<p id="rfc.section.2.p.2">A non-normative example of a grant request is below:</p>
+<pre>{
+    "resources": [
+        {
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        },
+        "dolphin-metadata"
+    ],
+    "key": {
+        "proof": "jwsd",
+        "jwk": {
+                    "kty": "RSA",
+                    "e": "AQAB",
+                    "kid": "xyz-1",
+                    "alg": "RS256",
+                    "n": "kOB5rR4Jv0GMeL...."
+        }
+    },
+    "interact": {
+        "redirect": true,
+        "callback": {
+            "uri": "https://client.example.net/return/123455",
+            "nonce": "LKLTI25DK82FX4T4QFZC"
+        }
+    },
+    "display": {
+        "name": "My Client Display Name",
+        "uri": "https://example.net/client"
+    },
+    "capabilities": ["ext1", "ext2"],
+    "subject": {
+        "id": ["iss-sub", "email"],
+        "assertion": ["oidc_id_token"]
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.2.p.4">The request MUST be sent as a JSON object in the body of the HTTP POST request with Content-Type <samp>application/json</samp>, unless otherwise specified by the signature mechanism.</p>
+<h1 id="rfc.section.2.1">
+<a href="#rfc.section.2.1">2.1.</a> <a href="#request-resource" id="request-resource">Requesting Resources</a>
+</h1>
+<p id="rfc.section.2.1.p.1">If the client is requesting one or more 
+access tokens for the purpose of accessing an API, the client MUST 
+include a resources element. This element MUST be an array (for a single
+ access token) or an object (for multiple access tokens), as described 
+in the following sections.</p>
+<h1 id="rfc.section.2.1.1">
+<a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#request-resource-single" id="request-resource-single">Requesting a Single Access Token</a>
+</h1>
+<p id="rfc.section.2.1.1.p.1">When requesting a single access token, the
+ client MUST send a resources element containing a JSON array. The 
+elements of the JSON array represent rights of access that the client is
+ requesting in the access token. The requested access is the sum of all 
+elements within the array. These request elements MAY be sent by value 
+as an object or by reference as a string. A single resources array MAY 
+contain both object and string type resource requests.</p>
+<p id="rfc.section.2.1.1.p.2">The client declares what access it wants 
+to associated with the resulting access token using objects that 
+describe multiple dimensions of access. Each object contains a <samp>type</samp>
+ property that determines the type of API that the client is calling.  
+The value of this field is under the control of the AS and it MAY 
+determine which other fields allowed in the object. While it is expected
+ that many APIs will have its own properties, a set of common properties
+ are defined here. Specific API implementations SHOULD NOT re-use these 
+fields with different semantics or syntax.  [[ Editor's note: this will 
+align with OAuth 2 RAR, but the details of how it aligns are TBD ]].</p>
+<p></p>
+
+<dl>
+<dt>actions</dt>
+<dd style="margin-left: 8">The types of actions the RC will take at the 
+RS as an array of strings. The values of the strings are determined by 
+the API being protected.</dd>
+<dt>locations</dt>
+<dd style="margin-left: 8">The location of the RS as an array of strings. These strings are typically URIs, and are determined by the API being protected.</dd>
+<dt>datatypes</dt>
+<dd style="margin-left: 8">Kinds of data available to the RC at the RS's
+ API as an array of strings. The values of the strings are determined by
+ the API being protected.</dd>
+<dt>identifier</dt>
+<dd style="margin-left: 8">A string identifier indicating a specific resource at the RS. The value of the string is determined by the API being protected.</dd>
+</dl>
+<p id="rfc.section.2.1.1.p.4">The following non-normative example shows the use of both common and API-specific elements.</p>
+<pre>    "resources": [
+        {
+            "type": "photo-api",
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        },
+        {
+            "type": "financial-transaction",
+            "actions": [
+                "withdraw"
+            ],
+            "identifier": "account-14-32-32-3", 
+            "currency": "USD"
+        }
+    ]</pre>
+<p></p>
+<p id="rfc.section.2.1.1.p.6">Instead of sending an object, a client MAY
+ send a string known to the AS or RS representing the access being 
+requested. Each string SHOULD correspond to a specific expanded object 
+representation at the AS. [[ Editor's note: we could describe more about
+ how the expansion would work. For example, expand into an object where 
+the value of the "type" field is the value of the string. Or we could 
+leave it open and flexible, since it's really up to the AS/RS to 
+interpret. ]] This value is opaque to the client and MAY be any valid 
+JSON string, and therefore could include spaces, unicode characters, and
+ properly escaped string sequences.</p>
+<pre>    "resources": [
+        "read", "dolphin-metadata", "some other thing"
+    ]
+</pre>
+<p></p>
+<p id="rfc.section.2.1.1.p.8">A single "resources" array MAY include both object-type and string-type resource items.</p>
+<pre>    "resources": [
+        {
+            "type": "photo-api",
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        },
+        "read", "dolphin-metadata",
+        {
+            "type": "financial-transaction",
+            "actions": [
+                "withdraw"
+            ],
+            "identifier": "account-14-32-32-3", 
+            "currency": "USD"
+        },
+        "some other thing"
+    ]</pre>
+<h1 id="rfc.section.2.1.2">
+<a href="#rfc.section.2.1.2">2.1.2.</a> <a href="#request-resource-multiple" id="request-resource-multiple">Requesting Multiple Access Tokens</a>
+</h1>
+<p id="rfc.section.2.1.2.p.1">When requesting multiple access tokens, 
+the resources element is a JSON object. The names of the JSON object 
+elements are token identifiers chosen by the client, and MAY be any 
+valid string. The values of the JSON object are JSON arrays representing
+ a single access token request, as specified in <a href="#response-token-single" class="xref">requesting a single access token</a>.</p>
+<p id="rfc.section.2.1.2.p.2">The following non-normative example shows a request for two separate access tokens, token1 and token2.</p>
+<pre>    "resources": {
+        "token1": [
+          {
+              "type": "photo-api",
+              "actions": [
+                  "read",
+                  "write",
+                  "dolphin"
+              ],
+              "locations": [
+                  "https://server.example.net/",
+                  "https://resource.local/other"
+              ],
+              "datatypes": [
+                  "metadata",
+                  "images"
+              ]
+          },
+          "dolphin-metadata"
+      ],
+      "token2": [
+            {
+                "type": "walrus-access",
+                "actions": [
+                    "foo",
+                    "bar"
+                ],
+                "locations": [
+                    "https://resource.other/"
+                ],
+                "datatypes": [
+                    "data",
+                    "pictures",
+                    "walrus whiskers"
+                ]
+            }
+        ]
+    }</pre>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#request-subject" id="request-subject">Requesting User Information</a>
+</h1>
+<p id="rfc.section.2.2.p.1">If the client is requesting information 
+about the current user from the AS, it sends a subject element as a JSON
+ object. This object MAY contain the following fields (or additional 
+fields defined in [[ registry TBD ]]).</p>
+<p></p>
+
+<dl>
+<dt>sub-ids</dt>
+<dd style="margin-left: 8">An array of subject identifier subject types requested for the user, as defined by <a href="#I-D.ietf-secevent-subject-identifiers" class="xref">[I-D.ietf-secevent-subject-identifiers]</a>.</dd>
+<dt>assertions</dt>
+<dd style="margin-left: 8">An array of requested assertion formats defined by [[ registry TBD ]].</dd>
+</dl>
+<pre>"subject": {
+   "sub-ids": [ "iss-sub", "email" ],
+   "assertions": [ "oidc-id-token", "saml" ]
+}</pre>
+<p></p>
+<p id="rfc.section.2.2.p.4">If the AS knows the identifier for the 
+current user and has permission to do so [[ editor's note: from the 
+user's consent or a policy or ... ]], the AS MAY <a href="#response-subject" class="xref">return the user's information in its response</a>.</p>
+<p id="rfc.section.2.2.p.5">The "sub-ids" and "assertions" request 
+fields are independent of each other, and a returned assertion MAY omit a
+ requested subject identifier. [[ Editor's note: we're potentially 
+conflating these two fields in the same structure, so perhaps these 
+should be split. ]]</p>
+<h1 id="rfc.section.2.3">
+<a href="#rfc.section.2.3">2.3.</a> <a href="#request-key" id="request-key">Identifying the Client</a>
+</h1>
+<p id="rfc.section.2.3.p.1">When sending an initial request to the AS, 
+the client MUST identify itself by including the key field in the 
+request and by signing the request as described in <a href="#binding-keys" class="xref">Section 8</a>. This key MAY be sent by value or by reference.</p>
+<p id="rfc.section.2.3.p.2">When sent by value, the key MUST be a public
+ key in at least one supported format and MUST contain a proof property 
+that matches the proofing mechanism used in the request. If the key is 
+sent in multiple formats, all the keys MUST be the same. The key 
+presented in this field MUST be the key used to sign the request.</p>
+<p></p>
+
+<dl>
+<dt>proof</dt>
+<dd style="margin-left: 8">The form of proof that the RC will use when 
+presenting the key to the AS. The valid values of this field and the 
+processing requirements for each are detailed in <a href="#binding-keys" class="xref">Section 8</a>. This field is REQUIRED.</dd>
+<dt>jwk</dt>
+<dd style="margin-left: 8">Value of the public key as a JSON Web Key. 
+MUST contain an "alg" field which is used to validate the signature.  
+MUST contain the "kid" field to identify the key in the signed object.</dd>
+<dt>cert</dt>
+<dd style="margin-left: 8">PEM serialized value of the certificate used to sign the request, with optional internal whitespace.</dd>
+<dt>cert#256</dt>
+<dd style="margin-left: 8">The certificate thumbprint calculated as per <a href="#RFC8705" class="xref">OAuth-MTLS</a> in base64 URL encoding.</dd>
+</dl>
+<p id="rfc.section.2.3.p.4">Additional key types are defined in [[ registry TBD ]]. Proof types are defined in a [[ registry TBD ]] and described in <a href="#binding-keys" class="xref">Section 8</a>.
+ [[ Editor's note: we will eventually want to have fetchable keys, I 
+would guess. Things like DID for key identification are going to be 
+important. ]]</p>
+<p id="rfc.section.2.3.p.5">This non-normative example shows a single key presented in multiple formats using a single proofing mechanism.</p>
+<pre>    "key": {
+        "proof": "httpsig",
+        "jwk": {
+                    "kty": "RSA",
+                    "e": "AQAB",
+                    "kid": "xyz-1",
+                    "alg": "RS256",
+                    "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xY..."
+        },
+        "cert": "MIIEHDCCAwSgAwIBAgIBATANBgkqhkiG9w0BAQsFA..."
+    }</pre>
+<p></p>
+<p id="rfc.section.2.3.p.7">The AS MAY associate policies with the 
+client software identified by this key, such as limiting which resources
+ can be requested and which interaction methods can be used.</p>
+<p id="rfc.section.2.3.p.8">If the client has a reference for its key, 
+the client MAY send that reference handle as a string. The format of 
+this string is opaque to the client.</p>
+<pre>{
+  "key": "7C7C4AZ9KHRS6X63AJAO"
+}</pre>
+<p></p>
+<p id="rfc.section.2.3.p.10">If the key is passed by reference, the 
+proofing mechanism associated with that key reference MUST also be used.
+ If the AS does not recognize the key reference handle, the request MUST
+ be rejected with an error.</p>
+<p id="rfc.section.2.3.p.11">If the client identifies its key by 
+reference, the referenced key MAY be a symmetric key known to the AS. 
+The client MUST NOT send a symmetric key by value.</p>
+<p id="rfc.section.2.3.p.12">The AS MUST ensure that the key represented by this reference is the same key used to sign the request as described in <a href="#binding-keys" class="xref">Section 8</a>.</p>
+<h1 id="rfc.section.2.4">
+<a href="#rfc.section.2.4">2.4.</a> <a href="#request-user" id="request-user">Identifying the User</a>
+</h1>
+<p id="rfc.section.2.4.p.1">If the client knows the identity of the 
+current user or one or more identifiers for the user, the client MAY 
+send that information to the AS in the "user" field. The client MAY pass
+ this information by value or by reference.</p>
+<p></p>
+
+<dl>
+<dt>sub-ids</dt>
+<dd style="margin-left: 8">An array of subject identifiers for the user, as defined by <a href="#I-D.ietf-secevent-subject-identifiers" class="xref">[I-D.ietf-secevent-subject-identifiers]</a>.</dd>
+<dt>assertions</dt>
+<dd style="margin-left: 8">An object containing assertions as values 
+keyed on the assertion type defined by [[ registry TBD ]]. [[ Editor's 
+note: should this be an array of objects with internal typing like the 
+sub-ids? Do we expect more than one assertion per user anyway? ]]</dd>
+</dl>
+<pre>"user": {
+   "sub-ids": [ {
+     "subject_type": "email",
+     "email": "user@example.com"
+   } ],
+   "assertions": {
+     "oidc-id-token": "eyj..."
+   }
+}</pre>
+<p></p>
+<p id="rfc.section.2.4.p.4">Subject identifiers are hints to the AS in 
+determining the current user and MUST NOT be taken as declarative 
+statements that a particular user is present at the client. Assertions 
+SHOULD be validated by the AS. [[ editor's note: assertion validation is
+ extremely specific to the kind of assertion in place ]]</p>
+<p id="rfc.section.2.4.p.5">If the identified user does not match the 
+user present at the AS during an interaction step, the AS SHOULD reject 
+the request. [[ Editor's note: we're potentially conflating 
+identification (sub-ids) and provable presence (assertions and a trusted
+ reference handle) in the same structure, so perhaps these should be 
+split. ]]</p>
+<p id="rfc.section.2.4.p.6">Additional user assertion formats are defined in [[ registry TBD -- probably the same registry as requesting formats ]].</p>
+<p id="rfc.section.2.4.p.7">If the client has a reference for the 
+current user at this AS, the client MAY pass that reference as a string.
+ The format of this string is opaque to the client.</p>
+<pre>"user": "XUT2MFM1XBIKJKSDU8QM"
+</pre>
+<p></p>
+<p id="rfc.section.2.4.p.9">If the AS trusts the client to present user 
+information, it MAY decide, based on its policy, to skip interaction 
+with the user, even if the client provides one or more interaction 
+capabilities.</p>
+<h1 id="rfc.section.2.5">
+<a href="#rfc.section.2.5">2.5.</a> <a href="#request-interact" id="request-interact">Interacting with the User</a>
+</h1>
+<p id="rfc.section.2.5.p.1">If the client is capable of driving 
+interaction with the user, the client MAY declare the means that it can 
+interact using the "interact" field. This field is a JSON object with 
+keys that declare different interaction capabilities. A client MUST NOT 
+declare an interaction capability it does not support.</p>
+<p id="rfc.section.2.5.p.2">The client MAY send multiple capabilities in
+ the same request.  There is no preference order specified in this 
+request. An AS MAY respond to any, all, or none of the presented 
+interaction capabilities in a request.</p>
+<p id="rfc.section.2.5.p.3">The following sections detail requests for 
+interaction capabilities. Additional interaction capabilities are 
+defined in [[ a registry TBD ]].</p>
+<p id="rfc.section.2.5.p.4">[[ Editor's note: there need to be more 
+examples that knit together the interaction capabilities into common 
+flows, like an authz-code equivalent. But it's important for the 
+protocol design that these are separate pieces. ]]</p>
+<pre>    "interact": {
+        "redirect": true,
+        "user_code": true,
+        "callback": {
+            "uri": "https://client.example.net/return/123455",
+            "nonce": "LKLTI25DK82FX4T4QFZC"
+        }
+    }</pre>
+<h1 id="rfc.section.2.5.1">
+<a href="#rfc.section.2.5.1">2.5.1.</a> <a href="#request-interact-redirect" id="request-interact-redirect">Redirect to an Arbitrary URL</a>
+</h1>
+<p id="rfc.section.2.5.1.p.1">If the client is capable of directing the 
+user to a URL defined by the AS at runtime, the client indicates this by
+ sending the "redirect" field with the boolean value "true". The means 
+by which the client will activate this URL is out of scope of this 
+specification, but common methods include an HTTP redirect, launching a 
+browser on the user's device, providing a scannable image encoding, and 
+printing out a URL to an interactive console.</p>
+<pre>"interact": {
+   "redirect": true
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.1.p.3">If this interaction capability is supported for this client and request, the AS returns a redirect interaction response <a href="#response-interact-redirect" class="xref">Section 3.3.1</a>.</p>
+<h1 id="rfc.section.2.5.2">
+<a href="#rfc.section.2.5.2">2.5.2.</a> <a href="#request-interact-short" id="request-interact-short">Redirect to an Arbitrary Short URL</a>
+</h1>
+<p id="rfc.section.2.5.2.p.1">If the client can redirect to a shortened 
+URL defined by the AS at runtime, the client indicates this by sending 
+the "redirect" field with the boolean value "true". The means by which 
+the client will activate this URL is out of scope of this specification,
+ but common methods include an HTTP redirect, launching a browser on the
+ user's device, providing a scannable image encoding, and printing out a
+ URL to an interactive console.</p>
+<pre>"interact": {
+   "redirect_short": true
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.2.p.3">If this interaction capability is 
+supported for this client and request, the AS returns a redirect 
+interaction response with short URL <a href="#response-interact-short" class="xref">Section 3.3.2</a>.</p>
+<p id="rfc.section.2.5.2.p.4">[[ Editor's note: I'm not sold on this 
+structure as there's a lot of overlap with the "redirect" capability, so
+ maybe these should merge somehow. Also, I'm not sure if we want 
+additional parameters in here, like a max length that the client can 
+support? ]]</p>
+<h1 id="rfc.section.2.5.3">
+<a href="#rfc.section.2.5.3">2.5.3.</a> <a href="#request-interact-app" id="request-interact-app">Open an Application-specific URL</a>
+</h1>
+<p id="rfc.section.2.5.3.p.1">If the client can open a URL associated 
+with an application on the user's device, the client indicates this by 
+sending the "app" field with boolean value "true". The means by which 
+the client determines the application to open with this URL are out of 
+scope of this specification.</p>
+<pre>"interact": {
+   "app": true
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.3.p.3">If this interaction capability is 
+supported for this client and request, the AS returns an app interaction
+ response with an app URL payload <a href="#response-interact-app" class="xref">Section 3.3.3</a>.</p>
+<p id="rfc.section.2.5.3.p.4">[[ Editor's note: this is also similar to 
+the "redirect" above today as most apps use captured URLs, but there is 
+likely an appetite for splitting the web-based interaction and app-based
+ interaction into different URIs. There's also the possibility of 
+wanting more in the payload than can be reasonably put into the URL.  ]]</p>
+<h1 id="rfc.section.2.5.4">
+<a href="#rfc.section.2.5.4">2.5.4.</a> <a href="#request-interact-callback" id="request-interact-callback">Receive a Browser-based Callback</a>
+</h1>
+<p id="rfc.section.2.5.4.p.1">If the client is capable of receiving a 
+callback through the user's browser at the completion of an interaction,
+ the client indicates this by sending the "callback" field. The value of
+ this field is an object containing the following members.</p>
+<p></p>
+
+<dl>
+<dt>uri</dt>
+<dd style="margin-left: 8">REQUIRED. Indicates the URI to send the RO to
+ after interaction. This URI MAY be unique per request and MUST be 
+hosted by or accessible by the RC. This URI MUST NOT contain any 
+fragment component. This URI MUST be protected by HTTPS, be hosted on a 
+server local to the user's browser ("localhost"), or use an 
+application-specific URI scheme. If the RC needs any state information 
+to tie to the front channel interaction response, it MUST encode that 
+into the callback URI. The allowable URIs and URI patterns MAY be 
+restricted by the AS based on the RC's presented key information. The 
+callback URI SHOULD be presented to the RO during the interaction phase 
+before redirect.</dd>
+<dt>nonce</dt>
+<dd style="margin-left: 8">REQUIRED. Unique value to be used in the 
+calculation of the "hash" query parameter on the callback URL, must be 
+sufficiently random to be unguessable by an attacker.  MUST be generated
+ by the RC as a unique value for this request.</dd>
+<dt>hash_method</dt>
+<dd style="margin-left: 8">OPTIONAL. The hash calculation mechanism to be used for the callback hash in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.
+ Can be one of sha3 or sha2. If absent, the default value is sha3. [[ 
+Editor's note: This should be expandable via a registry of cryptographic
+ options, and it would be good if we didn't define our own identifiers 
+here.  ]]</dd>
+</dl>
+<pre>"interact": {
+    "callback": {
+       "uri": "https://client.example.net/return/123455",
+       "nonce": "LKLTI25DK82FX4T4QFZC"
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.4.p.4">If this interaction capability is supported for this client and request, the AS returns a nonce for use in validating <a href="#response-interact-callback" class="xref">the callback response</a>.
+  Requests to the callback URI MUST be processed as described in [[ 
+processing interaction callbacks ]], and the AS MUST require 
+presentation of an interaction callback reference as described in <a href="#interaction-callback" class="xref">Section 4.4.1</a>.</p>
+<p id="rfc.section.2.5.4.p.5">Since the incoming request to the callback
+ URL is from the user's browser, the client MUST require the user to be 
+present on the connection. If used with the "pushback" parameter, the 
+two URLs SHOULD be different as they have different security properties.</p>
+<p id="rfc.section.2.5.4.p.6">Note that the means by which the user 
+arrives at the AS is declared separately from the user's return using 
+this callback mechanism.</p>
+<h1 id="rfc.section.2.5.5">
+<a href="#rfc.section.2.5.5">2.5.5.</a> <a href="#request-interact-pushback" id="request-interact-pushback">Receive an HTTP Direct Callback</a>
+</h1>
+<p id="rfc.section.2.5.5.p.1">If the client is capable of receiving an 
+HTTP message directly from the AS, the client indicates this by sending 
+the "pushback" field. The value of this field is an object containing 
+the following members.</p>
+<p></p>
+
+<dl>
+<dt>uri</dt>
+<dd style="margin-left: 8">REQUIRED. Indicates the URI to send a message
+ to after the RO is finished interacting. This URI MAY be unique per 
+request and MUST be hosted by or accessible by the RC. This URI MUST NOT
+ contain any fragment component. This URI MUST be protected by HTTPS and
+ MUST be reachable by the AS. The allowable URIs and URI patterns MAY be
+ restricted by the AS based on the RC's presented key information.</dd>
+<dt>nonce</dt>
+<dd style="margin-left: 8">REQUIRED. Unique value to be used in the 
+calculation of the "hash" value sent to the pushback URL, must be 
+sufficiently random to be unguessable by an attacker. MUST be generated 
+by the RC as a unique value for this request.</dd>
+<dt>hash_method</dt>
+<dd style="margin-left: 8">OPTIONAL. The signature mechanism to be used for the callback hash in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.
+ Can be one of sha3 or sha2. If absent, the default value is sha3. [[ 
+Editor's note: This should be expandable via a registry of cryptographic
+ options, and it would be good if we didn't define our own identifiers 
+here.  ]]</dd>
+</dl>
+<pre>"interact": {
+    "pushback": {
+       "uri": "https://client.example.net/push/554321",
+       "nonce": "82FX4T4QFZCLKLTI25DK"
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.5.p.4">If this interaction capability is supported for this client and request, the AS returns a nonce for use in validating <a href="#response-interact-pushback" class="xref">the pushback response</a>.  Requests to the pushback URI MUST be processed as described in <a href="#interaction-pushback" class="xref">Section 4.4.2</a>, and the AS MUST require presentation of an interaction callback reference as described in [ interaction callback references ].</p>
+<p id="rfc.section.2.5.5.p.5">Since the incoming request to the pushback
+ URL is from the AS and not from the user's browser, the client MUST NOT
+ require the user to be present. If used with the "callback" parameter, 
+the two URLs SHOULD be different as they have different security 
+properties.</p>
+<p id="rfc.section.2.5.5.p.6">Note that the means by which the user arrives at the AS is declared separately from the user's return using this mechanism.</p>
+<h1 id="rfc.section.2.5.6">
+<a href="#rfc.section.2.5.6">2.5.6.</a> <a href="#request-interact-usercode" id="request-interact-usercode">Display a Short Code</a>
+</h1>
+<p id="rfc.section.2.5.6.p.1">If the client is capable of displaying or 
+otherwise communicating a short, human-entered code to the user, the 
+client indicates this by sending the "user_code" field with the boolean 
+value "true". This code is to be entered at a static URL that does not 
+change at runtime.</p>
+<pre>"interact": {
+    "user_code": true
+}</pre>
+<p></p>
+<p id="rfc.section.2.5.6.p.3">If this interaction capability is 
+supported for this client and request, the AS returns a user code and 
+interaction URL as specified in <a href="#interaction-usercode" class="xref">Section 4.2</a>.</p>
+<h1 id="rfc.section.2.5.7">
+<a href="#rfc.section.2.5.7">2.5.7.</a> <a href="#request-interact-extend" id="request-interact-extend">Extending Interaction Capabilities</a>
+</h1>
+<p id="rfc.section.2.5.7.p.1">Additional interaction capabilities are defined in [[ a registry TBD ]].</p>
+<p id="rfc.section.2.5.7.p.2">[[ Editor's note: we should have guidance 
+in here about how to define other interaction capabilities. There's 
+already interest in defining message-based protocols and 
+challenge-response protocols, for example. ]]</p>
+<h1 id="rfc.section.2.6">
+<a href="#rfc.section.2.6">2.6.</a> <a href="#request-display" id="request-display">Providing Displayable Client Information</a>
+</h1>
+<p id="rfc.section.2.6.p.1">If the client has additional information to 
+display to the user during any interactions at the AS, it MAY send that 
+information in the "display" field. This field is a JSON object that 
+declares information to present to the user during any interactive 
+sequences.</p>
+<p></p>
+
+<dl>
+<dt>name</dt>
+<dd style="margin-left: 8">Display name of the RC software</dd>
+<dt>uri</dt>
+<dd style="margin-left: 8">User-facing web page of the RC software</dd>
+<dt>logo_uri</dt>
+<dd style="margin-left: 8">Display image to represent the RC software</dd>
+</dl>
+<pre>    "display": {
+        "name": "My Client Display Name",
+        "uri": "https://example.net/client"
+    }</pre>
+<p></p>
+<p id="rfc.section.2.6.p.4">Additional display fields are defined by [[ a registry TBD. ]]</p>
+<p id="rfc.section.2.6.p.5">The AS SHOULD use these values during 
+interaction with the user.  The AS MAY restrict display values to 
+specific clients, as identified by their keys.</p>
+<p id="rfc.section.2.6.p.6">[[ Editor's note: this might make sense to 
+combine with the "key" field, but some classes of more dynamic client 
+vary those fields separately. We should also consider things like signed
+ statements for client attestation, but that might fit better into a 
+different top-level field instead. ]]</p>
+<h1 id="rfc.section.2.7">
+<a href="#rfc.section.2.7">2.7.</a> <a href="#request-capabilities" id="request-capabilities">Declaring Client Capabilities</a>
+</h1>
+<p id="rfc.section.2.7.p.1">If the client supports extension 
+capabilities, it MAY present them to the AS in the "capabilities" field.
+ This field is an array of strings representing specific extensions and 
+capabilities, as defined by [[ a registry TBD ]].</p>
+<pre>"capabilities": ["ext1", "ext2"]</pre>
+<h1 id="rfc.section.2.8">
+<a href="#rfc.section.2.8">2.8.</a> <a href="#request-existing" id="request-existing">Referencing an Existing Grant Request</a>
+</h1>
+<p id="rfc.section.2.8.p.1">If the client has a reference handle from a 
+previously granted request, it MAY send that reference in the 
+"reference" field. This field is a single string.</p>
+<pre>"existing_grant": "80UPRY5NM33OMUKMKSKU"</pre>
+<p></p>
+<p id="rfc.section.2.8.p.3">The AS MUST dereference the grant associated with the reference and process this request in the context of the referenced one.</p>
+<p id="rfc.section.2.8.p.4">[[ Editor's note: this basic capability is 
+to allow for both step-up authorization and downscoped authorization, 
+but by explicitly creating a new request and not modifying an existing 
+one. What's the best guidance for how an AS should process this? ]]</p>
+<h1 id="rfc.section.2.9">
+<a href="#rfc.section.2.9">2.9.</a> <a href="#request-extending" id="request-extending">Extending The Grant Request</a>
+</h1>
+<p id="rfc.section.2.9.p.1">The request object MAY be extended by 
+registering new items in [[ a registry TBD ]]. Extensions SHOULD be 
+orthogonal to other parameters.  Extensions MUST document any aspects 
+where the</p>
+<p id="rfc.section.2.9.p.2">[[ Editor's note: we should have more 
+guidance and examples on what possible top-level extensions would look 
+like. Things like an OIDC "claims" request or a VC query, for example. 
+]]</p>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#response" id="response">Grant Response</a>
+</h1>
+<p id="rfc.section.3.p.1">In response to a client's request, the AS responds with a JSON object as the HTTP entity body.</p>
+<pre>{
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L"
+    },
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue"
+    },
+    "subject": {
+        "sub-ids": [ {
+           "subject_type": "email",
+           "email": "user@example.com",
+        } ]
+    }
+}</pre>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#response-continue" id="response-continue">Request Continuation Handle</a>
+</h1>
+<p id="rfc.section.3.1.p.1">If the AS determines that the request can be
+ continued with additional requests, it responds with the "continue" 
+field. This field contains a JSON object with the following properties.</p>
+<p></p>
+
+<dl>
+<dt>handle</dt>
+<dd style="margin-left: 8">REQUIRED. A unique reference for the grant request.</dd>
+<dt>uri</dt>
+<dd style="margin-left: 8">REQUIRED. The URI at which the client can make continuation requests. This URI MAY vary per client or ongoing request.</dd>
+<dt>wait</dt>
+<dd style="margin-left: 8">RECOMMENDED. The amount of time in integer 
+seconds the client SHOULD wait after receiving this continuation handle 
+and calling the URI.</dd>
+<dt>expires_in</dt>
+<dd style="margin-left: 8">OPTIONAL. The number of seconds in which the 
+handle will expire. The client MUST NOT use the handle past this time. 
+The handle MAY be revoked at any point prior to its expiration.</dd>
+</dl>
+<pre>{
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue",
+        "wait": 60
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.3.1.p.4">The client can use the values of this field as described in <a href="#continue-request" class="xref">Section 5</a>.</p>
+<p id="rfc.section.3.1.p.5">This field SHOULD be returned when 
+interaction is expected, to allow the client to follow up after 
+interaction has been concluded.</p>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#response-token" id="response-token">Access Tokens</a>
+</h1>
+<p id="rfc.section.3.2.p.1">If the AS has successfully granted one or 
+more access tokens, it responds with one of these fields. The AS MUST 
+NOT respond with both fields.</p>
+<p id="rfc.section.3.2.p.2">[[ Editor's note: I really don't like the 
+dichotomy between "access_token" and "multiple_access_tokens" and their 
+being mutually exclusive, and I think we should design away from this 
+pattern toward something less error-prone. ]]</p>
+<h1 id="rfc.section.3.2.1">
+<a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#response-token-single" id="response-token-single">Single Access Token</a>
+</h1>
+<p id="rfc.section.3.2.1.p.1">If the client has requested a single 
+access token and the AS has granted that access token, the AS responds 
+with the "access_token" field. The value of this field is an object with
+ the following properties.</p>
+<p></p>
+
+<dl>
+<dt>value</dt>
+<dd style="margin-left: 8">REQUIRED. The value of the access token as a 
+string. The value is opaque to the client. The value SHOULD be limited 
+to ASCII characters to facilitate transmission over HTTP headers and 
+elements without additional encoding.</dd>
+<dt>proof</dt>
+<dd style="margin-left: 8">REQUIRED. The proofing presentation mechanism used for presenting this access token to an RS. See <a href="#send-access-token" class="xref">the section on sending access tokens</a> for details on possible values to this field and their requirements.</dd>
+<dt>manage</dt>
+<dd style="margin-left: 8">OPTIONAL. The management URI for this access token. If provided, the client MAY manage its access token as described in <a href="#token-management" class="xref">managing an access token lifecycle</a>. This URI MUST NOT include the access token value and MUST be different for each access token.</dd>
+<dt>resources</dt>
+<dd style="margin-left: 8">OPTIONAL. A description of the rights associated with this access token, as defined in <a href="#response-token-single" class="xref">requesting resource access</a>.
+ If included, this MUST reflect the rights associated with the issued 
+access token. These rights MAY vary from what was requested by the 
+client.</dd>
+<dt>expires_in</dt>
+<dd style="margin-left: 8">OPTIONAL. The number of seconds in which the 
+access will expire. The client MUST NOT use the access token past this 
+time. The access token MAY be revoked at any point prior to its 
+expiration.</dd>
+<dt>key</dt>
+<dd style="margin-left: 8">The key that the token is bound to, REQUIRED if the token is sender-constrained. The key MUST be in a format described in <a href="#request-key" class="xref">Section 2.3</a>.
+ [[ Editor's note: this isn't quite right, since the request section 
+includes a "proof" field that we already have here. A possible solution 
+would be to only have a "key" field as defined above and its absence 
+indicates a bearer token? ]]</dd>
+</dl>
+<pre>    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L",
+        "resources": [
+            {
+                "type": "photo-api",
+                "actions": [
+                    "read",
+                    "write",
+                    "dolphin"
+                ],
+                "locations": [
+                    "https://server.example.net/",
+                    "https://resource.local/other"
+                ],
+                "datatypes": [
+                    "metadata",
+                    "images"
+                ]
+            },
+            "read", "dolphin-metadata"
+        ]
+    }</pre>
+<p></p>
+<h1 id="rfc.section.3.2.2">
+<a href="#rfc.section.3.2.2">3.2.2.</a> <a href="#response-token-multiple" id="response-token-multiple">Multiple Access Tokens</a>
+</h1>
+<p id="rfc.section.3.2.2.p.1">If the client has requested multiple 
+access tokens and the AS has granted at least one of them, the AS 
+responds with the "multiple_access_tokens" field. The value of this 
+field is a JSON object, and the property names correspond to the token 
+identifiers chosen by the client in the <a href="#request-resource-multiple" class="xref">multiple access token request</a>. The values of the properties of this object are access tokens as described in <a href="#response-token-single" class="xref">Section 3.2.1</a>.</p>
+<pre>    "multiple_access_tokens": {
+        "token1": {
+            "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+            "proof": "bearer",
+            "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L"
+        },
+        "token2": {
+            "value": "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
+            "proof": "bearer"
+        }
+    }</pre>
+<p></p>
+<p id="rfc.section.3.2.2.p.3">Each access token corresponds to the named
+ resources arrays in the client's request. The AS MAY not issue one or 
+more of the requested access tokens. In such cases all of the issued 
+access tokens are included without the omitted token. The multiple 
+access token response MUST be used when multiple access tokens are 
+requested, even if only one access token is issued.</p>
+<p id="rfc.section.3.2.2.p.4">If the client <a href="#request-resource-single" class="xref">requested a single access token</a>, the AS MUST NOT respond with multiple access tokens.</p>
+<p id="rfc.section.3.2.2.p.5">Each access token MAY have different proofing mechanisms. If used, each access token MUST have different management URIs.</p>
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#response-interact" id="response-interact">Interaction Capabilities</a>
+</h1>
+<p id="rfc.section.3.3.p.1">If the client has indicated a capability to 
+interact with the user in its request, and the AS has determined that 
+interaction is both supported and necessary, the AS responds to the 
+client with any of the following values. There is no preference order 
+for interaction capabilities in the response, and it is up to the client
+ to determine which ones to use.</p>
+<p id="rfc.section.3.3.p.2">[[ Editor's note: Currently these are all in
+ the root of the response, but should they be bundled into an "interact"
+ sub-object? This would match the request pattern. ]]</p>
+<h1 id="rfc.section.3.3.1">
+<a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#response-interact-redirect" id="response-interact-redirect">Redirection to an arbitrary URL</a>
+</h1>
+<p id="rfc.section.3.3.1.p.1">If the client indicates that it can <a href="#request-interact-redirect" class="xref">redirect to an arbitrary URL</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with the "interaction_url" field, which is a string containing 
+the URL to direct the user to. This URL MUST be unique for the request 
+and MUST NOT contain any security-sensitive information.</p>
+<pre>"interaction_url": "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"</pre>
+<p></p>
+<p id="rfc.section.3.3.1.p.3">The client sends the user to the URL to 
+interact with the AS. The client MUST NOT alter the URL in any way. The 
+means for the client to send the user to this URL is out of scope of 
+this specification, but common methods include an HTTP redirect, 
+launching the system browser, displaying a scannable code, or printing 
+out the URL in an interactive console.</p>
+<p id="rfc.section.3.3.1.p.4">[[ Editor's note: should we rename this to
+ "redirect" to match the request? Downside: it conflicts with OAuth 2's 
+"redirect_uri" concept. ]]</p>
+<h1 id="rfc.section.3.3.2">
+<a href="#rfc.section.3.3.2">3.3.2.</a> <a href="#response-interact-short" id="response-interact-short">Redirection to a short URL</a>
+</h1>
+<p id="rfc.section.3.3.2.p.1">If the client indicates that it can <a href="#request-interact-short" class="xref">redirect to an arbitrary short URL</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with the "short_interaction_url" field, which is a string 
+containing the URL to direct the user to. This URL MUST be unique for 
+the request and MUST NOT contain any security-sensitive information.</p>
+<pre>"short_interaction_url": "https://srv.ex/MXKHQ"</pre>
+<p></p>
+<p id="rfc.section.3.3.2.p.3">The client sends the user to the URL to 
+interact with the AS. The client MUST NOT alter the URL in any way. The 
+means for the client to send the user to this URL is out of scope of 
+this specification, but common methods include displaying a scannable 
+code, or printing out the URL in an interactive console.</p>
+<p id="rfc.section.3.3.2.p.4">[[ Editor's note: should we rename this to
+ "short_redirect" to match the request? Downside: it kinda conflicts 
+with OAuth 2's "redirect_uri" concept. ]]</p>
+<h1 id="rfc.section.3.3.3">
+<a href="#rfc.section.3.3.3">3.3.3.</a> <a href="#response-interact-app" id="response-interact-app">Launch of an application URL</a>
+</h1>
+<p id="rfc.section.3.3.3.p.1">If the client indicates that it can <a href="#request-interact-app" class="xref">launch an application URL</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with the "app" field, which is a string containing the URL to 
+direct the user to. This URL MUST be unique for the request and MUST NOT
+ contain any security-sensitive information.</p>
+<pre>"app_url": "https://app.example.com/4CF492MLVMSW9MKMXKHQ"</pre>
+<p></p>
+<p id="rfc.section.3.3.3.p.3">The client launches the URL. The client 
+MUST NOT alter the URL in any way. The means for the client to launch 
+this URL is out of scope of this specification.</p>
+<p id="rfc.section.3.3.3.p.4">[[ Editor's note: This will probably need 
+to be expanded to an object to account for other parameters needed in 
+app2app use cases, like addresses for distributed storage systems, 
+server keys, and the like. Details TBD as people build this out. ]]</p>
+<h1 id="rfc.section.3.3.4">
+<a href="#rfc.section.3.3.4">3.3.4.</a> <a href="#response-interact-callback" id="response-interact-callback">Callback to a Client URL</a>
+</h1>
+<p id="rfc.section.3.3.4.p.1">If the client indicates that it can <a href="#request-interact-callback" class="xref">receive a post-interaction callback on a URL</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with a "callback_server_nonce" that the client will use in 
+validating the callback as defined in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.</p>
+<pre>"callback_server_nonce": "MBDOFXG4Y5CVJCX821LH"</pre>
+<p></p>
+<p id="rfc.section.3.3.4.p.3">If the AS returns a 
+"callback_server_nonce", the client MUST NOT continue a grant request 
+before it receives the associated interaction reference on the callback 
+URI. If both the "callback" and "pushback" capabilities are available, 
+the client MAY use either value.</p>
+<p id="rfc.section.3.3.4.p.4">[[ Editor's note: should we rename this 
+"callback" and/or put it in an object to match the request? That feels 
+like an overfit to me, though. ]]</p>
+<h1 id="rfc.section.3.3.5">
+<a href="#rfc.section.3.3.5">3.3.5.</a> <a href="#response-interact-pushback" id="response-interact-pushback">Push to a Client URL</a>
+</h1>
+<p id="rfc.section.3.3.5.p.1">If the client indicates that it can <a href="#request-interact-pushback" class="xref">receive a post-interaction push on a URL</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with a "pushback_server_nonce" that the client will use in 
+validating the pushback call as defined in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.</p>
+<pre>"pushback_server_nonce": "MBDOFXG4Y5CVJCX821LH"</pre>
+<p></p>
+<p id="rfc.section.3.3.5.p.3">If the AS returns a 
+"pushback_server_nonce", the client MUST NOT continue a grant request 
+before it receives the associated interaction reference on the pushback 
+URI. If both the "callback" and "pushback" capabilities are available, 
+the client MAY use either value.</p>
+<p id="rfc.section.3.3.5.p.4">[[ Editor's note: should we rename this 
+"pushback" and/or put it in an object to match the request? That feels 
+like an overfit to me, though. ]]</p>
+<h1 id="rfc.section.3.3.6">
+<a href="#rfc.section.3.3.6">3.3.6.</a> <a href="#response-interact-usercode" id="response-interact-usercode">Display of a Short Code</a>
+</h1>
+<p id="rfc.section.3.3.6.p.1">If the client indicates that it can <a href="#request-interact-usercode" class="xref">display a short user-typable code</a>
+ and the AS supports this capability for the client's request, the AS 
+responds with a "user_code" field. This field is an object that contains
+ the following members.</p>
+<p></p>
+
+<dl>
+<dt>code</dt>
+<dd style="margin-left: 8">REQUIRED. A unique short code that the user 
+can type into an authorization server. This string MUST be 
+case-insensitive, MUST consist of only easily typeable characters (such 
+as letters or numbers). The time in which this code will be accepted 
+SHOULD be short lived, such as several minutes. It is RECOMMENDED that 
+this code be no more than eight characters in length.</dd>
+<dt>url</dt>
+<dd style="margin-left: 8">RECOMMENDED. The interaction URL that the RC 
+will direct the RO to. This URL MUST be stable at the AS such that 
+clients can be statically configured with it.</dd>
+</dl>
+<pre>    "user_code": {
+        "code": "A1BC-3DFF",
+        "url": "https://srv.ex/device"
+    }
+</pre>
+<p></p>
+<p id="rfc.section.3.3.6.p.4">The client MUST communicate the "code" to 
+the user in some fashion, such as displaying it on a screen or reading 
+it out audibly. The client SHOULD also communicate the URL if possible. 
+As this interaction capability is designed to facilitate interaction via
+ a secondary device, it is not expected that the client redirect the 
+user to the URL. If the client is capable of communicating an arbitrary 
+URL to the user, such as through a scannable code, the client SHOULD use
+ the <a href="#request-interact-redirect" class="xref">"redirect"</a> or <a href="#request-interact-short" class="xref">"short_redirect"</a> capabilities for this purpose.</p>
+<h1 id="rfc.section.3.3.7">
+<a href="#rfc.section.3.3.7">3.3.7.</a> Extending Interaction Capability Responses</h1>
+<p id="rfc.section.3.3.7.p.1">Extensions to this specification can define new interaction capability responses in [[ a registry TBD ]].</p>
+<h1 id="rfc.section.3.4">
+<a href="#rfc.section.3.4">3.4.</a> <a href="#response-subject" id="response-subject">Returning User Information</a>
+</h1>
+<p id="rfc.section.3.4.p.1">If information about the current user is 
+requested and the AS grants the client access to that data, the AS 
+returns the approved information in the "subject" response field. This 
+field is an object with the following properties.</p>
+<p></p>
+
+<dl>
+<dt>sub-ids</dt>
+<dd style="margin-left: 8">An array of subject identifiers for the user, as defined by <a href="#I-D.ietf-secevent-subject-identifiers" class="xref">[I-D.ietf-secevent-subject-identifiers]</a>. [[ Editor's note: privacy considerations are needed around returning identifiers. ]]</dd>
+<dt>assertions</dt>
+<dd style="margin-left: 8">An object containing assertions as values 
+keyed on the assertion type defined by [[ registry TBD ]]. [[ Editor's 
+note: should this be an array of objects with internal typing like the 
+sub-ids? Do we expect more than one assertion per user anyway? ]]</dd>
+</dl>
+<pre>"subject": {
+   "sub-ids": [ {
+     "subject_type": "email",
+     "email": "user@example.com",
+   } ],
+   "assertions": {
+     "oidc-id-token": "eyj..."
+   }
+}</pre>
+<p></p>
+<p></p>
+<h1 id="rfc.section.3.5">
+<a href="#rfc.section.3.5">3.5.</a> <a href="#response-dynamic-handles" id="response-dynamic-handles">Returning Dynamically-bound Reference Handles</a>
+</h1>
+<p id="rfc.section.3.5.p.1">Many parts of the client's request can be 
+passed as either a value or a reference. Some of these references, such 
+as for the client's keys or the resources, can sometimes be managed 
+statically through an admin console or developer portal provided by the 
+AS or RS. If desired, the AS MAY also generate and return some of these 
+references dynamically to the client in its response to facilitate 
+multiple interactions with the same software. The client SHOULD use 
+these references in future requests in lieu of sending the associated 
+data value. These handles are intended to be used on future requests.</p>
+<p id="rfc.section.3.5.p.2">Dynamically generated handles are string 
+values that MUST be protected by the client as secrets. Handle values 
+MUST be unguessable and MUST NOT contain any sensitive information. 
+Handle values are opaque to the client. [[ Editor's note: these used to 
+be objects to allow for expansion to future elements, like a management 
+URI or different presentation types or expiration, but those weren't 
+used in practice. Is that desirable anymore or is collapsing them like 
+this the right direction? ]]</p>
+<p id="rfc.section.3.5.p.3">All dynamically generated handles are 
+returned as fields in the root JSON object of the response. This 
+specification defines the following dynamic handle returns, additional 
+handles can be defined [[ in a registry TBD ]].</p>
+<p></p>
+
+<dl>
+<dt>key_handle</dt>
+<dd style="margin-left: 8">A value used to represent the information in the key object that the client can use in a future request, as described in <a href="#request-key" class="xref">Section 2.3</a>.</dd>
+<dt>display_handle</dt>
+<dd style="margin-left: 8">A value used to represent the information in the display object that the client can use in a future request, as described in <a href="#request-display" class="xref">Section 2.6</a>.</dd>
+<dt>user_handle</dt>
+<dd style="margin-left: 8">A value used to represent the current user. The client can use in a future request, as described in <a href="#request-user" class="xref">Section 2.4</a>.</dd>
+</dl>
+<p id="rfc.section.3.5.p.5">This non-normative example shows two handles along side an issued access token.</p>
+<pre>{
+    "user_handle": "XUT2MFM1XBIKJKSDU8QM",
+    "key_handle": "7C7C4AZ9KHRS6X63AJAO",
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer"
+    }
+}</pre>
+<h1 id="rfc.section.3.6">
+<a href="#rfc.section.3.6">3.6.</a> <a href="#error-response" id="error-response">Error response</a>
+</h1>
+<p id="rfc.section.3.6.p.1">If the AS determines that the request cannot be issued for any reason, it responds to the RC with an error message.</p>
+<p></p>
+
+<dl>
+<dt>error</dt>
+<dd style="margin-left: 8">The error code.</dd>
+</dl>
+<pre>{
+
+  "error": "user_denied"
+
+}</pre>
+<p></p>
+<p id="rfc.section.3.6.p.4">The error code is one of the following, with additional values available in [[ a registry TBD ]]:</p>
+<p></p>
+
+<dl>
+<dt>user_denied</dt>
+<dd style="margin-left: 8">The RO denied the request.</dd>
+<dt>too_fast</dt>
+<dd style="margin-left: 8">The RC did not respect the timeout in the wait response.</dd>
+<dt>unknown_handle</dt>
+<dd style="margin-left: 8">The request referenced an unknown handle.</dd>
+</dl>
+<p id="rfc.section.3.6.p.6">[[ Editor's note: I think we will need a 
+more robust error mechanism, and we need to be more clear about what 
+error states are allowed in what circumstances. Additionally, is the 
+"error" parameter exclusive with others in the return? ]]</p>
+<h1 id="rfc.section.3.7">
+<a href="#rfc.section.3.7">3.7.</a> Extending the Response</h1>
+<p id="rfc.section.3.7.p.1">Extensions to this specification MAY define additional fields for the grant response in [[ a registry TBD ]].</p>
+<p id="rfc.section.3.7.p.2">[[ Editor's note: what guidance should we give to designers on this? ]]</p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#user-interaction" id="user-interaction">Interaction at the AS</a>
+</h1>
+<p id="rfc.section.4.p.1">If the client <a href="#request-interact" class="xref">indicates that it is capable of driving interaction with the user in its request</a>, and the AS determines that interaction is required, the client SHOULD initiate one of the returned <a href="#response-interact" class="xref">interaction capabilities in the response</a>.</p>
+<p id="rfc.section.4.p.2">When the RO is interacting with the AS, the AS MAY perform whatever actions it sees fit, including but not limited to:</p>
+<p></p>
+
+<ul>
+<li>authenticate the user as RO</li>
+<li>gather consent and authorization from the RO for access to requested resources or the</li>
+<li>allow the RO to modify the parameters of the request (such as 
+disallowing some requested resources or specifying an account or record)</li>
+</ul>
+<p id="rfc.section.4.p.4">[[ Editor's note: there are some privacy and 
+security considerations here but for the most part we don't want to be 
+overly prescriptive about the UX, I think. ]]</p>
+<h1 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#interaction-redirect" id="interaction-redirect">Interaction at a Redirected URI</a>
+</h1>
+<p id="rfc.section.4.1.p.1">When the user is directed to the AS through the <a href="#response-interact-redirect" class="xref">"interaction_url"</a> or <a href="#response-interact-short" class="xref">"short_interaction_url"</a>
+ capabilities, the AS can interact with the user through their web 
+browser to authenticate the user as an RO and gather their consent.  
+Note that since the client does not add any parameters to the URL, the 
+AS MUST determine the grant request being referenced from the URL value 
+itself. If the URL cannot be associated with a currently active request,
+ the AS MUST display an error to the user and MUST NOT attempt to 
+redirect the user back to any client.</p>
+<p id="rfc.section.4.1.p.2">The interaction URL MUST be reachable from 
+the RO's browser, though note that the RO MAY open the URL on a separate
+ device from the RC itself. The interaction URL MUST be accessible from 
+an HTTP GET request, and MUST be protected by HTTPS or equivalent means.</p>
+<h1 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#interaction-usercode" id="interaction-usercode">Interaction at the User Code URI</a>
+</h1>
+<p id="rfc.section.4.2.p.1">When the user is directed to the AS through the <a href="#response-interact-usercode" class="xref">"user_code"</a>
+ capability, the AS can interact with the user through their web browser
+ to collect the user code, authenticate the user as an RO, and gather 
+their consent.  Note that since the URL itself is static, the AS MUST 
+determine the grant request being referenced from the user code value 
+itself. If the user code cannot be associated with a currently active 
+request, the AS MUST display an error to the user and MUST NOT attempt 
+to redirect the user back to any client.</p>
+<p id="rfc.section.4.2.p.2">The user code URL MUST be reachable from the
+ RO's browser, though note that the RO MAY open the URL on a separate 
+device from the RC itself. The user code URL MUST be accessible from an 
+HTTP GET request, and MUST be protected by HTTPS or equivalent means.</p>
+<h1 id="rfc.section.4.3">
+<a href="#rfc.section.4.3">4.3.</a> <a href="#interaction-app" id="interaction-app">Interaction through an Application URI</a>
+</h1>
+<p id="rfc.section.4.3.p.1">When the user successfully launches an application through the <a href="#response-interact-app" class="xref">"app" capability</a>,
+ the AS interacts with the user through that application to authenticate
+ the user as the RO and gather their consent. The details of this 
+interaction are out of scope for this specification.</p>
+<p id="rfc.section.4.3.p.2">[[ Editor's note: Should we have anything to
+ say about an app sending information to a back-end to get details on 
+the pending request? ]]</p>
+<h1 id="rfc.section.4.4">
+<a href="#rfc.section.4.4">4.4.</a> <a href="#interaction-finalize" id="interaction-finalize">Finalizing Interaction</a>
+</h1>
+<p id="rfc.section.4.4.p.1">Upon completing an interaction with the user, if either a <a href="#response-interact-callback" class="xref">"callback"</a> or <a href="#response-interact-pushback" class="xref">"pushback"</a>
+ capability is available with the current request, the AS MUST follow 
+the appropriate method at the end of interaction to allow the client to 
+continue. If neither capability is available, the AS SHOULD instruct the
+ user to return to their client software upon completion. Note that 
+these steps still take place in most error cases, such as when the user 
+has denied access. This allows the client to potentially recover from 
+the error state without restarting. [[ Editor's note: there might be 
+some other kind of push-based notification or callback that the client 
+can use, or an out-of-band protocol. The AS would know about this if 
+supported and used, but the guidance here should be written in such a 
+way as to not be too restrictive in the next steps that it can take. 
+Still, it's important that the AS not expect clients to poll if the 
+client has stated it can take a callback. ]]</p>
+<p id="rfc.section.4.4.p.2">The AS MUST calculate a hash value as described in <a href="#interaction-hash" class="xref">Section 4.4.3</a>. The client will use this value to validate the return call from the AS.</p>
+<p id="rfc.section.4.4.p.3">The AS MUST create an interaction reference 
+and associate that reference with the current interaction and the 
+underlying pending request. This value MUST be sufficiently random so as
+ not to be guessable by an attacker.</p>
+<p id="rfc.section.4.4.p.4">The AS then MUST send the hash and 
+interaction reference based on the interaction finalization capability 
+as described in the following sections. If both the "callback" and 
+"pushback" capabilities are available for the current request, the AS 
+MUST choose only one. [[ Editor's note: is this restriction necessary? 
+]]</p>
+<h1 id="rfc.section.4.4.1">
+<a href="#rfc.section.4.4.1">4.4.1.</a> <a href="#interaction-callback" id="interaction-callback">Finalizing Interaction with a Callback URI</a>
+</h1>
+<p id="rfc.section.4.4.1.p.1">When using the <a href="#response-interact-callback" class="xref">"callback" interaction capability</a>,
+ the AS signals to the client that interaction is complete and the 
+request can be continued by directing the user (in their browser) back 
+to the client's callback URL sent in <a href="#request-interact-callback" class="xref">the callback request</a>.</p>
+<p id="rfc.section.4.4.1.p.2">The AS secures this callback by adding the hash and interaction reference as query parameters to the client's callback URL.</p>
+<p></p>
+
+<dl>
+<dt>hash</dt>
+<dd style="margin-left: 8">REQUIRED. The interaction hash value as described in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.</dd>
+<dt>interact_ref</dt>
+<dd style="margin-left: 8">REQUIRED. The interaction reference generated for this interaction.</dd>
+</dl>
+<p id="rfc.section.4.4.1.p.4">The means of directing the user to this 
+URL are outside the scope of this specification, but common options 
+include redirecting the user from a webpage and launching the system 
+browser with the target URL.</p>
+<pre>https://client.example.net/return/123455
+  ?hash=p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A
+  &amp;interact_ref=4IFWWIKYBC2PQ6U56NL1</pre>
+<p></p>
+<p id="rfc.section.4.4.1.p.6">When receiving the request, the client MUST parse the query parameters to calculate and validate the hash value as described in <a href="#interaction-hash" class="xref">Section 4.4.3</a>. If the hash validates, the client sends a continuation request to the AS as described in <a href="#continue-after-interaction" class="xref">Section 5.1</a> using the interaction reference value received here.</p>
+<h1 id="rfc.section.4.4.2">
+<a href="#rfc.section.4.4.2">4.4.2.</a> <a href="#interaction-pushback" id="interaction-pushback">Finalizing Interaction with a Pushback URI</a>
+</h1>
+<p id="rfc.section.4.4.2.p.1">When using the <a href="#response-interact-pushback" class="xref">"pushback" interaction capability</a>,
+ the AS signals to the client that interaction is complete and the 
+request can be continued by sending an HTTP POST request to the client's
+ pushback URL sent in <a href="#request-interact-pushback" class="xref">the pushback request</a>.</p>
+<p id="rfc.section.4.4.2.p.2">The entity message body is a JSON object consisting of the following two elements:</p>
+<p></p>
+
+<dl>
+<dt>hash</dt>
+<dd style="margin-left: 8">REQUIRED. The interaction hash value as described in <a href="#interaction-hash" class="xref">Section 4.4.3</a>.</dd>
+<dt>interact_ref</dt>
+<dd style="margin-left: 8">REQUIRED. The interaction reference generated for this interaction.</dd>
+</dl>
+<pre>POST /push/554321 HTTP/1.1
+Host: client.example.net
+Content-Type: application/json
+
+{
+  "hash": "p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A",
+  "interact_ref": "4IFWWIKYBC2PQ6U56NL1"
+}
+</pre>
+<p></p>
+<p id="rfc.section.4.4.2.p.5">When receiving the request, the client MUST parse the JSON object and validate the hash value as described in <a href="#interaction-hash" class="xref">Section 4.4.3</a>. If the hash validates, the client sends a continuation request to the AS as described in <a href="#continue-after-interaction" class="xref">Section 5.1</a> using the interaction reference value received here.</p>
+<h1 id="rfc.section.4.4.3">
+<a href="#rfc.section.4.4.3">4.4.3.</a> <a href="#interaction-hash" id="interaction-hash">Calculating the interaction hash</a>
+</h1>
+<p id="rfc.section.4.4.3.p.1">The "hash" parameter in the callback and 
+pushback response ties the front channel response to an ongoing request 
+by using values known only to the parties involved. This prevents 
+several kinds of session fixation attacks against the client.</p>
+<p id="rfc.section.4.4.3.p.2">To calculate the "hash" value, the party doing the calculation first takes the "nonce" value sent by the RC in the <a href="#request-interact-callback" class="xref">interaction section of the initial request</a>,
+ the AS's nonce value, and the "interact_ref" returned in the callback 
+response. For a "callback" return, the AS nonce is the 
+"callback_server_nonce" value in <a href="#response-interact-callback" class="xref">the callback response</a>, while for a "pushback" return the AS nonce is the "pushback_server_nonce" value in <a href="#response-interact-pushback" class="xref">the pushback response</a>.
+  These three values are concatenated to each other in this order using a
+ single newline character as a separator between the fields.  There is 
+no padding or whitespace before or after any of the lines, and no 
+trailing newline character.</p>
+<pre>VJLO6A4CAYLBXHTR0KRO
+MBDOFXG4Y5CVJCX821LH
+4IFWWIKYBC2PQ6U56NL1</pre>
+<p></p>
+<p id="rfc.section.4.4.3.p.4">The party then hashes this string with the
+ appropriate algorithm based on the "hash_method" parameter of the 
+"callback" or "pushback" request. If the "hash_method" value is not 
+present in the RC's request, the algorithm defaults to "sha3". [[ 
+Editor's note: these hash algorithms should be pluggable, and ideally we
+ shouldn't redefine yet another crypto registry for this purpose, but 
+I'm not convinced an appropriate one already exists. ]]</p>
+<h1 id="rfc.section.4.4.3.1">
+<a href="#rfc.section.4.4.3.1">4.4.3.1.</a> SHA3</h1>
+<p id="rfc.section.4.4.3.1.p.1">The "sha3" hash method consists of 
+hashing the input string with the 512-bit SHA3 algorithm. The byte array
+ is then encoded using URL Safe Base64 with no padding. The resulting 
+string is the hash value.</p>
+<pre>p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A</pre>
+<h1 id="rfc.section.4.4.3.2">
+<a href="#rfc.section.4.4.3.2">4.4.3.2.</a> SHA2</h1>
+<p id="rfc.section.4.4.3.2.p.1">The "sha2" hash method consists of 
+hashing the input string with the 512-bit SHA2 algorithm. The byte array
+ is then encoded using URL Safe Base64 with no padding. The resulting 
+string is the hash value.</p>
+<pre>62SbcD3Xs7L40rjgALA-ymQujoh2LB2hPJyX9vlcr1H6ecChZ8BNKkG_HrOKP_Bpj84rh4mC9aE9x7HPBFcIHw</pre>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#continue-request" id="continue-request">Continuing a Grant Request</a>
+</h1>
+<p id="rfc.section.5.p.1">If the client receives a continuation element in its response <a href="#response-continue" class="xref">Section 3.1</a>,
+ the client can make an HTTP POST call to the continuation URI with a 
+JSON object. The client MUST send the handle reference from the 
+continuation element in its request as a top-level JSON parameter.</p>
+<pre>{
+  "handle": "tghji76ytghj9876tghjko987yh"
+}</pre>
+<p></p>
+<p id="rfc.section.5.p.3">The client MAY include other parameters as 
+described here or as defined [[ in a registry TBD ]]. [[ Editor's note: 
+We probably want to allow other parameters, like modifying the resources
+ requested or providing more user information. We'll certainly have some
+ kinds of specific challenge-response protocols as there's already been 
+interest in that kind of thing, and the continuation request is the 
+place where that would fit. ]]</p>
+<p id="rfc.section.5.p.4">If a "wait" parameter was included in the 
+continuation response, the client MUST NOT call the continuation URI 
+prior to waiting the number of seconds indicated. If no "wait" period is
+ indicated, the client SHOULD wait at least 5 seconds [[ Editor's note: 
+what's a reasonable amount of time so as not to DOS the server?? ]].</p>
+<p id="rfc.section.5.p.5">The response from the AS is a JSON object and MAY contain any of the elements described in <a href="#response" class="xref">Section 3</a>, with some variations:</p>
+<p id="rfc.section.5.p.6">If the AS determines that the client can make a
+ further continuation request, the AS MUST include a new "continue" 
+response element. The returned handle value MUST NOT be the same as that
+ used to make the continuation request, and the continuation URI MAY 
+remain the same.</p>
+<p id="rfc.section.5.p.7">If the AS determines that the client still 
+needs to drive interaction with the user, the AS MAY return appropriate 
+responses for any of the interaction mechanisms. Unique values such as 
+interaction URIs and nonces SHOULD be re-generated and not re-used.</p>
+<p id="rfc.section.5.p.8">The client MUST present proof of the same <a href="#request-key" class="xref">key identified in the initial request</a> by signing the request as described in <a href="#binding-keys" class="xref">Section 8</a>.</p>
+<h1 id="rfc.section.5.1">
+<a href="#rfc.section.5.1">5.1.</a> <a href="#continue-after-interaction" id="continue-after-interaction">Continuing after a Finalized Interaction</a>
+</h1>
+<p id="rfc.section.5.1.p.1">If the client has received an interaction reference from a <a href="#interaction-callback" class="xref">"callback"</a> or <a href="#interaction-pushback" class="xref">"pushback"</a>
+ incoming message, the client MUST include the "interaction_ref" in its 
+continuation request.  Note that the client validates the hash before 
+making the continuation request, but the client does not send the hash 
+back to the AS.</p>
+<pre>{
+  "handle": "tghji76ytghj9876tghjko987yh",
+  "interact_ref": "4IFWWIKYBC2PQ6U56NL1"
+}</pre>
+<p></p>
+<h1 id="rfc.section.5.2">
+<a href="#rfc.section.5.2">5.2.</a> <a href="#continue-after-tokens" id="continue-after-tokens">Continuing after Tokens are Issued</a>
+</h1>
+<p id="rfc.section.5.2.p.1">A request MAY be continued even after access tokens have been issued, so long as the handle is valid.</p>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#token-management" id="token-management">Token Management</a>
+</h1>
+<p id="rfc.section.6.p.1">If an access token response includes the "manage" parameter as described in <a href="#response-token-single" class="xref">Section 3.2.1</a>, the client MAY call this URL to manage the access token with the following actions.</p>
+<p id="rfc.section.6.p.2">The client MUST present proof of the same <a href="#request-key" class="xref">key identified in the initial request</a> as described in <a href="#binding-keys" class="xref">Section 8</a>.</p>
+<h1 id="rfc.section.6.1">
+<a href="#rfc.section.6.1">6.1.</a> <a href="#rotate-access-token" id="rotate-access-token">Rotating the Access Token</a>
+</h1>
+<p id="rfc.section.6.1.p.1">The client makes an HTTP POST to the token 
+management URI, signing the request with its key. If the token was 
+issued to the client identified by the key, the AS will invalidate the 
+current access token associated with this URL, if possible, and return a
+ new access token response as described in <a href="#response-token-single" class="xref">Section 3.2.1</a>. Note that this MAY include an updated access token management URL.</p>
+<h1 id="rfc.section.6.2">
+<a href="#rfc.section.6.2">6.2.</a> <a href="#revoke-access-token" id="revoke-access-token">Revoking the Access Token</a>
+</h1>
+<p id="rfc.section.6.2.p.1">The client makes an HTTP DELETE request to 
+the token management URI, signing the request with its key. If the token
+ was issued to the client identified by the key, the AS will invalidate 
+the current access token associated with this URL, if possible, and 
+return an HTTP 201 response code.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#send-access-token" id="send-access-token">Sending Access Tokens</a>
+</h1>
+<p id="rfc.section.7.p.1">The method used to send an access token depends on the value of the "proof" parameter in <a href="#response-token-single" class="xref">the access token response</a>.</p>
+<p id="rfc.section.7.p.2">If this value is "bearer", the access token is sent using the HTTP Header method defined in <a href="#RFC6750" class="xref">[RFC6750]</a>.</p>
+<pre>Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0</pre>
+<p></p>
+<p id="rfc.section.7.p.4">If the "proof" value is any other string, the 
+access token is sent using the HTTP authorization scheme "GNAP" along 
+with a key proof as described in <a href="#binding-keys" class="xref">Section 8</a> for the key bound to the access token. For example, a "jwsd"-bound access token is sent as follows:</p>
+<pre>Authorization: GNAP OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0
+JWS-Signature: eyj0....</pre>
+<p></p>
+<p id="rfc.section.7.p.6">[[ Editor's note: I don't actually like the 
+idea of using only one header type for differently-bound access tokens, 
+but instead these values should somehow reflect the key binding types. 
+Maybe there can be multiple fields after the "GNAP" keyword using 
+structured headers? Or a set of derived headers like GNAP-mtls? This 
+might also be better as a separate specification, like OAuth 2. ]]</p>
+<h1 id="rfc.section.8">
+<a href="#rfc.section.8">8.</a> <a href="#binding-keys" id="binding-keys">Binding Keys</a>
+</h1>
+<p id="rfc.section.8.p.1">Any keys presented by the RC to the AS or RS 
+MUST be validated as part of the request in which they are presented. 
+The type of binding used is indicated by the proof parameter of the key 
+section in the initial request <a href="#request-key" class="xref">Section 2.3</a>. Values defined by this specification are as follows:</p>
+<p></p>
+
+<dl>
+<dt>jwsd</dt>
+<dd style="margin-left: 8">A detached JWS signature header</dd>
+<dt>jws</dt>
+<dd style="margin-left: 8">Attached JWS payload</dd>
+<dt>mtls</dt>
+<dd style="margin-left: 8">Mutual TLS certificate verification</dd>
+<dt>dpop</dt>
+<dd style="margin-left: 8">OAuth DPoP key proof header</dd>
+<dt>httpsig</dt>
+<dd style="margin-left: 8">HTTP Signing signature header</dd>
+<dt>oauthpop</dt>
+<dd style="margin-left: 8">OAuth PoP key proof authentication header</dd>
+</dl>
+<p id="rfc.section.8.p.3">Additional values can be defined by [[ a registry TBD ]].</p>
+<p id="rfc.section.8.p.4">The keys presented by the RC in the request<a href="#request" class="xref">Section 2</a> MUST be proved in all continuation requests<a href="#continue-request" class="xref">Section 5</a> and token management requests <a href="#token-management" class="xref">Section 6</a>.
+ The AS MUST validate all keys presented by the RC or referenced in the 
+transaction at each call to the transaction endpoint. The client MUST 
+NOT use a different key during the transaction.</p>
+<h1 id="rfc.section.8.1">
+<a href="#rfc.section.8.1">8.1.</a> <a href="#detached-jws" id="detached-jws">Detached JWS</a>
+</h1>
+<p id="rfc.section.8.1.p.1">This method is indicated by <samp>jwsd</samp> in the <samp>proof</samp>
+ field of a key request. To sign a request to the transaction endpoint, 
+the RC takes the serialized body of the request and signs it using 
+detached JWS <a href="#RFC7797" class="xref">[RFC7797]</a>. The header 
+of the JWS MUST contain the kid field of the key bound to this RC during
+ this transaction. The JWS header MUST contain an alg field appropriate 
+for the key identified by kid and MUST NOT be none.</p>
+<p id="rfc.section.8.1.p.2">The RC presents the signature in the 
+JWS-Signature HTTP Header field. [Editor's Note: this is a custom header
+ field, do we need this?]</p>
+<pre>JWS-Signature: eyj0....</pre>
+<p></p>
+<p id="rfc.section.8.1.p.4">When the AS receives the JWS-Signature 
+header, it MUST parse its contents as a detached JWS object. The HTTP 
+Body is used as the payload for purposes of validating the JWS, with no 
+transformations.</p>
+<p id="rfc.section.8.1.p.5">[[ Editor's note: this is a potentially fragile signature mechanism but it's simple to calculate. ]]</p>
+<h1 id="rfc.section.8.2">
+<a href="#rfc.section.8.2">8.2.</a> Attached JWS</h1>
+<p id="rfc.section.8.2.p.1">This method is indicated by <samp>jws</samp> in the <samp>proof</samp>
+ field of a key request. To sign a request to the transaction endpoint, 
+the RC takes the serialized body of the request JSON and signs it using 
+JWS <a href="#RFC7515" class="xref">[RFC7515]</a>.  The header of the 
+JWS MUST contain the kid field of the key bound to this RC during this 
+transaction. The JWS header MUST contain an alg field appropriate for 
+the key identified by kid and MUST NOT be none.</p>
+<p id="rfc.section.8.2.p.2">The RC presents the JWS as the body of the request along with a content type of <samp>application/jose</samp>. The AS MUST extract the payload of the JWS and treat it as the request body for further processing.</p>
+<h1 id="rfc.section.8.3">
+<a href="#rfc.section.8.3">8.3.</a> <a href="#mtls" id="mtls">Mutual TLS</a>
+</h1>
+<p id="rfc.section.8.3.p.1">This method is indicated by <samp>mtls</samp> in the <samp>proof</samp>
+ field of a key request. The RC presents its client certificate during 
+TLS negotiation with the server (either AS or RS). The AS or RS takes 
+the thumbprint of the client certificate presented during mutual TLS 
+negotiation and compares that thumbprint to the thumbprint presented by 
+the RC application as described in <a href="#RFC8705" class="xref">[RFC8705]</a> section 3.</p>
+<h1 id="rfc.section.8.4">
+<a href="#rfc.section.8.4">8.4.</a> DPoP</h1>
+<p id="rfc.section.8.4.p.1">This method is indicated by <samp>dpop</samp> in the <samp>proof</samp> field of a key request. The RC creates a DPoP signature header as described in <a href="#I-D.ietf-oauth-dpop" class="xref">[I-D.ietf-oauth-dpop]</a> section 2.</p>
+<h1 id="rfc.section.8.5">
+<a href="#rfc.section.8.5">8.5.</a> HTTP Signing</h1>
+<p id="rfc.section.8.5.p.1">This method is indicated by <samp>httpsig</samp> in the <samp>proof</samp> field of a key request. The RC creates an HTTP Signature header as described in <a href="#I-D.ietf-httpbis-message-signatures" class="xref">[I-D.ietf-httpbis-message-signatures]</a> section 4. The RC MUST calculate and present the Digest header as defined in <a href="#RFC3230" class="xref">[RFC3230]</a>.</p>
+<h1 id="rfc.section.8.6">
+<a href="#rfc.section.8.6">8.6.</a> OAuth PoP</h1>
+<p id="rfc.section.8.6.p.1">This method is indicated by <samp>oauthpop</samp> in the <samp>proof</samp> field of a key request. The RC creates an HTTP Authorization PoP header as described in <a href="#I-D.ietf-oauth-signed-http-request" class="xref">[I-D.ietf-oauth-signed-http-request]</a> section 4, with the following additional requirements:</p>
+<p></p>
+
+<ul>
+<li>The at (access token) field MUST be omitted [note: this is in contrast to the requirements in the existing spec]</li>
+<li>The b (body hash) field MUST be calculated and supplied</li>
+</ul>
+<h1 id="rfc.section.9">
+<a href="#rfc.section.9">9.</a> Discovery</h1>
+<p id="rfc.section.9.p.1">By design, the protocol minimizes the need for
+ any pre-flight discovery. To begin a transaction, the RC only needs to 
+know the transaction endpoint of the AS, and everything else can be 
+negotiated dynamically.</p>
+<p id="rfc.section.9.p.2">If the RC wants to optimize its calls to the 
+AS, it MAY send an HTTP OPTIONS request to the transaction endpoint to 
+retrieve the server's discovery information. The AS MUST respond with a 
+JSON document containing the following information:</p>
+<p></p>
+
+<dl>
+<dt>grant_request_endpoint</dt>
+<dd style="margin-left: 8">REQUIRED. The full URL of the AS's grant request endpoint. This MUST match the URL the RC used to make the discovery request.</dd>
+<dt>capabilities</dt>
+<dd style="margin-left: 8">OPTIONAL. A list of the AS's capabilities. The values of this result MAY be used by the RC in the <a href="#request-capabilities" class="xref">capabilities section</a> of the request.</dd>
+<dt>interaction_methods</dt>
+<dd style="margin-left: 8">OPTIONAL. A list of the AS's interaction methods. The values of this list correspond to the possible fields in the <a href="#request-interact" class="xref">interaction section</a> of the request.</dd>
+<dt>key_proofs</dt>
+<dd style="margin-left: 8">OPTIONAL. A list of the AS's supported key proofing mechanisms. The values of this list correspond to possible values of the <samp>proof</samp> field of the <a href="#request-key" class="xref">key section</a> of the request.</dd>
+<dt>sub-ids</dt>
+<dd style="margin-left: 8">OPTIONAL. A list of the AS's supported identifiers. The values of this list correspond to possible values of the <a href="#request-subject" class="xref">subject identifier section</a> of the request.</dd>
+<dt>assertions</dt>
+<dd style="margin-left: 8">OPTIONAL. A list of the AS's supported assertion formats. The values of this list correspond to possible values of the <a href="#request-subject" class="xref">subject assertion section</a> of the request.</dd>
+</dl>
+<p id="rfc.section.9.p.4">The information returned from this method is 
+for optimization purposes only. The AS MAY deny any request, or any 
+portion of a request, even if it lists a capability as supported. For 
+example, a given client can be registered with the <samp>mtls</samp> key
+ proofing mechanism, but the AS also returns other proofing methods, 
+then the AS will deny a request from that client using a different 
+proofing mechanism.</p>
+<h1 id="rfc.section.10">
+<a href="#rfc.section.10">10.</a> Requesting a Resources Without a Token</h1>
+<p id="rfc.section.10.p.1">If the client calls an RS without an access 
+token, the RS MAY respond to the client with an authentication header 
+indicating that GNAP can be used in the "as_uri" parameter. The RS MAY 
+additionally return a resource reference that the client MAY use in its 
+resource request <a href="#request-resource" class="xref">req</a>. This 
+resource reference handle SHOULD be sufficient for at least the action 
+the client was attempting to take at the RS. The means of the RS 
+obtaining or generating this resource reference are out of scope for 
+this specification. [[ Editor's note: This could be statically 
+configured at the RS, but we could also specify a simple protocol for an
+ RS to send some kind of resource description to the AS, tied to the 
+RS's keys, and get back an identifier to hand to the client. ]]</p>
+<pre>WWW-Authenticate: GNAP as_uri=http://server.example/transaction,resource=FWWIKYBQ6U56NL1</pre>
+<p></p>
+<p id="rfc.section.10.p.3">The client then makes a call to the "as_uri" 
+as described in , with the value of "resource" as one of the members of 
+the "resources" array <a href="#request-resource-single" class="xref">Section 2.1.1</a>. The client MAY request additional resources and additional information.</p>
+<p id="rfc.section.10.p.4">[[ Editor's note: this borrows heavily from 
+UMA 2's "distributed authorization" model and, like UMA, might be better
+ suited to an extension than the core protocol. ]]</p>
+<h1 id="rfc.section.11">
+<a href="#rfc.section.11">11.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
+</h1>
+<p id="rfc.section.11.p.1">The author would like to thank the feedback of the GNAP working group.</p>
+<h1 id="rfc.section.12">
+<a href="#rfc.section.12">12.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+</h1>
+<p id="rfc.section.12.p.1">[[ TBD: There are a lot of items in the document that are expandable through the use of value registries. ]]</p>
+<h1 id="rfc.section.13">
+<a href="#rfc.section.13">13.</a> <a href="#Security" id="Security">Security Considerations</a>
+</h1>
+<p id="rfc.section.13.p.1">[[ TBD: There are a lot of security considerations to add. ]]</p>
+<p id="rfc.section.13.p.2">All requests have to be over TLS or 
+equivalent. Many handles act as shared secrets, though they can be 
+combined with a requirement to provide proof of a key as well.</p>
+<h1 id="rfc.section.14">
+<a href="#rfc.section.14">14.</a> <a href="#Privacy" id="Privacy">Privacy Considerations</a>
+</h1>
+<p id="rfc.section.14.p.1">[[ TBD: There are a lot of privacy considerations to add. ]]</p>
+<p id="rfc.section.14.p.2">Handles are passed between parties and 
+therefore should be stateful and not contain any internal structure or 
+information, which could leak private data.</p>
+<p id="rfc.section.14.p.3">When user information is passed to the client, the AS needs to make sure that it has the permission to do so.</p>
+<h1 id="rfc.references">
+<a href="#rfc.references">15.</a> Normative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="BCP195">[BCP195]</b></td>
+<td class="top">
+<a>Sheffer, Y.</a>, <a>Holz, R.</a> and <a>P. Saint-Andre</a>, "<a href="https://tools.ietf.org/html/rfc7525">Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)</a>", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-httpbis-message-signatures">[I-D.ietf-httpbis-message-signatures]</b></td>
+<td class="top">
+<a>Backman, A.</a>, <a>Richer, J.</a> and <a>M. Sporny</a>, "<a href="https://tools.ietf.org/html/draft-ietf-httpbis-message-signatures-00">Signing HTTP Messages</a>", Internet-Draft draft-ietf-httpbis-message-signatures-00, April 2020.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-oauth-dpop">[I-D.ietf-oauth-dpop]</b></td>
+<td class="top">
+<a>Fett, D.</a>, <a>Campbell, B.</a>, <a>Bradley, J.</a>, <a>Lodderstedt, T.</a>, <a>Jones, M.</a> and <a>D. Waite</a>, "<a href="https://tools.ietf.org/html/draft-ietf-oauth-dpop-01">OAuth 2.0 Demonstration of Proof-of-Possession at the Application Layer (DPoP)</a>", Internet-Draft draft-ietf-oauth-dpop-01, May 2020.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-oauth-signed-http-request">[I-D.ietf-oauth-signed-http-request]</b></td>
+<td class="top">
+<a>Richer, J.</a>, <a>Bradley, J.</a> and <a>H. Tschofenig</a>, "<a href="https://tools.ietf.org/html/draft-ietf-oauth-signed-http-request-03">A Method for Signing HTTP Requests for OAuth</a>", Internet-Draft draft-ietf-oauth-signed-http-request-03, August 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-secevent-subject-identifiers">[I-D.ietf-secevent-subject-identifiers]</b></td>
+<td class="top">
+<a>Backman, A.</a> and <a>M. Scurtescu</a>, "<a href="https://tools.ietf.org/html/draft-ietf-secevent-subject-identifiers-05">Subject Identifiers for Security Event Tokens</a>", Internet-Draft draft-ietf-secevent-subject-identifiers-05, July 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3230">[RFC3230]</b></td>
+<td class="top">
+<a>Mogul, J.</a> and <a>A. Van Hoff</a>, "<a href="https://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>", RFC 3230, DOI 10.17487/RFC3230, January 2002.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC6750">[RFC6750]</b></td>
+<td class="top">
+<a>Jones, M.</a> and <a>D. Hardt</a>, "<a href="https://tools.ietf.org/html/rfc6750">The OAuth 2.0 Authorization Framework: Bearer Token Usage</a>", RFC 6750, DOI 10.17487/RFC6750, October 2012.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7515">[RFC7515]</b></td>
+<td class="top">
+<a>Jones, M.</a>, <a>Bradley, J.</a> and <a>N. Sakimura</a>, "<a href="https://tools.ietf.org/html/rfc7515">JSON Web Signature (JWS)</a>", RFC 7515, DOI 10.17487/RFC7515, May 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7797">[RFC7797]</b></td>
+<td class="top">
+<a>Jones, M.</a>, "<a href="https://tools.ietf.org/html/rfc7797">JSON Web Signature (JWS) Unencoded Payload Option</a>", RFC 7797, DOI 10.17487/RFC7797, February 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8174">[RFC8174]</b></td>
+<td class="top">
+<a>Leiba, B.</a>, "<a href="https://tools.ietf.org/html/rfc8174">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8259">[RFC8259]</b></td>
+<td class="top">
+<a>Bray, T.</a>, "<a href="https://tools.ietf.org/html/rfc8259">The JavaScript Object Notation (JSON) Data Interchange Format</a>", STD 90, RFC 8259, DOI 10.17487/RFC8259, December 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8705">[RFC8705]</b></td>
+<td class="top">
+<a>Campbell, B.</a>, <a>Bradley, J.</a>, <a>Sakimura, N.</a> and <a>T. Lodderstedt</a>, "<a href="https://tools.ietf.org/html/rfc8705">OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens</a>", RFC 8705, DOI 10.17487/RFC8705, February 2020.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.appendix.A">
+<a href="#rfc.appendix.A">Appendix A.</a> Document History</h1>
+<p id="rfc.section.A.p.1">-09</p>
+<p></p>
+
+<ul>
+<li>Major document refactoring based on request and response capabilities.</li>
+<li>Changed from "claims" language to "subject identifier" language.</li>
+<li>Added "pushback" interaction capability.</li>
+<li>Removed DIDCOMM interaction (better left to extensions).</li>
+<li>Excised "transaction" language in favor of "Grant" where appropriate.</li>
+<li>Added token management URLs.</li>
+<li>Added separate grant continuation URL to use continuation handle with.</li>
+<li>Expanded RS-first idea slightly.</li>
+<li>Added notion of extending a grant request based on a previous grant.</li>
+</ul>
+<p id="rfc.section.A.p.3">-08</p>
+<p></p>
+
+<ul>
+<li>Added attached JWS signature method.</li>
+<li>Added discovery methods.</li>
+</ul>
+<p id="rfc.section.A.p.5">-07</p>
+<p></p>
+
+<ul><li>Marked sections as being controlled by a future registry TBD.</li></ul>
+<p id="rfc.section.A.p.7">-06</p>
+<p></p>
+
+<ul><li>Added multiple resource requests and multiple access token response.</li></ul>
+<p id="rfc.section.A.p.9">-05</p>
+<p></p>
+
+<ul>
+<li>Added "claims" request and response for identity support.</li>
+<li>Added "capabilities" request for inline discovery support.</li>
+</ul>
+<p id="rfc.section.A.p.11">- 04</p>
+<p></p>
+
+<ul>
+<li>Added crypto agility for callback return hash.</li>
+<li>Changed "interaction_handle" to "interaction_ref".</li>
+</ul>
+<p id="rfc.section.A.p.13">- 03</p>
+<p></p>
+
+<ul>
+<li>Removed "state" in favor of "nonce".</li>
+<li>Created signed return parameter for front channel return.</li>
+<li>Changed "client" section to "display" section, as well as associated handle.</li>
+<li>Changed "key" to "keys".</li>
+<li>Separated key proofing from key presentation.</li>
+<li>Separated interaction methods into booleans instead of "type" field.</li>
+</ul>
+<p id="rfc.section.A.p.15">- 02</p>
+<p></p>
+
+<ul><li>Minor editorial cleanups.</li></ul>
+<p id="rfc.section.A.p.17">- 01</p>
+<p></p>
+
+<ul>
+<li>Made JSON multimodal for handle requests.</li>
+<li>Major updates to normative language and references throughout document.</li>
+<li>Allowed interaction to split between how the user gets to the AS and how the user gets back.</li>
+</ul>
+<p id="rfc.section.A.p.19">- 00</p>
+<p></p>
+
+<ul><li>Initial submission.</li></ul>
+<h1 id="rfc.appendix.B">
+<a href="#rfc.appendix.B">Appendix B.</a> <a href="#examples" id="examples">Example Protocol Flows</a>
+</h1>
+<p id="rfc.section.B.p.1">The protocol defined in this specification 
+provides a number of features that can be combined to solve many 
+different kinds of authentication scenarios. This section seeks to show 
+examples of how the protocol would be applied for different situations.</p>
+<p id="rfc.section.B.p.2">Some longer fields, particularly cryptographic information, have been truncated for display purposes in these examples.</p>
+<h1 id="rfc.appendix.B.1">
+<a href="#rfc.appendix.B.1">B.1.</a> Redirect-Based User Interaction</h1>
+<p id="rfc.section.B.1.p.1">In this scenario, the user is the RO and has
+ access to a web browser, and the client can take front-channel 
+callbacks on the same device as the user. This combination is analogous 
+to the OAuth 2 Authorization Code grant type.</p>
+<p id="rfc.section.B.1.p.2">The client initiates the request to the AS. Here the client identifies itself using its public key.</p>
+<pre>POST /tx HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+{
+    "resources": [
+        {
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        }
+    ],
+    "key": {
+        "proof": "jwsd",
+        "jwk": {
+            "kty": "RSA",
+            "e": "AQAB",
+            "kid": "xyz-1",
+            "alg": "RS256",
+            "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xY..."
+        }
+    },
+    "interact": {
+        "redirect": true,
+        "callback": {
+            "uri": "https://client.example.net/return/123455",
+            "nonce": "LKLTI25DK82FX4T4QFZC"
+        }
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.1.p.4">The AS processes the request and determines 
+that the RO needs to interact. The AS returns the following response 
+giving the client the information it needs to connect. The AS has also 
+indicated to the client that it can use the given key handle to identify
+ itself in future calls.</p>
+<pre>Content-type: application/json
+
+{
+    "interaction_url": "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+    "server_nonce": "MBDOFXG4Y5CVJCX821LH",
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue"
+    },
+    "key_handle": "7C7C4AZ9KHRS6X63AJAO"
+}</pre>
+<p></p>
+<p id="rfc.section.B.1.p.6">The client saves the response and redirects 
+the user to the interaction_url by sending the following HTTP message to
+ the user's browser.</p>
+<pre>HTTP 302 Found
+Location: https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ</pre>
+<p></p>
+<p id="rfc.section.B.1.p.8">The user's browser fetches the AS's 
+interaction URL. The user logs in, is identified as the RO for the 
+resource being requested, and approves the request. Since the AS has a 
+callback parameter, the AS generates the interaction reference, 
+calculates the hash, and redirects the user back to the client with 
+these additional values added as query parameters.</p>
+<pre>HTTP 302 Found
+Location: https://client.example.net/return/123455
+  ?hash=p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A
+  &amp;interact_ref=4IFWWIKYBC2PQ6U56NL1</pre>
+<p></p>
+<p id="rfc.section.B.1.p.10">The client receives this request from the 
+user's browser. The client ensures that this is the same user that was 
+sent out by validating session information and retrieves the stored 
+pending request. The client uses the values in this to validate the hash
+ parameter. The client then calls the continuation URL and presents the 
+handle and interaction reference in the request body. The client signs 
+the request as above.</p>
+<pre>POST /continue HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+
+{
+    "handle": "80UPRY5NM33OMUKMKSKU",
+    "interact_ref": "4IFWWIKYBC2PQ6U56NL1"
+}</pre>
+<p></p>
+<p id="rfc.section.B.1.p.12">The AS retrieves the pending request based on the handle and issues a bearer access token and returns this to the client.</p>
+<pre>Content-type: application/json
+
+{
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L",
+        "resources": [{
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        }]
+    },
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue"
+    }
+}</pre>
+<p></p>
+<h1 id="rfc.appendix.B.2">
+<a href="#rfc.appendix.B.2">B.2.</a> Secondary Device Interaction</h1>
+<p id="rfc.section.B.2.p.1">In this scenario, the user does not have 
+access to a web browser on the device and must use a secondary device to
+ interact with the AS.  The client can display a user code or a 
+printable QR code. The client prefers a short URL if one is available.</p>
+<p id="rfc.section.B.2.p.2">The client initiates the request to the AS.</p>
+<pre>POST /tx HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+{
+    "resources": [
+        "dolphin-metadata", "some other thing"
+    ],
+    "key": "7C7C4AZ9KHRS6X63AJAO",
+    "interact": {
+        "redirect": true,
+        "short_redirect": true,
+        "user_code": true
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.2.p.4">The AS processes this and determines that 
+the RO needs to interact.  The AS supports both long and short redirect 
+URIs for interaction, so it includes both. Since there is no "callback" 
+the AS does not include a nonce, but does include a "wait" parameter on 
+the continuation section because it expects the client to poll for 
+results.</p>
+<pre>Content-type: application/json
+
+{
+    "interaction_url": "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+    "short_interaction_url": "https://srv.ex/MXKHQ",
+    "user_code": {
+        "code": "A1BC-3DFF",
+        "url": "https://srv.ex/device"
+    },
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue",
+        "wait": 60
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.2.p.6">The client saves the response and displays 
+the user code visually on its screen along with the static device URL. 
+The client also displays the short interaction URL as a QR code to be 
+scanned.</p>
+<p id="rfc.section.B.2.p.7">If the user scans the code, they are taken 
+to the interaction endpoint and the AS looks up the current pending 
+request based on the incoming URL. If the user instead goes to the 
+static page and enters the code manually, the AS looks up the current 
+pending request based on the value of the user code. In both cases, the 
+user logs in, is identified as the RO for the resource being requested, 
+and approves the request. Once the request has been approved, the AS 
+displays to the user a message to return to their device.</p>
+<p id="rfc.section.B.2.p.8">Meanwhile, the client periodically polls the AS every 60 seconds at the continuation URL.</p>
+<pre>POST /continue HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+
+{
+    "handle": "80UPRY5NM33OMUKMKSKU"
+}</pre>
+<p></p>
+<p id="rfc.section.B.2.p.10">The AS retrieves the pending request based 
+on the handle and determines that it has not yet been authorized. The AS
+ indicates to the client that no access token has yet been issued but it
+ can continue to call after another 60 second timeout.</p>
+<pre>Content-type: application/json
+
+{
+    "continue": {
+        "handle": "BI9QNW6V9W3XFJK4R02D",
+        "uri": "https://server.example.com/continue",
+        "wait": 60
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.2.p.12">Note that the continuation handle has been 
+rotated since it was used by the client to make this call. The client 
+polls the continuation URL after a 60 second timeout using the new 
+handle.</p>
+<pre>POST /continue HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+
+{
+    "handle": "BI9QNW6V9W3XFJK4R02D"
+}</pre>
+<p></p>
+<p id="rfc.section.B.2.p.14">The AS retrieves the pending request based on the handle and determines that it has been approved and it issues an access token.</p>
+<pre>Content-type: application/json
+
+{
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L",
+        "resources": [
+            "dolphin-metadata", "some other thing"
+        ]
+    }
+}</pre>
+<p></p>
+<h1 id="rfc.appendix.B.3">
+<a href="#rfc.appendix.B.3">B.3.</a> No User Involvement</h1>
+<p id="rfc.section.B.3.p.1">In this scenario, the client is requesting access on its own behalf, with no user to interact with.</p>
+<p id="rfc.section.B.3.p.2">The client creates a request to the AS, identifying itself with its public key and using MTLS to make the request.</p>
+<pre>POST /tx HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+
+{
+    "resources": [
+        "backend service", "nightly-routine-3"
+    ],
+    "key": {
+        "proof": "mtls",
+        "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.3.p.4">The AS processes this and determines that the client can ask for the requested resources and issues an access token.</p>
+<pre>Content-type: application/json
+
+{
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L",
+        "resources": [
+            "backend service", "nightly-routine-3"
+        ]
+    }
+}</pre>
+<h1 id="rfc.appendix.B.4">
+<a href="#rfc.appendix.B.4">B.4.</a> Asynchronous Authorization</h1>
+<p id="rfc.section.B.4.p.1">In this scenario, the client is requesting 
+on behalf of a specific RO, but has no way to interact with the user. 
+The AS can asynchronously reach out to the RO for approval in this 
+scenario.</p>
+<p id="rfc.section.B.4.p.2">The client starts the request at the AS by requesting a set of resources. The client also identifies a particular user.</p>
+<pre>POST /tx HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+{
+    "resources": [
+        {
+            "type": "photo-api",
+            "actions": [
+                "read",
+                "write",
+                "dolphin"
+            ],
+            "locations": [
+                "https://server.example.net/",
+                "https://resource.local/other"
+            ],
+            "datatypes": [
+                "metadata",
+                "images"
+            ]
+        },
+        "read", "dolphin-metadata",
+        {
+            "type": "financial-transaction",
+            "actions": [
+                "withdraw"
+            ],
+            "identifier": "account-14-32-32-3", 
+            "currency": "USD"
+        },
+        "some other thing"
+    ],
+    "key": "7C7C4AZ9KHRS6X63AJAO",
+    "user": {
+        "sub-ids": [ {
+            "subject_type": "email",
+            "email": "user@example.com"
+        } ]
+   }
+}</pre>
+<p></p>
+<p id="rfc.section.B.4.p.4">The AS processes this and determines that 
+the RO needs to interact.  The AS determines that it can reach the 
+identified user asynchronously and that the identified user does have 
+the ability to approve this request. The AS indicates to the client that
+ it can poll for continuation.</p>
+<pre>Content-type: application/json
+
+{
+    "continue": {
+        "handle": "80UPRY5NM33OMUKMKSKU",
+        "uri": "https://server.example.com/continue",
+        "wait": 60
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.4.p.6">The AS reaches out to the RO and prompts 
+them for consent. In this example, the AS has an application that it can
+ push notifications in to for the specified account. </p>
+<p id="rfc.section.B.4.p.7">Meanwhile, the client periodically polls the AS every 60 seconds at the continuation URL.</p>
+<pre>POST /continue HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+
+{
+    "handle": "80UPRY5NM33OMUKMKSKU"
+}</pre>
+<p></p>
+<p id="rfc.section.B.4.p.9">The AS retrieves the pending request based 
+on the handle and determines that it has not yet been authorized. The AS
+ indicates to the client that no access token has yet been issued but it
+ can continue to call after another 60 second timeout.</p>
+<pre>Content-type: application/json
+
+{
+    "continue": {
+        "handle": "BI9QNW6V9W3XFJK4R02D",
+        "uri": "https://server.example.com/continue",
+        "wait": 60
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.4.p.11">Note that the continuation handle has been 
+rotated since it was used by the client to make this call. The client 
+polls the continuation URL after a 60 second timeout using the new 
+handle.</p>
+<pre>POST /continue HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+
+{
+    "handle": "BI9QNW6V9W3XFJK4R02D"
+}</pre>
+<p></p>
+<p id="rfc.section.B.4.p.13">The AS retrieves the pending request based on the handle and determines that it has been approved and it issues an access token.</p>
+<pre>Content-type: application/json
+
+{
+    "access_token": {
+        "value": "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        "proof": "bearer",
+        "manage": "https://server.example.com/token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L",
+        "resources": [
+            "dolphin-metadata", "some other thing"
+        ]
+    }
+}</pre>
+<p></p>
+<h1 id="rfc.appendix.B.5">
+<a href="#rfc.appendix.B.5">B.5.</a> Applying OAuth 2 Scopes and Client IDs</h1>
+<p id="rfc.section.B.5.p.1">In this scenario, the client developer has a
+ client_id and set of scope values from their OAuth 2 system and wants 
+to apply them to the new protocol. Traditionally, the OAuth 2 client 
+developer would put their client_id and scope values as parameters into a
+ redirect request to the authorization endpoint.</p>
+<pre>HTTP 302 Found
+Location: https://server.example.com/authorize
+  ?client_id=7C7C4AZ9KHRS6X63AJAO
+  &amp;scope=read%20write%20dolphin
+  &amp;redirect_uri=https://client.example.net/return
+  &amp;response_type=code
+  &amp;state=123455
+</pre>
+<p></p>
+<p id="rfc.section.B.5.p.3">Now the developer wants to make an analogous
+ request to the AS using the new protocol. To do so, the client makes an
+ HTTP POST and places the OAuth 2 values in the appropriate places.</p>
+<pre>POST /tx HTTP/1.1
+Host: server.example.com
+Content-type: application/json
+Detached-JWS: ejy0...
+
+{
+    "resources": [
+        "read", "write", "dolphin"
+    ],
+    "key": "7C7C4AZ9KHRS6X63AJAO",
+    "interact": {
+        "redirect": true,
+        "callback": {
+            "uri": "https://client.example.net/return?state=123455",
+            "nonce": "LKLTI25DK82FX4T4QFZC"
+        }
+    }
+}</pre>
+<p></p>
+<p id="rfc.section.B.5.p.5">The client_id can be used to identify the 
+client's keys that it uses for authentication, the scopes represent 
+resources that the client is requesting, and the redirect_uri and state 
+value are combined into a callback URI that can be unique per request. 
+The client additionally creates a nonce to protect the callback, 
+separate from the state parameter that it has added to its return URL.</p>
+<p id="rfc.section.B.5.p.6">From here, the protocol continues as above.</p>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Justin Richer</span> (editor)
+	  <span class="n hidden">
+		<span class="family-name">Richer</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Bespoke Engineering</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality"></span> 
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline"></span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:ietf@justin.richer.org">ietf@justin.richer.org</a></span>
+
+  </address>
+</div>
+
+
+
+</body></html>
