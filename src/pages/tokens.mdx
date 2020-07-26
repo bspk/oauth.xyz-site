@@ -57,7 +57,7 @@ Methods for key binding are <Link to="/keys">the same as used by the client to t
 
 > Since we don't have full control over the resource server's API, the methods available to the client aren't as well defined ahead of time. For example, using detached JWS, we rely on signing the body, but there may not be a request body at the RS. This makes more sense with MTLS.
 
-## Rotating tokens
+## Managing access tokens
 
 If the access token is issued alongside a token management URI:
 
@@ -71,13 +71,16 @@ If the access token is issued alongside a token management URI:
   }
 }} />
 
-Then the client can send a POST request to the token management URL to get a new access token. The client has to prove possession of the same key that was used to issue the token.
+Then the client can send a POST request to the token management URL to get a new access token.
+
+The token itself is used to access the API at the management URL. If the token is bound to a specific key, the client has to present that token If the token is a `bearer` token, the client has to prove possession of the same key that was used to issue the token.
 
 <Code
   from="client" to="rs"
   language='http' codeString={`POST /token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L HTTP/1.1
 Host: server.example.com
-Authorization: JWSD ejy... `} />
+Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0
+Detached-JWS: ejy... `} />
 
 If the management URI is still valid, the AS revokes the old access token (if possible) and issues the new access token.
 
@@ -93,21 +96,20 @@ If the management URI is still valid, the AS revokes the old access token (if po
 
 Note that since this process could result in the management URL rotating upon each use. If no management URL is returned, the client can no longer refresh the token.
 
-## Revoking tokens
-
-A client can request the revocation of a token by sending a `DELETE` request to the token management endpoint.
+A client can request the revocation of a token by sending a `DELETE` request to the token management URL.
 
 <Code
   from="client" to="rs"
   language='http' codeString={`DELETE /token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L HTTP/1.1
 Host: server.example.com
-Authorization: JWSD ejy... `} />
+Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0
+Detached-JWS: ejy... `} />
 
 Both the AS and client throw out the access token after completion.
 
 ## Multiple access tokens
 
-A client can make a <Link to="/transactionrequest">transaction request</Link> with a multi-part `resources` section, which is formatted as a JSON object with the field names chosen by the client to differentiate the access being requested. A request would look like this.
+A client can make a <Link to="/transactionrequest">request</Link> with a multi-part `resources` section, which is formatted as a JSON object with the field names chosen by the client to differentiate the access being requested. A request would look like this.
 
 <Code code={{
   token1: [{
