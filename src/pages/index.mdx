@@ -10,7 +10,7 @@ XYZ is a proposed delegation protocol in the spirit of OAuth 2, but designed wit
 
 XYZ has several core features that drive its design principles, and these are key to providing a consistent data model:
 
- - Intent registration. This allows the client to start the process off the same way every time by maing a <Link to="/transactionrequest/">request to the authorization server</Link>.
+ - Intent registration. This allows the client to start the process off the same way every time by making a <Link to="/transactionrequest/">request to the authorization server</Link>.
  - Don't assume the user has a browser. Interaction needs to happen in a <Link to="/interaction/">variety of ways depending on the capabilities of the client</Link>, and only sometimes will a browser be involved.
  - Minimize the front channel. When a browser *is involved*, the protocol seeks to minimize the amount and kind of information that passes through the URLs of the front channel.
  - Polymorphic JSON. The protocol elements have different data types that convey additional contextual meaning, allowing us to avoid mutually exclusive protocol elements and design a more succinct and readable protocol. This lets us pass things by reference or by value using the same element field, among other things.
