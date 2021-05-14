@@ -1,43 +1,36 @@
-const path = require('path')
-
 module.exports = {
   siteMetadata: {
-    title: 'OAuth.xyz',
-    description:
-      'A new authorization protocol based on concepts from OAuth2 and its extensions.',
-    author: '@jricher'
+    title: "OAuth.XYZ",
   },
   plugins: [
+    "gatsby-plugin-sass",
+    "gatsby-plugin-image",
+    "gatsby-plugin-react-helmet",
     {
-      resolve: `gatsby-mdx`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        defaultLayouts: { default: path.resolve('./src/components/layout.js') },
+        defaultLayouts: {
+          default: require.resolve("./src/components/layout.js"),
+        },
       },
     },
-    'gatsby-plugin-react-helmet',
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
+        name: "images",
+        path: "./src/images/"
       },
+      __key: "images"
     },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: 'gatsby-default-mdx-basic',
-        short_name: 'starter',
-        start_url: '/',
-        background_color: '#883344',
-        theme_color: '#883344',
-        display: 'minimal-ui',
-        icon: 'src/images/xyz.png', // This path is relative to the root of the site.
+        name: "pages",
+        path: "./src/pages/"
       },
+      __key: "pages"
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.app/offline
-    // 'gatsby-plugin-offline',
   ],
-}
+};
