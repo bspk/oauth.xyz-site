@@ -50,7 +50,7 @@ const Header = ({ location }) => (
           }}
         >
           <img src="/xyz.png" alt="XYZ" className="logo" />
-          XYZ: Transactional Authorization
+          XYZ: Implementing GNAP
         </Link>
       </h1>
           <nav>

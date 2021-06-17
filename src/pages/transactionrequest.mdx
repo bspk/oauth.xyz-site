@@ -6,38 +6,65 @@ import Code from '../components/code'
 
 <SEO title="Transaction Request" keywords={['oauth', 'authorization', 'security']} />
 
-# Grant Request
+# Request
 
-The client begins the transaction by creating a grant request. This is a `JSON` document `POST`ed to the authorization server's grant endpoint. This request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
+The client begins the delegation process by creating a grant request. This is a `JSON` document `POST`ed to the authorization server's grant endpoint. This same request starts the transaction regardless of the type of client, the type of resource being accessed, or the type of authorizations needed to access said resources. 
 
 The request contains several parts:
- - `key` identifies the client software using a key the client is able to provide proof of possession for during this transaction and any related actions
- - `resources` contains a list of resources that the client is requesting access to
- - `subject` contains a set of claims about the current end user that the client is requesting from the AS
- - `display` includes information about how the client software making the request
- - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
+ - `access_token` describes the rights and properties of any access tokens that the client instance is requesting
+ - `subject` contains a request for information about the current end user that the client instance is requesting from the AS
+ - `client` identifies the instance of client software using a key the client is able to provide proof of possession for during this transaction and any related actions
  - `user` contains assertions about the current user that the client knows
- - `capabilities` allows a client to list large pieces of functionality and extensions that it can support
- 
-Each ot these sections is optional and can be also sent as a handle instead. When sent as a handle, the AS looks up the handle value to determine the values associated with that handle. The AS can also limit which values can be used together, such as only allowing certain callback URIs or display information for a particular key handle. 
+ - `interact` contains information about how the client is able to get the user to interact with the AS, if necessary
 
-Note that the JSON in many sections is potentially polymorphic. That is to say, when sent as a fully-formed request, it is a JSON `object`. When sent as a handle, it is sent as a JSON `string`. 
+Some of these values can be sent by reference instead of by value, as described below. The AS can also limit which values can be used together, such as only allowing certain callback URIs or display information for a particular key handle. 
 
-This example shows how the different sections can be composed with each other in a request.
+Note that the JSON in many sections is potentially polymorphic. For example, when sent as a fully-formed request, `client` is a JSON `object` but when sent as an instance identifier it is sent as a JSON `string`. 
+
+This interactive example shows how the different sections can be composed with each other in a request.
 
 <TransactionRequest />
 
-Each of the sections is detailed below. The AS will send a <Link to="/transactionresponse">grant response</Link> in response.
+Each of the sections is detailed below. 
 
-## Resources
+The client instance has to protect all requests to the AS by <Link to="/keys">signing the request with its key</Link>.
 
-The `resources` parameter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
+The AS will send a <Link to="/transactionresponse">response</Link> back to the client.
+
+## Access Token
+
+The `access_token` parameter allows the client instance to request one or more access tokens from the AS, for use at downstream resource servers. The client can signal a number of different behaviors, including whether the resulting token is bound to a signing key (by default, it is), what kinds of access are requested for the token, and even whether multiple access tokens are requested. The client instance can also signal advanced functionality, such as whether or not a given access token could be split into multiple resulting access tokens by the AS.
+
+When requesting a single access token, the `access_token` object contains the following fields:
+ - `access` describes the resources the access token should be bound to
+ - `label` provides a unique, client-chosen label for the resulting access token
+ - `flags` allows the client to signal advanced functionality
 
 <Code code={{
+access_token:
+  {
+    label: "token1",
+    access: [{
+        type: "example.com/resource-set",
+        actions: ["read", "write", "dolphin"],
+        locations: ["https://server.example.net/", "https://resource.local/other"],
+        datatypes: ["metadata", "images"]
+    }],
+    flags: ["bearer", "split"]
+  }
+}} />
+
+### Access
+
+The `access` parameter contains a list of all resources and APIs the client wishes to access. Each object in this array lists the types of actions the client can take, the URIs where those actions can be taken, and the kinds of data that the client expects access to. 
+
+<Code code={{
+access: [{
           type: "example.com/resource-set",
           actions: ["read", "write", "dolphin"],
           locations: ["https://server.example.net/", "https://resource.local/other"],
           datatypes: ["metadata", "images"]
+}]
 }} />
 
 An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
@@ -51,24 +78,45 @@ An AS can publish pre-set resources as resource handles that can be passed by th
 
 The client can send several of these objects or handles in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
 
-To request multiple access tokens, the client sends an object instead of an array for the value of the `resources` parameter. The keys of this object are access token identifiers chosen by the client, and they must be unique within the request. The member values of this object are lists of resources, just as above. These lists can be combinations of objects and handle strings. Each item in the `resources` object will correspond to a different named access token in the response. 
+### Multiple Access Tokens
+
+Usually, a client instance will request a single access token, in which case the client instance sends a single object as the value of the `access_token` object. However, GNAP allows advanced clients to request several tokens at once on a single request. To request multiple access tokens, the client sends an array instead of an object for the value of the `access_token` parameter. The values of this array are the same objects used in a single access token request, with one additional requirement: Each individual access tokens request object must include a unique `label` for that token. Each item in the `access_token` array will correspond to a different named access token in the response. 
 
 <Code code={{
-  token1: [{
-    type: "example.com/resource-set",
-    actions: ["read", "write", "dolphin"],
-    locations: ["https://server.example.net/", "https://resource.local/other"],
-    datatypes: ["metadata", "images"]
-  }],
-  token2: [{
-    type: "example.com/resource-set",
-    actions: ["foo", "bar", "dolphin"],
-    locations: ["https://resource.other/"],
-    datatypes: ["data", "pictures"]
+access_token:
+  [{
+    label: "token1",
+    access: [{
+        type: "example.com/resource-set",
+        actions: ["read", "write", "dolphin"],
+        locations: ["https://server.example.net/", "https://resource.local/other"],
+        datatypes: ["metadata", "images"]
+    }]
+  },
+  {
+    label: "token2",
+    access: [{
+        type: "example.com/resource-set",
+        actions: ["foo", "bar", "dolphin"],
+        locations: ["https://resource.other/"],
+        datatypes: ["data", "pictures"]
+    }]
   }]
 }} />
 
 In this specific example, the client is requesting `token1` to access the first resource and `token2` to access the second resource. See more about what this means in the <Link to="/tokens">section on tokens</Link>.
+
+### Flags
+
+The `flags` parameter allows the client instance to specify specific advanced behavior to be associated with the requested access token.
+
+The `bearer` flag indicates that the client does not want the resulting access token to be bound to a key for presentation at the RS. Without this flag, the access token must be presented with proof of the client's key using the same mechanism the client used to make the original request.
+
+The `split` flag indicates that the client is prepared for the AS to split the requested token into multiple access tokens in the response. Without this flag, a request for a single access token will never result in multiple access tokens. The `label` values for the resulting split tokens are at the discretion of the AS that processes the split.
+
+## Client
+
+
 
 ## Key
 

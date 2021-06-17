@@ -6,25 +6,25 @@ import SEO from '../components/seo'
 
 # What is XYZ?
 
-XYZ is a proposed delegation protocol in the spirit of OAuth 2, but designed with the decade of experience that we have now with OAuth 2 and its extensions. The XYZ protocol is ***not intended to be directly compatible with OAuth 2***, much in the same way that OAuth 2 was not directly compatible with OAuth 1. However, the concepts and many of the goals should feel familiar to developers used to these existing protocols and their extensions. Concepts from OAuth 2, OIDC, PKCE, UMA, CIBA, OBUK, FAPI, and a host of other extensions and profiles were analyzed and adapted in the design of XYZ, but with a mind toward taking the best aspects of all of them and applying them in a consistent way. 
+XYZ is a set of implementations of the [Grant Negotiation Authorization Protocol (GNAP)](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol), a draft delegation protocol being developed in the spirit of OAuth 2, but designed with the decade of experience that we have now with OAuth 2 and its extensions. XYZ used to be the name of a proposed protocol taht was published as an individual draft, but this proposal has been superseded by GNAP. The [GNAP Working Group](https://datatracker.ietf.org/wg/gnap/about/) is a working group of the IETF, and discussion is happening now on the [txauth@ietf.org](https://www.ietf.org/mailman/listinfo/txauth) mailing list and at the GNAP issue tracker for the [core protocol](https://github.com/ietf-wg-gnap/gnap-core-protocol/) and [resource server](https://github.com/ietf-wg-gnap/gnap-resource-servers/) documents from the working group.
 
-XYZ has several core features that drive its design principles, and these are key to providing a consistent data model:
+This website contains a live playground of GNAP based on the XYZ implementations, seeking to explain GNAP in a more interactive way than is often possible with a standard document.
+
+# What is GNAP?
+
+GNAP is ***not intended to be directly compatible with OAuth 2***, much in the same way that OAuth 2 was not directly compatible with OAuth 1. However, the concepts and many of the goals should feel familiar to developers used to these existing protocols and their extensions. Concepts from OAuth 2, OIDC, PKCE, UMA, CIBA, OBUK, FAPI, and a host of other extensions and profiles were analyzed and adapted in the design of XYZ, but with a mind toward taking the best aspects of all of them and applying them in a consistent way. 
+
+GNAP has several core features that drive its design principles, and these are key to providing a consistent data model:
 
  - Intent registration. This allows the client to start the process off the same way every time by making a <Link to="/transactionrequest/">request to the authorization server</Link>.
  - Don't assume the user has a browser. Interaction needs to happen in a <Link to="/interaction/">variety of ways depending on the capabilities of the client</Link>, and only sometimes will a browser be involved.
  - Minimize the front channel. When a browser *is involved*, the protocol seeks to minimize the amount and kind of information that passes through the URLs of the front channel.
  - Polymorphic JSON. The protocol elements have different data types that convey additional contextual meaning, allowing us to avoid mutually exclusive protocol elements and design a more succinct and readable protocol. This lets us pass things by reference or by value using the same element field, among other things.
- - Key proofing and presentation. While OAuth 2 thrived on client secrets and bearer tokens, XYZ seeks to <Link to="/keys/">move beyond that at the base level</Link>, making use of a variety of security technologies.
- - Ease of transition from OAuth 2. Even though this is not backwards compatible, there should be a <Link to="/specs/">clear translation path from OAuth 2 based systems to XYZ</Link>.
+ - Key proofing and presentation. While OAuth 2 thrived on client secrets and bearer tokens, GNAP seeks to <Link to="/keys/">move beyond that at the base level</Link>, making use of a variety of security technologies.
+ - Ease of transition from OAuth 2. Even though this is not backwards compatible, there should be a <Link to="/specs/">clear translation path from OAuth 2 based systems to GNAP</Link>.
  - Inline negotiation. Whenever possible, the protocol is designed such that <Link to="/discovery/">discovery and registration are not needed</Link>, but they can still be supported.
 
-And most importantly, XYZ seeks to build out a protocol that **doesn't have the same assumptions as OAuth 2** by carefully examining and questioning all aspects of OAuth 2 and its extensions. Nothing is considered *sacred*, even as we build in a world already full of OAuth 2. This lets us question the utility of protocol elements like the `client_id` and figure out if and how they fit into the new world.
-
-# GNAP
-
-The XYZ protocol is one of the inputs in the newly-formed [Grant Negotiation Authorization Protocol (GNAP)](https://datatracker.ietf.org/wg/gnap/about/) working group in the IETF. This is a new working group, and discussion is happening now on the [txauth@ietf.org](https://www.ietf.org/mailman/listinfo/txauth) mailing list. The XYZ protocol has been [submitted as an individual draft](https://tools.ietf.org/html/draft-richer-transactional-authz), but the GNAP protocol will take its own shape after the working group is officially formed.
-
-GNAP will one day be a formal standard, and as that standardization process takes place, XYZ will transition to being an implementation of that standard. 
+And most importantly, GNAP seeks to build out a protocol that **doesn't have the same assumptions as OAuth 2** by carefully examining and questioning all aspects of OAuth 2 and its extensions. Nothing is considered *sacred*, even as we build in a world already full of OAuth 2. This lets us question the utility of protocol elements like the `client_id` and figure out if and how they fit into the new world.
 
 # Presentations and Materials
 
@@ -36,7 +36,7 @@ In addition to the website, I've been fortunate to present XYZ and its concepts 
  - [IETF 105 Montreal 2019, OAuth Working Group](https://www.youtube.com/watch?v=TE3Fzb5-Jz0&t=3764)
  - [IETF 106 Singapore, TXAuth BoF Meeting](https://www.youtube.com/watch?v=q096sY6L9-E)
 
-I've also written a number of articles on the topic of XYZ and the choices behind the protocol design.
+I've also written a number of articles on the topic of XYZ, GNAP, and the choices behind the protocol design.
 
  - [Moving On from OAuth 2](https://medium.com/@justinsecurity/moving-on-from-oauth-2-629a00133ade)
  - [The Case for OAuth 3](https://medium.com/@justinsecurity/the-case-for-oauth-3-0-5c7537e3f9c3)
@@ -45,11 +45,13 @@ I've also written a number of articles on the topic of XYZ and the choices behin
  - [XYZ: Interaction](https://medium.com/@justinsecurity/xyz-interaction-a84091d2a8c8)
  - [XYZ: Compatibility with OAuth 2](https://medium.com/@justinsecurity/xyz-compatibility-with-oauth-2-f7b490be536d)
  - [XYZ: Cryptographic Binding and Agility](https://medium.com/@justinsecurity/xyz-cryptographic-binding-db367f6581e6)
+ - [Filling in the GNAP](https://justinsecurity.medium.com/filling-in-the-gnap-a032453eaf8c)
 
-Several others in the wider OAuth community have also provided some great discussions on XYZ and the concepts driving this new work.
+Several others in the wider OAuth community have also provided some great discussions on XYZ, GNAP, and the concepts driving this new work.
 
  - [Transaction Authorization: Or why we need to re-think OAuth scopes](https://medium.com/oauth-2/transaction-authorization-or-why-we-need-to-re-think-oauth-scopes-2326e2038948)
  - [Adding Identity to XYZ](https://aaronparecki.com/2019/07/18/17/adding-identity-to-xyz)
+ - [Managing authorization grants beyond OAuth 2](https://blog.fimbault.com/managing-authorization-grants-beyond-oauth-2)
 
 # Implementations
 
