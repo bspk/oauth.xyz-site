@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import Network from '../components/network';
+import ShowHide from '../components/showhide';
 
 const Code = ({code, codeString, from, to, language}) => {
+
+  const [show, setShow] = useState(true);
 
   if (!language) {
     language = 'javascript';
@@ -15,19 +18,33 @@ const Code = ({code, codeString, from, to, language}) => {
     codeString = JSON.stringify(code, null, 4);
   }
   
-  if (from || to) {
-    return ([
-      <>
-      <Network from={from} to={to} />
-      <SyntaxHighlighter language={language} style={okaidia} customStyle={{marginTop: 0, borderRadius: "0 0 0.3rem 0.3rem"}}>{codeString}</SyntaxHighlighter>
-      </>
-    ]);
+  if (show) {
+    if (from || to) {
+      return (
+        <>
+        <Network from={from} to={to} show={show} setShow={setShow} />
+        <SyntaxHighlighter className="codeblock" language={language} style={okaidia}>{codeString}</SyntaxHighlighter>
+        </>
+      );
+    } else {
+      return (
+        <>
+        <ShowHide show={show} setShow={setShow} />
+        <SyntaxHighlighter className="codeblock" language={language} style={okaidia}>{codeString}</SyntaxHighlighter>
+        </>
+      );
+    }
   } else {
-    return (
-      <SyntaxHighlighter language={language} style={okaidia}>{codeString}</SyntaxHighlighter>
-    );
+    if (from || to) {
+      return (
+        <Network from={from} to={to} show={show} setShow={setShow} />
+      );
+    } else {
+      return (
+        <ShowHide show={show} setShow={setShow} />
+      );
+    }
   }
-  
 };
 
 

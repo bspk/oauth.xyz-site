@@ -700,9 +700,18 @@ blockquote::after{
 }
 
 .alert-network {
+  padding: 0.5rem;
+}
+
+.alert-network-showhide-true {
   margin-bottom: 0;
   border-radius: 0.3rem 0.3rem 0 0;
 }
+
+.alert-network-showhide-false {
+  border-radius: 0.3rem;
+}
+
 
 .alert-network .badge-client {
   background-color: #17A2B8;
@@ -760,6 +769,23 @@ blockquote::after{
   background: linear-gradient(to right, #343a40, #17A2B8);
 }
 
+.alert-showhide {
+  padding: 0.1rem;
+}
+
+.alert-showhide-true {
+  margin-bottom: 0;
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+
+.alert-showhide-false {
+  border-radius: 0.3rem;
+}
+
+.codeblock {
+  margin-top: 0 !important;
+  border-radius: 0 0 0.3rem 0.3rem !important;
+}
 
 h1,h2,h3,h4,h5,h6 {
   margin: 1.2em 0 0.67em;

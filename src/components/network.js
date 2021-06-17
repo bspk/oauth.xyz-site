@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Badge from 'react-bootstrap/Badge'
+import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 
 const Client = () => {
@@ -41,7 +42,7 @@ const asBadge = (el) => {
   }
 };
 
-const Network = ({from, to}) => {
+const Network = ({from, to, show, setShow}) => {
   const elements = [
     asBadge(from),
     '➡',
@@ -51,7 +52,8 @@ const Network = ({from, to}) => {
   // TODO: change the network banner color based on the communication pair in play
   
   return (
-    <Alert variant="dark" className={'alert-network alert-network-' + from + '-' + to}>
+    <Alert variant="dark" className={'alert-network alert-network-' + from + '-' + to + ' alert-network-showhide-' + show}>
+      <Button variant="link" size="sm" onClick={() => setShow(!show)}>{ show ? '🔽' : '▶️ Show Code'}</Button>
       {elements}
     </Alert>
   );
