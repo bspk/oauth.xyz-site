@@ -114,61 +114,45 @@ The `bearer` flag indicates that the client does not want the resulting access t
 
 The `split` flag indicates that the client is prepared for the AS to split the requested token into multiple access tokens in the response. Without this flag, a request for a single access token will never result in multiple access tokens. The `label` values for the resulting split tokens are at the discretion of the AS that processes the split.
 
-## Client
-
-
-
-## Key
-
-The `key` parameter lets the client tell the AS which keys it is able to prove ownership of during the course of the transaction, thereby identifying the client making the call. The `proof` parameter indicates how the client can provide proof of those keys, and may be one of `jwsd`, `httpsig`, or `mtls`. 
-
-The AS can statically issue a key handle to a piece of software (or its developer). An AS can also dynamically generate a key handle and return it to the client during the initial transaction. This handle can be used by the same piece of software to identify its keys in future transactions. The key handle stands in for both the key and its proof mechanism. The key handle does not need to be derived from the key ID, CN, or other identifying information found in the key itself. 
-
-Any keys referenced here, whether directly by value or by reference through a handle, have to be proved by the client during every request in the transaction. More detail is found in the <Link to="/keys">Keys</Link> section. 
-
-> We need a mechanism for the AS to issue keys to the client during this process, and to acknowledge that it's accepted the presentation and proof of any keys sent by the client.
-
-## Display
-
-The `display` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
-
-The AS can statically issue a display handle to a piece of software (or its developer) to be used in place of this section. In this way, it takes the place of the `client_id` and `client_secret` of OAuth 2. In these cases, the AS will likely also keep references to which `resources` the client can ask for, which `interact` methods it is allowed to use, which `key`s it is allowed to present, and even what kinds of `user` information it can assert. 
-
-An AS can also dynamically generate a display handle and return it to the client during the initial response. This handle can be used by the same piece of software to identify itself in future transactions.
-
-## Subject
-
-The `subject` parameter lets the client request information about the user. The presence of this field indicates to the AS that the client wants to know who is logged in at the AS during the interaction process. 
-
-This is distinct from the `user` parameter below, which contains information that the client already knows about the current user. 
-
 ## Interact
 
 The `interact` parameter lets the client tell the AS how to get a user to interact with the AS during a transaction. A client could be capable of multiple forms of interaction with the user, from redirecting to an arbitrary URL, to displaying a user code, to relaying messages to another piece of software. 
 
 More detail is found in the <Link to="/interaction">Interaction</Link> section.
 
-> Do we care about an interact handle? Redirect based clients need to send a new `nonce` parameter every time anyway, and could potentially send a new callback URL while they're at it. Any matching on callback URI's can be tied to keys and would need to have the same rules as a dynamic registration system would have anyway. 
+## Client
+
+The `client` parameter allows the client instance to identify itself to the AS during its request. In GNAP, client software could have multiple distinct instances, depending on the nature of the software and its deployment. A mobile application, for example, would have many individual, distinct instances, while a web application would likely only have one. Furthermore, a client instance could be long-lived or ephemeral. A mobile application will need ongoing access long after the initial authorization, while an SPA instance will cease to exist at the end of the browser session. It's up to the AS to determine what kinds of clients it will accept connections from, including whether it will require client developers to pre-register client instance keys or derive keys from some known source, like a certificate authority.
+
+The client instance can identify its aspects by value, sending an object as the `client` parameter in the initial request. This allows the client to identify itself to the AS and provide all the information necessary for the AS to start the transaction. Alternatively, the client can present an instance identifier by sending this identifier as a string in the `client` parameter. The AS dereferences this string to determine whatever client information is needed to start the transaction. The instance identifier can be generated during a static registration process or dynamically from the response of the AS.
+
+### Key
+
+In GNAP, each distinct client instance is identified by its key. If two copies of the same software have the same key, they are functionally the same client instance. If one copy of a piece of client software has multiple keys, each key represents a separate instance from the perspective of GNAP.
+
+The client instance can pass its key information to the AS by value or reference using the `key` parameter, thereby identifying the client instance making the call. When passed by value, the `key` object contains the key data in one of several formats, including X.509 certificates or JWKs. The `proof` parameter indicates how the client instance can provide proof of those keys, and may be one of several values including `httpsig` or `mtls`. When passed by reference, the key value is a simple opaque string identifier that the AS dereferences to find the key material.
+
+Any keys referenced here, whether by value or by reference, have to be proved by the client during every request in the transaction, whether the initial request or a continuation request. More detail is found in the <Link to="/keys">Keys</Link> section. 
+
+### Display
+
+The `display` section describes the client software that is making the request. This information can be used during any interaction with the user that the AS might need to do, and for auditing and review of authorization decisions. 
+
+## Subject
+
+The `subject` parameter lets the client request information about the user. The presence of this field indicates to the AS that the client wants to know who is logged in at the AS during the interaction process, and to have that information returned to the client.
+
+This is distinct from the `user` parameter below, which contains information that the client already knows about the current user. 
 
 ## User
 
-The `user` parameter lets the client pass information to the AS about the current user in the form of an assertion or other set of claims gathered from a trusted source. These claims need to be able to be validated by the AS, and it should be additionally validated that the client is an authorized holder of this information.  The client can also present a set of possible identifiers that the AS may know the user by, though these are hints and can't be taken as proof that the user is present.
+The `user` parameter lets the client pass information to the AS about the current user in the form of an assertion or other set of claims gathered from a trusted source. Any assertions presented usually need to be validated by the AS, and it should be additionally validated that the client is an authorized holder of this information.  The client can also present a set of possible subject identifiers that the AS may know the user by, though these are hints and can't be taken as proof that the user is present.
 
-While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction in appropriately trusted scenarios.
+While this does not necessarily prove that the user in question is actually present with the client, it can allow the AS to make authorization decisions without user interaction when the AS can trust the client to present this information. For example, if the AS has previously seen the user interact with this client and the client software is trusted, the authorization server could decide to process any requests as if that user's presence were already accounted for. Therefore if something is requested that does not require additional authorization, the AS does not need to interact with the user.
 
 The AS can dynamically generate a user handle and return it to the client in the response. This handle can be used by the same piece of software to identify the same user in future transactions. In this way, it is similar to the persistent claims token from UMA 2.
 
-This is distinct from the `claims` parameter above, which is about the client asking for information about the current user.
-
-## Capabilities
-
-The `capabilities` parameter lets the client tell the AS about extensions and functions to the XYZ protocol that it can support. If the client sends this parameter, the AS returns its own `capabilities` array selecting which of the client's functions it can support. The client can then self-configure for the ensuing transaction based on these values. If the client does not include this block in the request, the AS does not return a `capabilities` array in the response. 
-
-> Could the client send a request with only the `capabilities` block to effectively do a discovery/registration in one step?
-
-The values in the `capabilities` array map to specific features or extensions. 
-
-> This needs to be a registry and the core spec needs to have clear definitions on how to build these extensions, including which sections and actions they affect. 
+This is distinct from the `subject` parameter above, which is about the client asking for information about the current user.
 
 # Continuation Request
 
