@@ -67,16 +67,13 @@ access: [{
 }]
 }} />
 
-An AS can publish pre-set resources as resource handles that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
+An AS can publish pre-set resources as resource references that can be passed by the client to the AS during a transaction request, similar to OAuth 2's `scope` concept. The AS can determine a default set of resources for a client not asking for anything specifically.
 
-<Code code={[{
-          type: "example.com/resource-set",
-          actions: ["read", "write", "dolphin"],
-          locations: ["https://server.example.net/", "https://resource.local/other"],
-          datatypes: ["metadata", "images"]
-}, "dolphin-metadata"]} />
+<Code code={{
+access: ["foo", "bar", "dolphin-metadata"]
+}} />
 
-The client can send several of these objects or handles in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
+The client can send several of these objects or references in a single request, which the AS interprets as the client requesting access to all of the resources with a single access token.
 
 ### Multiple Access Tokens
 

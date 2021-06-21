@@ -1,27 +1,49 @@
 import Code from "../components/code"
 import SEO from '../components/seo'
+import { Link } from 'gatsby'
 
 <SEO title="Interaction" keywords={['oauth', 'authorization', 'security']} />
 
 # Interaction
 
-During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the request, the client tells the AS how it is able to interact with the user. Several modes of interaction are defined, and a client can support multiple forms of interaction simultaneously.
+During a transaction, the AS will often require interaction from a user. This user can be the same person running the client software, or it could be another party who's not necessarily available. In the request, the client instance tells the AS how it is able to interact with the user running the software by declaring how it can start an interaction, how it can finish an interaction, and any other interaction-based hints that might help the AS. 
 
- - The `redirect` and `short_redirect` capability is used when the client is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
- - The `user_code` capability is used when the client can communicate an out-of-band code for the user to provide to the AS.
+## Start Modes
+
+The client can indicate one or more modes to start an interaction. 
+
+ - The `redirect` mode is used when the client instance is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
+ - The `app` mode is used when the client instance can launch an application from the same device the user is interacting with. The way that application communicates with the AS is not defined by GNAP.
+ - The `user_code` mode is used when the client instance can communicate an out-of-band code to the user for the user to provide to the AS (usually by typing it in).
  
-In addition, the client can indicate how it can receive responses from the interaction request. Currently, there are two modes of getting a response defined and they can be declared independently:
+The client indicates these in the interaction request's `start` field by listing out the modes in an array. The AS evaluates this array and determines which, if any, of the modes are appropriate for the request. 
 
- - The client can set a `callback` capability including a URL that the AS can send the user back to when done interacting
- - The client can set a `pushback` capability including a URL that the AS can send an HTTP message to when the user is done interacting
+In the future, other start modes could indicate things like allowing the client to send a request to a digital wallet or sending a message to the user through another communication channel.
+ 
+## Finish Modes 
 
-The client can poll the AS using a continuation handle as well.
+In addition, the client can indicate how it can receive a signal from the AS once interaction is completed. Currently, there are two methods of getting a response:
 
-These can be used independently of other interaction capabilities, but it will likely be most common to use a callback with the redirect method, polling with the user code capability, and a few others. Common combinations are shown here.
+ - The client can set a `redirect` method including a URL that the AS can send the user back to when done interacting
+ - The client can set a `push` method including a URL that the AS can send an HTTP message to when the user is done interacting
+
+The messages from the AS to any of these finish methods will contain an `interact_ref` parameter that the client instance presents to the AS when it <Link to="/continue">continues the request at the AS</Link>.
+
+By default, the finish methods will use a `SHA3` 512-bit hash to protect the returned data. The client can choose a different hash algorithm by sending a `hash_method` parameter.
+
+The client can also poll the AS using a continuation handle as well, though a client that's waiting for a response from interaction shouldn't poll before that interaction signal is completed because it won't have the interaction reference returned. A client that just wants to poll should leave the interaction `finish` field off of its request.
+
+## Hints
+
+The client instance can also give some hints to the AS about how to handle the interaction. Currently, the client can only send a set of preferred UI locales, but in the future other information the client might know could be set here as well.
+
+# Example Interaction Combinations
+
+While the different interaction modes can be mixed and matched to fit different needs, as shown on the <Link to="/transactionrequest">request demo page</Link>, there are a number of common combinations that are worth calling out.
 
 ## Redirect with Callback
 
-In redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
+In fully redirect based interaction, the client sends the user to an interactive page at the AS. The AS then sends the user back to the client with an HTTP redirect. 
 
 To use this mode, the client's transaction request includes a section that includes a URI the client can receive requests at as well as a unique state value. 
 
@@ -30,8 +52,9 @@ To use this mode, the client's transaction request includes a section that inclu
   code={
 {
   "interact": {
-    "redirect": true,
-    "callback": {
+    "start": ["redirect"],
+    "finish": {
+        "method": "redirect",
 		"uri": "https://client.example.net/return/123455",
 		"nonce": "VJLO6A4CAYLBXHTR0KRO"
 	}
@@ -40,25 +63,7 @@ To use this mode, the client's transaction request includes a section that inclu
   }
 />
 
-By default, the callback return will use a `SHA3` 512-bit hash. The client can choose a different hash algorithm by sending a `hash_method` parameter. In this example, a `SHA2` 512-bit hash is requested. If the AS doesn't support the client's requested hash method, it returns an error.
-
-<Code
-  from="client" to="as"
-  code={
-{
-  "interact": {
-    "redirect": true,
-    "callback": {
-		"uri": "https://client.example.net/return/123455",
-		"nonce": "VJLO6A4CAYLBXHTR0KRO",
-		"hash_method": "SHA2"
-	}
-  }
-}
-  }
-/>
-
-The URI must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The `nonce` must be a unique value for each transaction and cannot be re-used. The `nonce` value is opaque to the AS and should be random. The client remembers this `nonce` value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the `nonce` value is remembered in the application's current state.
+The URI in the finish method must be reachable from the user's system browser, and can be any `https` URL, an `http` URL for a local-to-the-device host, or a service-specific URI that the user's browser can open. The `nonce` must be a unique value for each transaction and cannot be re-used. The `nonce` value is opaque to the AS and should be random. The client remembers this `nonce` value and associates it with the current user. For a web server or other web application, this is generally done by placing it in the user's session. Native applications are generally considered single-user in nature, so the `nonce` value is remembered in the application's current state.
 
 When the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the transaction response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS.
 
