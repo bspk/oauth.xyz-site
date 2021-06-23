@@ -4,6 +4,8 @@ import Code from '../components/code'
 import Selector from '../components/selector'
 import SelectorList from '../components/selectorlist'
 
+import { processCodeVal, CodeValueSelector } from '../components/codevalueselector'
+
 class TransactionRequest extends React.Component {
 
   codeValues = {
@@ -214,17 +216,6 @@ class TransactionRequest extends React.Component {
       }
     },
     
-    capabilities: {
-      label: 'Capabilities',
-      full: [
-        'foo', 'bar', 'extension-B'
-      ],
-      options: {
-        full: "On",
-        omit: "Off"
-      }
-    }
-    
   }
   
   state = {
@@ -241,22 +232,60 @@ class TransactionRequest extends React.Component {
       subject: 'omit'
     }
   }
+  
+  all = {
+    omit: {
+      display: 'omit',
+      access_token: 'omit',
+      interact: [],
+      start: [],
+      finish: ['redirect'],
+      key: 'omit',
+      client: 'instance',
+      user: 'omit',
+      subject: 'omit'
+    },
+    full: {
+      display: 'full',
+      access_token: 'multiple',
+      interact: ['start', 'finish'],
+      start: ['app', 'user_code', 'redirect'],
+      finish: ['redirect'],
+      key: 'httpsig',
+      client: 'full',
+      user: 'full',
+      subject: 'full'
+    },
+    minimal: {
+      display: 'omit',
+      access_token: 'reference',
+      interact: [],
+      start: [],
+      finish: ['redirect'],
+      key: 'ref',
+      client: 'instance',
+      user: 'omit',
+      subject: 'omit'
+    }
+  }
 
   
   change = (field) => (value) => {
 
     // if we're toggling everything at once
     if (field === 'all') {
-      Object.keys(this.state.selected).forEach((field) => {
-        this.change(field)(value);
+      const all = this.all[value];
+      console.log(all);
+      this.setState({
+        selected: all
       });
       return;
     }
 	
     const s = this.state.selected;
-	
+
     if (this.codeValues[field] 
-        && this.codeValues[field].type === 'checkbox'
+        && (this.codeValues[field].type === 'checkbox' || this.codeValues[field].type === 'picklist')
         && value.indexOf('omit') !== -1) {
         // turn off everything
         s[field] = [];
@@ -270,147 +299,25 @@ class TransactionRequest extends React.Component {
     
   }
   
-  // Get the single content of the object for inclusion into the main object
-  getContent = (codeVal, selected, allSelected) => {
-    //console.log('>> getContent ', codeVal, selected);
-    // add the single selected element into the resulting object
-    if (codeVal.subkeys && codeVal.subkeys.includes(selected)) {
-      const sub = this.processCodeVal(
-        codeVal[selected],
-        allSelected
-      );
-      //console.log('≫≫ sub ', sub);
-      return sub;
-    } else {
-      return codeVal[selected];
-    }
-  }
-  
-  // get a list of content for inclusion into the main object
-  getContentList = (codeVal, selected, allSelected) => {
-    //console.log('++ getContentList() ', codeVal, selected);
-    if (Array.isArray(selected)) {
-      // return a list of everything to be added
-      return selected.map(k => {
-        return this.getContent(codeVal, k, allSelected);
-      });
-    } else {
-      return [];
-    }
-    
-  }
-  
-  processCodeVal = (codeVal, allSelected) => {
-    //console.log('-- processCodeVal() ', codeVal);
-    return Object.keys(codeVal).reduce((result, key) => {
-      //console.log('==', codeVal[key]);
-      if (codeVal[key].type === 'checkbox') {
-        // process a list
-        const vals = this.getContentList(codeVal[key], allSelected[key], allSelected)
-          .filter(v => v !== undefined);
-        //console.log('== vals ', vals);
-        if (vals.length > 0) {
-          
-          // combine all return values
-          result[key] = vals.reduce((result, e) => {
-            if (e) {
-              return {...result, ...e};
-            }
-          }, {});
-        }
-      } else if (codeVal[key].type === 'picklist') {
-        // process a list
-        const vals = this.getContentList(codeVal[key], allSelected[key], allSelected)
-          .filter(v => v !== undefined);
-        //console.log('== vals ', vals);
-        if (vals.length > 0) {
-          // combine all return values in one array
-          result[key] = vals;
-        }
-      } else {
-        // process a single-selection
-        const content = this.getContent(codeVal[key], allSelected[key], allSelected);
-        // copy over the value content
-        result[key] = content;
-      }
-      return result;
-    }, {});
-  }
-
-  
   render = () => {
 
     // build the transaction object based on the current selection
-    const transaction = this.processCodeVal(this.codeValues, this.state.selected);
+    const transaction = processCodeVal(this.codeValues, this.state.selected);
 
     // build the selectors
     const options = {
       full: "Full",
-      handle: "Handle",
+      minimal: "Minimal",
       omit: "Off"
     };
     
-    const selectors = Object.keys(this.codeValues).map((field) => {
-        {
-          if (this.codeValues[field].subkeys && (this.codeValues[field].type === 'checkbox' || this.codeValues[field].type === 'picklist')) {
-            // it's got subkeys AND it's a pickilst or checkbox
-            
-            const subs = this.state.selected[field]
-              .filter((s) => this.codeValues[field].subkeys.includes(s))
-              .reduce((result, selected) => {
-              const selectedSubs = Object.keys(this.codeValues[field][selected]).map((f) => {
-                return(
-                  <Selector onChange={this.change(f)} 
-                    label={this.codeValues[field][selected][f].label} 
-                    selected={this.state.selected[f]} 
-                    options={this.codeValues[field][selected][f].options} 
-                    type={this.codeValues[field][selected][f].type} />
-                );
-              });
-              return result.concat(selectedSubs);
-            }, []);
-            
-            
-            return (
-              <>
-              <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
-              <SelectorList>
-                {subs}
-              </SelectorList>
-              </>
-            );
-
-          } else if (this.codeValues[field].subkeys && this.codeValues[field].subkeys.includes(this.state.selected[field])) {
-            // if it's got sub-keys, process them here
-            const subs = Object.keys(this.codeValues[field][this.state.selected[field]]).map((f) => {
-              return(
-                <Selector onChange={this.change(f)} 
-                  label={this.codeValues[field][this.state.selected[field]][f].label} 
-                  selected={this.state.selected[f]} 
-                  options={this.codeValues[field][this.state.selected[field]][f].options} 
-                  type={this.codeValues[field][this.state.selected[field]][f].type} />
-              );
-            });
-            
-            return (
-              <>
-              <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
-              <SelectorList>
-                {subs}
-              </SelectorList>
-              </>
-            );
-            
-          } else {
-            return (
-              <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
-            );
-          }
-        }
-    })
-    // add the "all" selector
-    .concat(<Selector onChange={this.change('all')} label="All" all options={options} />);
-
+    const selectors = CodeValueSelector({
+      change: this.change,
+      codeValues: this.codeValues,
+      selected: this.state.selected,
+      options: options
+    });
+      
     return (
       <div>
           <SelectorList>
