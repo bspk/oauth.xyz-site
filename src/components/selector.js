@@ -22,7 +22,7 @@ const Selector = ({onChange, label, selected, all, options, type}) => {
   }));
   
   return (
-    <ToggleButtonGroup name={label} type={ type ? type : 'radio' } value={all ? "" : selected} onChange={onChange} size="sm" className="selector">
+    <ToggleButtonGroup name={label} type={ (type == 'checkbox' || type == 'picklist') ? 'checkbox' : 'radio' } value={all ? "" : selected} onChange={onChange} size="sm" className="selector">
       {elements}
     </ToggleButtonGroup>
   );

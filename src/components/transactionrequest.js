@@ -149,27 +149,50 @@ class TransactionRequest extends React.Component {
     interact: {
       label: 'Interact',
       type: 'checkbox',
-      redirect: true,
-      callback: {
-        uri: "https://client.example.net/return/123455",
-        nonce: "LKLTI25DK82FX4T4QFZC"
+      subkeys: ['start', 'finish'],
+      start: {
+        start: {
+          label: "Start",
+          type: 'picklist',
+          redirect: "redirect",
+          app: "app",
+          user_code: "user_code",
+          options: {
+            redirect: "Redirect",
+            app: "Launch App",
+            user_code: "User Code"
+          }
+        }
       },
-      pushback: {
-        uri: "https://client.example.net/push/554321",
-        nonce: "K82FX4T4QFZLKLTI25DC"
+      finish: {
+        finish: {
+          label: "Finish",
+          redirect: {
+            method: "redirect",
+            uri: "https://client.example.net/return/123455",
+            nonce: "LKLTI25DK82FX4T4QFZC"
+          },
+          push: {
+            method: "push",
+            uri: "https://client.example.net/return/123455",
+            nonce: "LKLTI25DK82FX4T4QFZC"
+          },
+          options: {
+            redirect: "Redirect",
+            push: "Push"
+          }
+        }
       },
-      short_redirect: true,
-      app: true,
-      user_code: true,
+      hints: {
+        "ui_locales": ["en-US", "fr-CA"]
+      },
       options: {
-        redirect: "Redirect",
-        short_redirect: "Short Redirect",
-        app: "Launch App",
-        callback: "Callback",
-        pushback: "Push",
-        user_code: "User Code",
+        start: "Start",
+        finish: "Finish",
+        hints: "Hints",
         omit: "Off"
       }
+      
     },
     
     user: {
@@ -208,10 +231,11 @@ class TransactionRequest extends React.Component {
     selected: {
       display: 'full',
       access_token: 'single',
-      interact: ['start', 'finish'],
+      interact: ['finish'],
       start: ['redirect'],
-      finish: ['callback'],
+      finish: ['redirect'],
       key: 'httpsig',
+      client: 'full',
       user: 'omit',
       capabilities: 'omit',
       subject: 'omit'
@@ -246,53 +270,79 @@ class TransactionRequest extends React.Component {
     
   }
   
+  // Get the single content of the object for inclusion into the main object
+  getContent = (codeVal, selected, allSelected) => {
+    //console.log('>> getContent ', codeVal, selected);
+    // add the single selected element into the resulting object
+    if (codeVal.subkeys && codeVal.subkeys.includes(selected)) {
+      const sub = this.processCodeVal(
+        codeVal[selected],
+        allSelected
+      );
+      //console.log('≫≫ sub ', sub);
+      return sub;
+    } else {
+      return codeVal[selected];
+    }
+  }
+  
+  // get a list of content for inclusion into the main object
+  getContentList = (codeVal, selected, allSelected) => {
+    //console.log('++ getContentList() ', codeVal, selected);
+    if (Array.isArray(selected)) {
+      // return a list of everything to be added
+      return selected.map(k => {
+        return this.getContent(codeVal, k, allSelected);
+      });
+    } else {
+      return [];
+    }
+    
+  }
+  
+  processCodeVal = (codeVal, allSelected) => {
+    //console.log('-- processCodeVal() ', codeVal);
+    return Object.keys(codeVal).reduce((result, key) => {
+      //console.log('==', codeVal[key]);
+      if (codeVal[key].type === 'checkbox') {
+        // process a list
+        const vals = this.getContentList(codeVal[key], allSelected[key], allSelected)
+          .filter(v => v !== undefined);
+        //console.log('== vals ', vals);
+        if (vals.length > 0) {
+          
+          // combine all return values
+          result[key] = vals.reduce((result, e) => {
+            if (e) {
+              return {...result, ...e};
+            }
+          }, {});
+        }
+      } else if (codeVal[key].type === 'picklist') {
+        // process a list
+        const vals = this.getContentList(codeVal[key], allSelected[key], allSelected)
+          .filter(v => v !== undefined);
+        //console.log('== vals ', vals);
+        if (vals.length > 0) {
+          // combine all return values in one array
+          result[key] = vals;
+        }
+      } else {
+        // process a single-selection
+        const content = this.getContent(codeVal[key], allSelected[key], allSelected);
+        // copy over the value content
+        result[key] = content;
+      }
+      return result;
+    }, {});
+  }
+
+  
   render = () => {
 
     // build the transaction object based on the current selection
-    const transaction = Object.keys(this.codeValues).reduce((result, key) => {
-      
-	    if (this.codeValues[key].type === 'checkbox') {
-	  	  // build the whole value set
-        if (this.state.selected[key].length > 0) {
-  		    result[key] = Object.keys(this.codeValues[key])
-            .filter(k => this.state.selected[key].indexOf(k) !== -1)
-            .reduce((r, k) => {
-              r[k] = this.codeValues[key][k];
-              return r;
-            }, {});
-          }
-      } else if (this.codeValues[key].subkeys && (this.codeValues[key].subkeys.includes(this.state.selected[key]))) {
-        // if it's got sub-keys, process them here
-        const subs = Object.keys(this.codeValues[key][this.state.selected[key]]).map((f) => {
-          if (this.codeValues[key][this.state.selected[key]][f].type == 'checkbox') {
-            return [f, Object.keys(this.codeValues[key][this.state.selected[key]][f])
-              .filter(k => this.state.selected[key].indexOf(k) !== -1)
-              .reduce((r, k) => {
-                r[k] = this.codeValues[key][k];
-                return r;
-            }, {})];
-          } else {
-            return [f, this.codeValues[key][this.state.selected[key]][f][this.state.selected[f]]];
-          }
-        });
-        if (subs.length > 0) {
-          result[key] = {};
-          subs.forEach((k) => {
-            result[key][k[0]] = k[1];
-          });
-        }
-	    } else {
-	      // otherwise just copy the value
-        result[key] = this.codeValues[key][this.state.selected[key]];
-	    }
-      
-      return result;
-    }, {});
-    
-    const tx = {};
-    
-    //tx['access_token']
-    
+    const transaction = this.processCodeVal(this.codeValues, this.state.selected);
+
     // build the selectors
     const options = {
       full: "Full",
@@ -300,11 +350,37 @@ class TransactionRequest extends React.Component {
       omit: "Off"
     };
     
-    const cv = this.codeValues;
-    
     const selectors = Object.keys(this.codeValues).map((field) => {
         {
-          if (this.codeValues[field].subkeys && (this.codeValues[field].subkeys.includes(this.state.selected[field]))) {
+          if (this.codeValues[field].subkeys && (this.codeValues[field].type === 'checkbox' || this.codeValues[field].type === 'picklist')) {
+            // it's got subkeys AND it's a pickilst or checkbox
+            
+            const subs = this.state.selected[field]
+              .filter((s) => this.codeValues[field].subkeys.includes(s))
+              .reduce((result, selected) => {
+              const selectedSubs = Object.keys(this.codeValues[field][selected]).map((f) => {
+                return(
+                  <Selector onChange={this.change(f)} 
+                    label={this.codeValues[field][selected][f].label} 
+                    selected={this.state.selected[f]} 
+                    options={this.codeValues[field][selected][f].options} 
+                    type={this.codeValues[field][selected][f].type} />
+                );
+              });
+              return result.concat(selectedSubs);
+            }, []);
+            
+            
+            return (
+              <>
+              <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
+              <SelectorList>
+                {subs}
+              </SelectorList>
+              </>
+            );
+
+          } else if (this.codeValues[field].subkeys && this.codeValues[field].subkeys.includes(this.state.selected[field])) {
             // if it's got sub-keys, process them here
             const subs = Object.keys(this.codeValues[field][this.state.selected[field]]).map((f) => {
               return(
