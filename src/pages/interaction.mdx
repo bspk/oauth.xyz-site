@@ -10,7 +10,7 @@ During a transaction, the AS will often require interaction from a user. This us
 
 ## Start Modes
 
-The client can indicate one or more modes to start an interaction. 
+The client can indicate one or more modes to `start` an interaction. 
 
  - The `redirect` mode is used when the client instance is capable of opening a browser on the same device for the user to interact with the AS, or otherwise directing the user to an arbitrary URL.
  - The `app` mode is used when the client instance can launch an application from the same device the user is interacting with. The way that application communicates with the AS is not defined by GNAP.
@@ -24,22 +24,40 @@ In the future, other start modes could indicate things like allowing the client 
 
 In addition, the client can indicate how it can receive a signal from the AS once interaction is completed. Currently, there are two methods of getting a response:
 
- - The client can set a `redirect` method including a URL that the AS can send the user back to when done interacting
- - The client can set a `push` method including a URL that the AS can send an HTTP message to when the user is done interacting
+ - The client instance can set a `redirect` method including a URL that the AS can send the user back to when done interacting
+ - The client instance can set a `push` method including a URL that the AS can send an HTTP message to when the user is done interacting
 
 The messages from the AS to any of these finish methods will contain an `interact_ref` parameter that the client instance presents to the AS when it <Link to="/continue">continues the request at the AS</Link>.
 
-By default, the finish methods will use a `SHA3` 512-bit hash to protect the returned data. The client can choose a different hash algorithm by sending a `hash_method` parameter.
+The client can also poll the continuation endpoint as well, in which case a client wouldn't specify a finish mode. However, a client that's waiting for a response from interaction shouldn't poll before that interaction signal is completed because it won't have the interaction reference returned. A client that just wants to poll should leave the interaction `finish` field off of its request.
 
-The client can also poll the AS using a continuation handle as well, though a client that's waiting for a response from interaction shouldn't poll before that interaction signal is completed because it won't have the interaction reference returned. A client that just wants to poll should leave the interaction `finish` field off of its request.
+### Interaction Reference Hash
 
-## Hints
+In addition to the interaction reference, the AS will calculate a cryptographic hash, which is later verified by the client instance. The hash is created by first concatenating the following values with a newline `\n` between them:
+
+ - the `nonce` value sent by the client instance in the initial request's `finish` section
+ - the `finish` nonce value returned in the initial response
+ - the unique interaction reference value `interact_ref` passed back to the client instance by the finish method
+ - the URL of the grant request endpoint, which identifies the AS the client instance is talking to
+
+For example, an input string could look like this:
+
+<Code language="none" codeString={`VJLO6A4CAYLBXHTR0KRO
+MBDOFXG4Y5CVJCX821LH
+4IFWWIKYBC2PQ6U56NL1
+https://server.example.com/tx`}/>
+
+> There's no trailing newline on this string, but conveying that in an example is really difficult to do.
+
+The AS and client instance then pass this value through a hash function to get the interaction hash. By default, the finish methods use a `SHA3` 512-bit hash over this data. The client instance can choose a different hash algorithm by sending a `hash_method` parameter as part of the `finish` object with a different registered hash value. If the AS can't honor the client instance's requested hash method, it has to fail the request from the start.
+
+## UI Hints
 
 The client instance can also give some hints to the AS about how to handle the interaction. Currently, the client can only send a set of preferred UI locales, but in the future other information the client might know could be set here as well.
 
 # Example Interaction Combinations
 
-While the different interaction modes can be mixed and matched to fit different needs, as shown on the <Link to="/transactionrequest">request demo page</Link>, there are a number of common combinations that are worth calling out.
+While the different interaction modes can be mixed and matched to fit different needs, as shown on the <Link to="/transactionrequest">request demo page</Link>, there are a number of common combinations that are worth discussing.
 
 ## Redirect with Callback
 
@@ -70,12 +88,16 @@ When the AS determines that the client's request needs user interaction, it crea
 <Code
   from="as" to="client"
   code={{
-interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-callback_server_nonce: "MBDOFXG4Y5CVJCX821LH",
+interact: {
+    redirect: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+    finish: "MBDOFXG4Y5CVJCX821LH"
+},
 continue: {
-        handle: "80UPRY5NM33OMUKMKSKU",
-        uri: "https://server.example.com/continue"
-}
+        access_token: {
+          value: "80UPRY5NM33OMUKMKSKU"
+        },
+        uri: "https://server.example.com/continue",
+      }
   }}
 />
 
@@ -100,14 +122,11 @@ Obviously, any method including an embedded security tab such as used by the App
 
 Once at the AS, the AS can ask the user for authentication, and to authorize the application itself. The AS could prompt the user to provide additional claims or proofs however it sees fit, and this interaction is ultimately outside of the protocol.
 
-When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates a `hash` to allow the client to confirm the transaction by concatenating the following values with a newline `\n` character and computing the hash based on the `hash_method` in the client's initial transaction request (defaults to `SHA3` 512-bit):
- - the `nonce` value sent by the client in the initial transaction request
- - the `callback_server_nonce` value returned in the initial transaction response
- - the unique interaction reference
+When the AS has collected whatever input it needs from the user, it sends the user back to the client with an HTTP redirect. First, the AS creates a unique, unguessable interaction handle that the client can use in its subsequent interaction request. The AS also calculates an interaction hash as described above.
 
 The AS creates the URL for the redirect by taking the `callback` URI presented in the transaction request and appending two parameters: 
- - the Base64 URL encoded `hash` value calculated above
  - a unique interaction reference, in this example `4IFWWIKYBC2PQ6U56NL1`
+ - the Base64 URL encoded `hash` value calculated as described above
 
 <Code 
   from="as" to="browser"
@@ -116,9 +135,7 @@ Location: https://client.example.net/return/123455
   ?hash=p28jsq0Y2KK3WS__a42tavNC64ldGTBroywsWxT4md_jZQ1R2HZT8BOWYHcLmObM7XHPAdJzTZMtKBsaraJ64A
   &interact_ref=4IFWWIKYBC2PQ6U56NL1`} />
 
-Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings.
-
-> This can't be a plain string concatenation because it would potentially let a malicious client inject a bad callback URI that looks safe. Alternatively we could use URI templates but that seems a lot of complexity to enforce with its own set of problems.
+Note that the AS has to use a proper URL builder in case the client's callback URL contains existing query parameters, is lacking a root path, or has some other anomaly which would make it problematic to simply concatenate the strings. 
 
 Once the AS creates the redirect response to the interaction request, the AS deletes or otherwise deactivates the interaction URL to prevent phishing and replay attacks. 
 
@@ -126,20 +143,17 @@ If the AS determines that there is an error during the interaction, its response
  - If the URL was valid and bound to an active transaction, the AS can return to the client as in a successful transaction. The client needs to send data to the transaction endpoint to determine next steps.
  - If the URL was not valid or not bound to an active transaction, the AS can only display to the user an error. Since the client has no way to inject a redirect URI alongside an invalid interaction request, there is reduced risk of open redirection attack.
  
-The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated by its originally chosen `nonce` value, the server's returned `callback_server_nonce` value from the original transaction request, and the value of the `interact` reference parameter from the callback request, hashed using the client's chosen method from the initial transaction request (which defaults to `SHA3` 512 bit hash). If these hash values don't match the client returns an error to the user and stops the transaction. 
+The client receives a request from the user's browser through the callback URL. If the client is a web server, this comes in as any other request. If the client is a native application, it usually receives the full URL from the system in whatever function it has registered to receive incoming requests. In any event, the client needs to parse the `hash` parameter and compare its value to a hash calculated in the same way that the AS created it. Since both the AS and the client instance have access to all forms of input in the hash calculation, this is possible. If these hash values don't match the client returns an error to the user and does not call the AS again.
 
-The client then sends a transaction continue request to the AS including the interaction reference as a parameter. The client also includes the current value of the transaction handle as well as any proofs for keys presented during the transaction start.
-
-> We could hash the interaction reference before sending it. It's still in the air whether this hashing is helpful to security or is an unnecessary step.
+The client then sends a <Link to="/continue">continue request</Link> to the AS including the interaction reference as a parameter.
 
 <Code
   from="client" to="as"
   code={{
-    handle: "80UPRY5NM33OMUKMKSKU",
     interact_ref: "4IFWWIKYBC2PQ6U56NL1"
   }} />
 
-The AS looks up the transaction from the transaction handle and fetches the interaction reference associated with that transaction. The AS compares the presented reference to the stored interaction reference it appended to the client's callback with `interact`. If they match, the AS continues processing as normal, likely issuing a token.
+The AS looks up the transaction from a combination of the continuation request  and fetches the interaction reference associated with that transaction. The AS compares the presented reference to the stored interaction reference it appended to the client's callback with `interact`. If they match, the AS continues processing as normal, likely issuing a token.
 
 ## User Code with Polling
 
@@ -151,7 +165,7 @@ The client starts this mode by sending a transaction request indicating that the
   from="client" to="as"
   code={{
   "interact": {
-    "user_code": true
+    start: [ "user_code" ]
   }
   }}
 />
@@ -161,17 +175,20 @@ When the AS determines that the client's request needs user interaction, it send
 <Code
   from="as" to="client"
   code={{
-user_code: {
-	url: "https://server.example.com/interact/device",
-	code: "A1BC-3DFF"
-},
-continue: {
-        handle: "80UPRY5NM33OMUKMKSKU",
-        uri: "https://server.example.com/continue",
-        wait: 60
-}
-  }}
-/>
+      interact: {
+        user_code: {
+        	url: "https://server.example.com/interact/device",
+        	code: "A1BC-3DFF"
+          }
+        },
+        continue: {
+            access_token: {
+              value: "80UPRY5NM33OMUKMKSKU"
+            },
+            uri: "https://server.example.com/continue",
+            wait: 30
+        }
+}}/>
 
 The client presents the user code to the user. The client also indicates to the user that they need to go to the interaction URL. As this is likely to be a static URL, the AS can provide a static link to this page. 
 
@@ -185,20 +202,25 @@ Meanwhile, the client can poll the AS using the transaction handle to see if the
 
 <Code
   from="client" to="as"
-  code={{
-    handle: "80UPRY5NM33OMUKMKSKU"
-  }} />
+  language='http'
+  codeString={`HTTP POST /continue
+Authorization: GNAP 80UPRY5NM33OMUKMKSKU
+Signature-Input: gnap=("host" "authorization" "@request-target");created=1624564850
+Signature: gnap=:N0MynxZllMLOTxgl4PmgHZjQ+gwHKGFGeg6wD5FXKtMM25PfcU2eLVMF9rPuZTguUKnEbvrY7spXlJDZ0jrKZQ==:`
+} />
 
-If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
+If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response can contain a new continuation access token and URL which replace the client's original ones.
 
 <Code
   from="as" to="client"
   code={{
-  wait: 30,
-  handle: {
-    value: "BI9QNW6V9W3XFJK4R02D",
-    method: "bearer"
-  }
+continue: {
+        access_token: {
+          value: "BI9QNW6V9W3XFJK4R02D"
+        },
+        uri: "https://server.example.com/continue",
+        wait: 30
+      }
 }} />
 
 The `wait` parameter tells the client the number of integer seconds it must wait before polling again. The client can continue to poll in this manner until it receives either a token response or the user code times out and the client receives an error response.
@@ -211,22 +233,25 @@ For some kinds of clients, it is possible to show the user a visual signal such 
   from="client" to="as"
   code={{
   "interact": {
-    "redirect": true
+      start: ["redirect"]
   }
-  }}
-/>
+}}/>
 
 As above, when the AS determines that the client's request needs user interaction, it creates a unique interaction URL and returns it to the client in the response. The AS associates this unique URI with the transaction. The interaction URI is for a user-facing page at the AS. Note that because the client did not send a `callback` to the AS, the AS does not generate or return a `callback_server_nonce` parameter.
 
 <Code
   from="as" to="client"
   code={{
-interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
+      interact: {
+      redirect: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+      },
 continue: {
-        handle: "80UPRY5NM33OMUKMKSKU",
+        access_token: {
+          value: "BI9QNW6V9W3XFJK4R02D"
+        },
         uri: "https://server.example.com/continue",
-        wait: 60
-}
+        wait: 30
+      }
   }}
 />
 
@@ -238,53 +263,23 @@ While the client waits for the user to complete the interaction, it polls the AS
 
 <Code
   from="client" to="as"
-  code={{
-    handle: "80UPRY5NM33OMUKMKSKU"
-  }} />
+  language='http'
+  codeString={`HTTP POST /continue
+Authorization: GNAP 80UPRY5NM33OMUKMKSKU
+Signature-Input: gnap=("host" "authorization" "@request-target");created=1624564850
+Signature: gnap=:N0MynxZllMLOTxgl4PmgHZjQ+gwHKGFGeg6wD5FXKtMM25PfcU2eLVMF9rPuZTguUKnEbvrY7spXlJDZ0jrKZQ==:`
+} />
 
 If the user has yet to approve the transaction, the AS sends back a response telling the client to wait. This response contains a new transaction handle which replaces the client's original one.
 
 <Code
   from="as" to="client"
   code={{
-  continue: {
-    handle: "ZI9QNW6V9W3XFJK4R02D",
-    wait: 30,
-    proof: "bearer"
-  }
+continue: {
+        access_token: {
+          value: "ZI9QNW6V9W3XFJK4R02D"
+        },
+        uri: "https://server.example.com/continue",
+        wait: 30
+      }
 }} />
-
-## DIDComm Messages and Queries
-
-In extensions to the protocol, some clients will be able to pass a message from the AS to another piece of software using a secondary protocol, such as DIDComm. 
-
-If the client can pass a complete DIDComm message to the agent, it sends the `didcomm` flag. If it can pass along a query, it sends the `didcomm_query` flag. 
-
-<Code
-  from="client" to="as"
-  code={{
-  "interact": {
-    "didcomm": true,
-	"didcomm_query": true
-  }
-  }}
-/>
-
-In either case, the agent might send its response directly to the AS through some external means, or the client might get a message back from the agent. This message is to be included in its continuation request.
-
-<Code
-  from="client" to="as"
-  code={{
-    handle: "80UPRY5NM33OMUKMKSKU",
-    didcomm: {
-		"...": "..."
-	}
-}} />
-
-If the client has no response message from the agent, it can poll the transaction as usual.
-
-<Code
-  from="client" to="as"
-  code={{
-    handle: "80UPRY5NM33OMUKMKSKU"
-  }} />
