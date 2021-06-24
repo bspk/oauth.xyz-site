@@ -6,13 +6,13 @@ import Code from '../components/code'
 
 <SEO title="Transaction Response" keywords={['oauth', 'authorization', 'security']} />
 
-# Grant Response
+# Response
 
-The response from the grant endpoint tells the client what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
+The response from the grant endpoint tells the client instance what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
 
-If the transaction can be continued by the client, the AS includes a `continue` handle in the response as well. This handle is used by the client for any subsequent references to this transaction. 
+If the transaction can be continued by the client instance, the AS includes a `continue` section in the response as well.
 
-The response can also include handles that the client can use in future transactions in lieu of any of the request sections.
+The response can also include handles that the client instance can use in future requests to refer to itself or the current user by reference.
 
 <TransactionResponse />
 
@@ -20,34 +20,134 @@ Each of these sections is detailed below.
 
 ## Interaction
 
-Foremost, the AS needs to tell the client what to do next. If the user needs to interact with the AS, it will indicate how the user can do that as described in the <Link to="/interaction">interaction section</Link>, which could include waiting until polling again.
+If the AS decides that it needs to interact with the end user, and the client has provided one or more means for facilitating interaction with the user, the AS includes an `interact` section that details what the client instance can do next. This can include a set of options to `start` the interaction process, a nonce used during the `finish` of the interaction process, and any other information the client instance might need. There are no inherent limitations on which combinations of `start` and `finish` methods are allowed together, but an AS will never respond with a method that the client instance did not indicate support for during its request.
 
-## Tokens and Subject 
+<Code code={{
+    interact: {
+        "start": {
+            "redirect": "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+        },
+        "finish": "MBDOFXG4Y5CVJCX821LH"
+    }
+}}/>
 
-If the transaction is successful, the result could contain one or more <Link to="/tokens">access tokens</Link> for use at the resource server as well as some `subject` data about the end user. 
+## Continue
 
-If a `subject` section is returned by the AS, it contains information about the user currently logged in to the AS. This information should be minimal to avoid privacy and data consistency problems. 
+If the AS wants to allow the client instance to make a follow-up <Link to="/continue">continuation request</Link>, it can return the necessary information in the `continue` section. This is used most prominently for managing <Link to="/interaction">interaction with the user</Link>, though continuation could be used in other circumstances such as requesting updated privileges from the AS or additional user information.
 
-## Continuation
+<Code code={{
+continue: {
+    access_token: {
+      value: "80UPRY5NM33OMUKMKSKU",
+      bound: true
+    },
+    uri: "https://server.example.com/continue",
+    wait: 60
+}
+}} />
 
-Both the interaction and poll-wait style responses require the the `continue` response in order to continue. If a transaction handle is included with the access token response, the client can use this handle to get a new access token in the event the first one expires or is revoked, so long as the transaction handle is still valid. The `continue` response also includes the URL at which the client needs to make its continuation requests, and can include information about how long the client should `wait` before trying again.
+The `continue` section contains an <Link to="tokens">access token</Link> which is bound to the client instance's key as well as a `uri` that the client instance can use that access token at for making continuation requests. When the client instance makes these requests, it has to sign the request with the same key and method used to make the original request.
 
-This `handle` is used by the client to continue the transaction from its previous state. The value returned by the AS is unique, random, and not reused by the AS. That is to say, an ongoing transaction will be represented by a single handle at a given time, and that handle will change over time. This is used in the <Link to="/transactionrequest">continuation request</Link>. 
+If the section contains a `wait` parameter, the client instance needs to wait at least that many seconds before trying to make the continuation call.
+
+## Tokens 
+
+If the request is successfully completed and the client instance asked for one or more access tokens, these are returned in the `access_token` section. If the client instance asked for only one access token, only one token is returned as an object. 
+
+<Code code={{
+    access_token: {
+        value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        access: [{
+          type: "example.com/resource-set",
+          actions: ["read", "write", "dolphin"],
+          locations: ["https://server.example.net/", "https://resource.local/other"],
+          datatypes: ["metadata", "images"]
+        }]
+    }
+}} />
+
+If the client asked for multiple access tokens, then all tokens are returned in an array of access token objects. 
+
+<Code code={{
+    access_token: [
+        {         
+          label: "token1",
+          value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+          access: [{
+            type: "example.com/resource-set",
+            actions: ["read", "write", "dolphin"],
+            locations: ["https://server.example.net/", "https://resource.local/other"],
+            datatypes: ["metadata", "images"]
+          }]
+        },
+        { 
+          label: "token2",
+          value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
+          access: [{
+            type: "example.com/another-api",
+            actions: ["foo", "bar", "dolphin"],
+            locations: ["https://resource.other/"],
+            datatypes: ["data", "pictures"]
+          }]
+        }
+      ]
+}}/>
+
+By default, access tokens are `bound` to the client instance's <Link to="/keys">key used during the initial request</Link>. When the client instance uses the access token at the RS, it has to sign that request using the same key in the same manner. A client instance can request a `bearer` access token which removes this requirement, but such behavior should be limited to applications where the risks of bearer tokens have been fully considered and weighed.
+
+<Code code={{
+    access_token: {
+        value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        access: ["read", "write", "dolphin"],
+        bound: false
+      }
+}} />
+
+Access tokens also contain an `access` array which describes the rights associated with the token. Just like in the request, these rights can be described either by value (using JSON objects) or by reference (using JSON strings). While it is up to the RS to interpret and enforce such rights, the values in the `access` array can be useful for a client figuring out whether its tokens are good for what it needs to do, or if it needs to ask for something more.
+
+## Subject 
+
+If the request is successfully completed and the client instance asked for information about the current user, this information is returned in the `subject` section. This information reflects identifiers and assertions associated with the user as known by the AS, usually by having the user interact with the AS as part of the process. The `subject` field will usually contain an `updated_at` parameter which indicates the last time the user's account information was updated at the AS.
+
+<Code code={{
+    subject: {
+        "sub_ids": [ {
+           "format": "opaque",
+           "id": "J2G8G8O4AZ",
+        }],
+  			updated_at: '2020-01-01T12:43:29+0000'
+  		}
+}} />
 
 
-## Dynamic Handles
+If there are multiple pieces of information in this section, the client instance can assume that they all refer to the same person. This information should be minimal to avoid privacy and data consistency problems. 
 
-Parts of the client's request can be assigned reference identifier handles by the AS so that the client can use these in future requests.
+<Code code={{
+    subject: {
+        "sub_ids": [ {
+           "format": "opaque",
+           "id": "J2G8G8O4AZ",
+        }, {
+          "format": "email",
+          "email": "user@example.com"
+        } ],
+        assertions: {
+           "id_token": "eyJraWQiOiIxZTlnZGs3IiwiYWxnIjoiUlMyNTYifQ.ewogImlzcyI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZfV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5NzAsCiAibmFtZSI6ICJKYW5lIERvZSIsCiAiZ2l2ZW5fbmFtZSI6ICJKYW5lIiwKICJmYW1pbHlfbmFtZSI6ICJEb2UiLAogImdlbmRlciI6ICJmZW1hbGUiLAogImJpcnRoZGF0ZSI6ICIwMDAwLTEwLTMxIiwKICJlbWFpbCI6ICJqYW5lZG9lQGV4YW1wbGUuY29tIiwKICJwaWN0dXJlIjogImh0dHA6Ly9leGFtcGxlLmNvbS9qYW5lZG9lL21lLmpwZyIKfQ.rHQjEmBqn9Jre0OLykYNnspA10Qql2rvx4FsD00jwlB0Sym4NzpgvPKsDjn_wMkHxcp6CilPcoKrWHcipR2iAjzLvDNAReF97zoJqq880ZD1bwY82JDauCXELVR9O6_B0w3K-E7yM2macAAgNCUwtik6SjoSUZRcf-O5lygIyLENx882p6MtmwaL1hd6qn5RZOQ0TLrOYu0532g9Exxcm-ChymrB4xLykpDj3lUivJt63eEGGN6DH5K6o33TcxkIjNrCD4XB1CKKumZvCedgHHF3IAK4dVEDSUoGlH9z4pP_eWYNXvqQOjGs-rDaQzUHl6cQQWNiDpWOl_lxXjQEvQ"
+        },
+  			updated_at: '2020-01-01T12:43:29+0000',
+  			auth_time: '2020-02-17T21:23:39+0000'
+      }
+}} />
 
-If a `display_handle` is returned by the AS, the client can use this handle in lieu of the information sent in the `display` block in the request for future transactions. 
+## Dynamic Identifiers
+
+Parts of the request can be assigned reference identifiers by the AS so that the client instance can use these in future requests.
+
+If an `instance_id` is returned by the AS, the client can use this handle in lieu of the information sent in the `client` block in the request for future requests. 
 
 If a `user_handle` is returned by the AS, the client can use this handle in lieu of the `user` portion of the transaction request to represent the same user in future requests, akin to UMA 2's PCT.
 
-If a `key_handle` is returned by the AS, the client can use this handle in lieu of the `key` section of the transaction request to reference the same key presented and proved by the client in this transaction. When presenting such key handles in a future request, the client must still <Link to="/keys">bind the request to the referenced key</Link>.
-
-## Capabilities
-
-If a `capabilities` section is sent by the client, the AS parses it and returns an array of all the capabilities that this AS can support for this transaction. This allows the client to dynamically self-configure for the transaction. 
-
-> This piece is effectively a discovery response, but tied directly to the transaction endpoint. This means the client knows the AS as only its transaction endpoint URL and can get everything else it needs from there. 
-
+<Code code={{
+    instance_id: '7C7C4A-Z9KHRS-6X63AJAO',
+    user_handle: '9O6_B0w3K-E7yM2m'
+}} />

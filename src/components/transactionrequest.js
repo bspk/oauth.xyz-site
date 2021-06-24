@@ -120,7 +120,7 @@ class TransactionRequest extends React.Component {
             proof: "mtls",
             "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
           },
-          ref: "7C7C4AZ9KHRS6X63AJAO",
+          ref: "7C7C4A-Z9KHRS-6X63AJAO",
           options: {
             jwsd: "JWS (Detached)",
             httpsig: "HTTP Signature",
