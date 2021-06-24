@@ -4,25 +4,45 @@ import Code from '../components/code'
 import Selector from '../components/selector'
 import SelectorList from '../components/selectorlist'
 
+import { processCodeVal, CodeValueSelector } from '../components/codevalueselector'
+
 class TransactionRequest extends React.Component {
 
   
   codeValues = {
-    interaction: {
+    interact: {
       label: 'Interaction',
       type: 'checkbox',
-      interaction_url: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ",
-      callback_server_nonce: "MBDOFXG4Y5CVJCX821LH",
-      pushback_server_nonce: "Y5CVJCX821LHMBDOFXG4",
-      user_code: {
-          url: "https://server.example.com/interact/device",
-          code: "A1BC-3DFF"
+      subkeys: ['start'],
+      start: {
+        start: {
+          label: 'Start',
+          type: 'checkbox',
+          redirect: {
+            redirect: "https://server.example.com/interact/4CF492MLVMSW9MKMXKHQ"
+          },
+          app: {
+            app: "https://app.example.com/launch?tx=4CF492MLV" 
+          },
+          user_code: {
+            user_code: {
+              url: "https://server.example.com/interact/device",
+              code: "A1BC-3DFF"
+            },
+          },
+          options: {
+            redirect: 'Redirect',
+            app: 'Launch App',
+            user_code: 'User Code'
+          }
+        }
+      },
+      finish: {
+        finish: "MBDOFXG4Y5CVJCX821LH"
       },
       options: {
-        interaction_url: "Redirect",
-        callback_server_nonce: "Callback",
-        pushback_server_nonce: "Pushback",
-        user_code: "Device",
+        start: "Start",
+        finish: "Finish",
         omit: 'Off'
       }
     },
@@ -30,25 +50,25 @@ class TransactionRequest extends React.Component {
     access_token: {
       label: 'Access Token',
       single: {
-        access_token: {
-            value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-            proof: "bearer"
-        }
+        value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0"
       },
-      multiple: {
-        multiple_access_tokens: {
-          token1: {
-            value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
-            proof: "bearer"
-          },
-          token2: {
-            value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1",
-            proof: "bearer"
-          }
-        }
+      bearer: {
+        value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0",
+        bound: false
       },
+      multiple: [
+        {         
+          label: "token1",
+          value: "OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0"
+        },
+        { 
+          label: "token2",
+          value: "UFGLO2FDAFG7VGZZPJ3IZEMN21EVU71FHCARP4J1"
+        }
+      ],
       options: {
         single: 'Single',
+        bearer: 'Bearer',
         multiple: 'Multiple',
         off: 'Off'
       }
@@ -63,24 +83,6 @@ class TransactionRequest extends React.Component {
       }
     },
     
-    handles: {
-      label: 'Handles',
-      type: 'checkbox',
-      display_handle: "VBUEOIQA82PBY2ZDJW7Q",
-      user_handle: "XUT2MFM1XBIKJKSDU8QM",
-      key_handle: "7C7C4AZ9KHRS6X63AJAO",
-      options: {
-        display_handle: 'Display',
-        user_handle: 'User',
-        key_handle: 'Key (client)'
-      }
-    },
-    
-    capabilities: {
-      label: 'Capabilities',
-      on: ['ext1', 'ext2']
-    },
-	
   	subject: {
   		label: 'Subject',
   		on: {
@@ -101,10 +103,27 @@ class TransactionRequest extends React.Component {
   state = {
     selected: {
       continue: 'on',
-      interaction: ['interaction_url', 'callback_server_nonce'],
+      interact: ['start', 'finish'],
+      start: ['redirect'],
       access_token: 'off',
-      handles: [],
       capabilities: 'off',
+      subject: 'off'
+    }
+  }
+  
+  all = {
+    full: {
+      continue: 'on',
+      interact: ['start', 'finish'],
+      start: ['redirect', 'user_code', 'app'],
+      access_token: 'on',
+      subject: 'on'
+    },
+    minimal: {
+      continue: 'off',
+      interact: [],
+      start: [],
+      access_token: 'single',
       subject: 'off'
     }
   }
@@ -114,32 +133,32 @@ class TransactionRequest extends React.Component {
 
     // if we're toggling everything at once
     if (field === 'all') {
-      Object.keys(this.state.selected).forEach((field) => {
-        this.change(field)(value);
+      const all = this.all[value];
+      this.setState({
+        selected: all
       });
       return;
     }
 	
     const s = this.state.selected;
 	
-    if (this.codeValues[field]) {
-      if (this.codeValues[field].type === 'checkbox'
+    if (this.codeValues[field] 
+        && (this.codeValues[field].type === 'checkbox' || this.codeValues[field].type === 'picklist')
         && value.indexOf('omit') !== -1) {
         // turn off everything
         s[field] = [];
-      } else {
-        s[field] = value;
-      }
+    } else {
+      s[field] = value;
     }
-    
-    if (field === 'handle' && value === 'off') {
-      s.access_token = 'single';
-      s.interaction = 'off';
-    }
-    
-    if (field === 'interaction' && value !== 'off') {
-      s.handle = 'on';
-    }
+    //
+    // if (field === 'handle' && value === 'off') {
+    //   s.access_token = 'single';
+    //   s.interaction = 'off';
+    // }
+    //
+    // if (field === 'interaction' && value !== 'off') {
+    //   s.handle = 'on';
+    // }
 
     this.setState({
       selected: s
@@ -150,33 +169,20 @@ class TransactionRequest extends React.Component {
   render = () => {
 
     // build the transaction object based on the current selection
-    const transaction = Object.keys(this.codeValues).reduce((result, key) => {
-      if (this.codeValues[key].type === 'checkbox') {
-        //result = {...result, ...this.codeValues[key][this.state.selected[key]]};
-        if (this.state.selected[key].length > 0) {
-  		    const res = Object.keys(this.codeValues[key])
-            .filter(k => this.state.selected[key].indexOf(k) !== -1)
-            .reduce((r, k) => {
-              r[k] = this.codeValues[key][k];
-              return r;
-            }, {});
-          result = {...result, ...res};
-        }
-      } else if (key === 'access_token') {
-        result = {...result, ...this.codeValues[key][this.state.selected[key]]};
-      } else {
-        result[key] = this.codeValues[key][this.state.selected[key]];
-      }
-      return result;
-    }, {});
-    
+    const transaction = processCodeVal(this.codeValues, this.state.selected);
+        
     const response = {...transaction};
     
     // build the selectors
-    const selectors = Object.keys(this.codeValues).map((field) => {
-      return (
-        <Selector onChange={this.change(field)} label={this.codeValues[field].label} selected={this.state.selected[field]} options={this.codeValues[field].options} type={this.codeValues[field].type} />
-      );
+    const options = {
+      full: "Full",
+      minimal: "Minimal"
+    };
+    const selectors = CodeValueSelector({
+      change: this.change,
+      codeValues: this.codeValues,
+      selected: this.state.selected,
+      options: options
     });
 
     

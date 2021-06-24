@@ -275,7 +275,6 @@ class TransactionRequest extends React.Component {
     // if we're toggling everything at once
     if (field === 'all') {
       const all = this.all[value];
-      console.log(all);
       this.setState({
         selected: all
       });
