@@ -1,0 +1,48 @@
+import { Link } from 'gatsby'
+
+import ContinueRequest from '../components/continue'
+import SEO from '../components/seo'
+import Code from '../components/code'
+
+<SEO title="Continuation Request" keywords={['oauth', 'authorization', 'security']} />
+
+# Continuation Request
+
+A continuation request is a form of request that continues the transaction for one of a number of reasons, based on the kind of interaction pattern that the client is capable of performing. 
+
+ - The client has received a callback during <Link to="/interaction">Interaction</Link> with the user
+ - The client is waiting for the user to take some action and is polling the request
+ - The client has received information in response to a server challenge that will allow the request to progress
+
+<ContinueRequest />
+
+## Interaction Reference
+
+If the client instance has received an interaction reference through one of the interaction `finish` mechanisms, the client will send that reference back to the AS.
+
+<Code code={{
+    "interact_ref": "4IFWWIKYBC2PQ6U56NL1"
+}}/>
+
+Note that the client instance has to validate the interaction hash before sending this reference back or else leave itself open to several forms of injection attack. Se the <Link to="/interaction">interaction</Link> page for more details.
+
+## Continuation Updates
+
+If the client instance wants to request additional access token rights or additional subject information, the client instance can do so by sending the same `access_token` and `subject` fields as it would inside the initial request. 
+
+The client instance could also send a `user` field if it has learned additional information about the current user that it wants to present to the AS.
+
+The continuation request is tied to a specific client instance, and so the `client` field can't be sent in any continuation request.
+
+## Canceling an Ongoing Request
+
+If the client instance wants to cancel an ongoing request, whether it's been granted or not, it can send an HTTP `DELETE` request to the continuation URL.
+
+## Response
+
+The AS responds to a transaction continuation request with a standard <Link to="/transactionresponse">response</Link>. Note that the AS can respond with a different `continue` field than that used in the transaction continuation request, in which case the client instance needs to use the new values of the access token and uri within that section.
+
+## Authentication
+
+A continuation request is always authenticated using the continuation access token issued in the `continue` section of the initial <Link to="/transactionresponse">response</Link>. Since this token is always bound to the client instance's key, this request is always signed.
+

@@ -6,9 +6,14 @@ import SelectorList from '../components/selectorlist'
 
 import { processCodeVal, CodeValueSelector } from '../components/codevalueselector'
 
-class TransactionRequest extends React.Component {
+class ContinueRequest extends React.Component {
 
   codeValues = {
+    
+    interact_ref: {
+      label: 'Interaction Reference',
+      on: '4IFWWIKYBC2PQ6U56NL1'      
+    },
     
     access_token: {
       label: 'Access Token',
@@ -85,69 +90,6 @@ class TransactionRequest extends React.Component {
       }
   	},
     
-    client: {
-      label: 'Client',
-      instance: 'xyz-client-1234a',
-      subkeys: ['full'],
-      full: {
-        key: {
-          label: 'Key',
-          jwsd: {
-            proof: "jwsd",
-            jwk: {
-                  "kty": "RSA",
-                  "e": "AQAB",
-                  "kid": "xyz-1",
-                  "alg": "RS256",
-                  "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
-            }
-          },
-          httpsig: {
-            proof: "httpsig",
-            jwk: {
-                  "kty": "RSA",
-                  "e": "AQAB",
-                  "kid": "xyz-1",
-                  "alg": "RS256",
-                  "n": "kOB5rR4Jv0GMeLaY6_It_r3ORwdf8ci_JtffXyaSx8xYJCCNaOKNJn_Oz0YhdHbXTeWO5AoyspDWJbN5w_7bdWDxgpD-y6jnD1u9YhBOCWObNPFvpkTM8LC7SdXGRKx2k8Me2r_GssYlyRpqvpBlY5-ejCywKRBfctRcnhTTGNztbbDBUyDSWmFMVCHe5mXT4cL0BwrZC6S-uu-LAx06aKwQOPwYOGOslK8WPm1yGdkaA1uF_FpS6LS63WYPHi_Ap2B7_8Wbw4ttzbMS_doJvuDagW8A1Ip3fXFAHtRAcKw7rdI4_Xln66hJxFekpdfWdiPQddQ6Y1cK2U3obvUg7w"
-            }
-          },
-          mtls: {
-            proof: "mtls",
-            cert: "MIIEHDCCAwSgAwIBAgIBATANBgkqhkiG9w0BAQsFADCBmjE3MDUGA1UEAwwuQmVzcG9rZSBFbmdpbmVlcmluZyBSb290IENlcnRpZmljYXRlIEF1dGhvcml0eTELMAkGA1UECAwCTUExCzAJBgNVBAYTAlVTMRkwFwYJKoZIhvcNAQkBFgpjYUBic3BrLmlvMRwwGgYDVQQKDBNCZXNwb2tlIEVuZ2luZWVyaW5nMQwwCgYDVQQLDANNVEkwHhcNMTkwNDEwMjE0MDI5WhcNMjQwNDA4MjE0MDI5WjB8MRIwEAYDVQQDDAlsb2NhbGhvc3QxCzAJBgNVBAgMAk1BMQswCQYDVQQGEwJVUzEgMB4GCSqGSIb3DQEJARYRdGxzY2xpZW50QGJzcGsuaW8xHDAaBgNVBAoME0Jlc3Bva2UgRW5naW5lZXJpbmcxDDAKBgNVBAsMA01USTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMmaXQHbs/wc1RpsQ6Orzf6rN+q2ijaZbQxD8oi+XaaN0P/gnE13JqQduvdq77OmJ4bQLokqsd0BexnI07Njsl8nkDDYpe8rNve5TjyUDCfbwgS7U1CluYenXmNQbaYNDOmCdHwwUjV4kKREg6DGAx22Oq7+VHPTeeFgyw4kQgWRSfDENWY3KUXJlb/vKR6lQ+aOJytkvj8kVZQtWupPbvwoJe0na/ISNAOhL74w20DWWoDKoNltXsEtflNljVoi5nqsmZQcjfjt6LO0T7O1OX3Cwu2xWx8KZ3n/2ocuRqKEJHqUGfeDtuQNt6Jz79v/OTr8puLWaD+uyk6NbtGjoQsCAwEAAaOBiTCBhjAJBgNVHRMEAjAAMAsGA1UdDwQEAwIF4DBsBgNVHREEZTBjgglsb2NhbGhvc3SCD3Rsc2NsaWVudC5sb2NhbIcEwKgBBIERdGxzY2xpZW50QGJzcGsuaW+GF2h0dHA6Ly90bHNjbGllbnQubG9jYWwvhhNzc2g6dGxzY2xpZW50LmxvY2FsMA0GCSqGSIb3DQEBCwUAA4IBAQCKKv8WlLrT4Z5NazaUrYtlTF+2v0tvZBQ7qzJQjlOqAcvxry/d2zyhiRCRS/v318YCJBEv4Iq2W3I3JMMyAYEe2573HzT7rH3xQP12yZyRQnetdiVM1Z1KaXwfrPDLs72hUeELtxIcfZ0M085jLboXhufHI6kqm3NCyCCTihe2ck5RmCc5l2KBO/vAHF0ihhFOOOby1v6qbPHQcxAU6rEb907/p6BW/LV1NCgYB1QtFSfGxowqb9FRIMD2kvMSmO0EMxgwZ6k6spa+jk0IsI3klwLW9b+Tfn/daUbIDctxeJneq2anQyU2znBgQl6KILDSF4eaOqlBut/KNZHHazJh"
-          },
-          thumbprint: {
-            proof: "mtls",
-            "cert#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
-          },
-          ref: "7C7C4A-Z9KHRS-6X63AJAO",
-          options: {
-            jwsd: "JWS (Detached)",
-            httpsig: "HTTP Signature",
-            mtls: "MTLS",
-            thumbprint: "MTLS (Thumbprint)",
-            ref: "Reference"
-          }
-        },
-        display: {
-          label: 'Display',
-          full: {
-            name: "My Client Display Name",
-            uri: "https://example.net/client"
-          },
-          options: {
-            full: "Full",
-            omit: "Off"
-          }
-        }
-      },
-      options: {
-        full: 'Full',
-        instance: 'Instance Identifier'
-      }
-    },
-    
-
     interact: {
       label: 'Interact',
       type: 'checkbox',
@@ -199,14 +141,8 @@ class TransactionRequest extends React.Component {
     
     user: {
       label: 'User',
-      identifier: {
-        "sub_ids": [ {
-          "subject_type": "email",
-          "email": "user@example.com"
-        } ]
-      },
       full: {
-        "sub_ids": [ {
+        "sub-ids": [ {
           "subject_type": "email",
           "email": "user@example.com"
         } ],
@@ -216,7 +152,6 @@ class TransactionRequest extends React.Component {
       },
       handle: "XUT2MFM1XBIKJKSDU8QM",
       options: {
-        identifier: "Identifier",
         full: "Full",
         handle: "Handle",
         omit: "Off"
@@ -227,13 +162,11 @@ class TransactionRequest extends React.Component {
   
   state = {
     selected: {
-      display: 'full',
-      access_token: 'single',
-      interact: ['finish'],
-      start: ['redirect'],
-      finish: ['redirect'],
-      key: 'httpsig',
-      client: 'full',
+      interact_ref: 'on',
+      access_token: 'off',
+      interact: [],
+      start: [],
+      finish: [],
       user: 'omit',
       subject: 'omit'
     }
@@ -241,35 +174,29 @@ class TransactionRequest extends React.Component {
   
   all = {
     omit: {
-      display: 'omit',
+      interact_ref: 'off',
       access_token: 'omit',
       interact: [],
       start: [],
-      finish: ['redirect'],
-      key: 'omit',
-      client: 'instance',
+      finish: [],
       user: 'omit',
       subject: 'omit'
     },
     full: {
-      display: 'full',
+      interact_ref: 'on',
       access_token: 'multiple',
       interact: ['start', 'finish'],
       start: ['app', 'user_code', 'redirect'],
       finish: ['redirect'],
-      key: 'httpsig',
-      client: 'full',
       user: 'full',
       subject: 'full'
     },
-    minimal: {
-      display: 'omit',
-      access_token: 'reference',
+    interact: {
+      interact_ref: 'on',
+      access_token: 'off',
       interact: [],
       start: [],
-      finish: ['redirect'],
-      key: 'ref',
-      client: 'instance',
+      finish: [],
       user: 'omit',
       subject: 'omit'
     }
@@ -311,8 +238,8 @@ class TransactionRequest extends React.Component {
 
     // build the selectors
     const options = {
-      full: "Full",
-      minimal: "Minimal",
+      interact: "Interact Reference",
+      full: "Full Update",
       omit: "Off"
     };
     
@@ -339,4 +266,4 @@ class TransactionRequest extends React.Component {
 
 };
 
-export default TransactionRequest;
+export default ContinueRequest;

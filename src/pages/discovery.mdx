@@ -7,29 +7,9 @@ import Code from '../components/code'
 
 # Discovery
 
-By design, the XYZ protocol minimizes the need for any pre-flight discovery. To start things off, the client only needs to know the transaction endpoint of the server, everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given transaction request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode.
+By design, the GNAP minimizes the need for any pre-flight discovery. To start things off, the client only needs to know the transaction endpoint of the server, everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given transaction request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode.
 
 Even so, the protocol allows for some additional discovery mechanisms.
-
-## Capabilities
-
-For managing extensions, the `capabilities` section of the <Link to="transactionrequest.mdx">transaction request</Link> allows a client to specify the set of things that it can do:
-
-<Code 
-  from="client" to="as"
-  language='json' code={{
- capabilities: [ 'foo', 'bar', 'extension-B' ]
-}} />
-
-The AS responds with the subset of those things that it supports:
-
-<Code 
-  from="as" to="client"
-  language='json' code={{
- capabilities: [ 'foo', 'extension-B' ]
-}} />
-
-The AS can never add something to the list that the client didn't send. With the example above, even if the AS supports `extension-A` it cannot put that in the response as that was not indicated by the client as a capability.
 
 ## Options Discovery
 

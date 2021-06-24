@@ -4,15 +4,17 @@ import TransactionResponse from '../components/transactionresponse'
 import SEO from '../components/seo'
 import Code from '../components/code'
 
-<SEO title="Transaction Response" keywords={['oauth', 'authorization', 'security']} />
+<SEO title="Response" keywords={['oauth', 'authorization', 'security']} />
 
 # Response
 
-The response from the grant endpoint tells the client instance what it needs to do next, including if it needs to <Link to="/interaction">interact with the user</Link> and any <Link to="/tokens">tokens that have been issued</Link>. 
+When the client instance makes its <Link to="/transactionrequest">initial request</Link> or a <Link to="/continue">continuation request</Link>, the AS responds with a JSON structure that contains details about what the client instance can do next. This includes some combination of the following: 
 
-If the transaction can be continued by the client instance, the AS includes a `continue` section in the response as well.
-
-The response can also include handles that the client instance can use in future requests to refer to itself or the current user by reference.
+- details needed for <Link to="/interaction">interacting with the user</Link>
+- any <Link to="/tokens">tokens that have been issued</Link> for use at an RS
+- any information about the user
+- details needed to <Link to="/continue">continue the request</Link>
+- Reference identifiers for the client instance and the current user, which can be used in future requests
 
 <TransactionResponse />
 
@@ -103,7 +105,7 @@ By default, access tokens are `bound` to the client instance's <Link to="/keys">
       }
 }} />
 
-Access tokens also contain an `access` array which describes the rights associated with the token. Just like in the request, these rights can be described either by value (using JSON objects) or by reference (using JSON strings). While it is up to the RS to interpret and enforce such rights, the values in the `access` array can be useful for a client figuring out whether its tokens are good for what it needs to do, or if it needs to ask for something more.
+Access token objects also contain an `access` array which describes the rights associated with the token. Just like in the request, these rights can be described either by value (using JSON objects) or by reference (using JSON strings). While it is up to the RS to interpret and enforce such rights, the values in the `access` array can be useful for a client figuring out whether its tokens are good for what it needs to do, or if it needs to ask for something more.
 
 ## Subject 
 
