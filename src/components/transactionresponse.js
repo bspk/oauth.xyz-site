@@ -225,12 +225,20 @@ class TransactionRequest extends React.Component {
     // }
     //
     
-    console.log('set ' + field + ' to ' + value);
+    //console.log('set ' + field + ' to ' + value);
     
-    // consistency check
-    if (s.continue === 'off') {
+    // consistency check: if we set the 'continue' field to 'off' make sure the interaction is off and we have an access token instead
+    if (field === 'continue' && s.continue === 'off') {
       s.interact = [];
-      s.access_token = 'single';
+      if (s.subject === 'off') {
+        s.access_token = 'single';
+      }
+    }
+    
+    // if we set the 'access_token' or 'subject' field to 'off', make sure there's a continuation
+    if ((field === 'access_token' && s.access_token === 'off' && s.subject === 'off') 
+      || (field === 'subject' && s.subject === 'off' && s.access_token === 'off'))  {
+      s.continue = 'on';
     }
 
     this.setState({
