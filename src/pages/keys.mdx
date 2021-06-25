@@ -6,7 +6,11 @@ import { Link } from 'gatsby'
 
 # Key Types
 
-Client instances in GNAP are always identified by their key. This key can be presented as a value or as a reference. The key binds the client instance during the grant process and must be proved for all requests. The AS can restrict access to certain keys, associated with particular clients and controlled through a registration process. The AS can also allow clients to dynamically present and prove a key at runtime, such as a key generated on a client device and bound to only that instance of the client software on that device. 
+Client instances in GNAP are always identified by their key. This key can be presented as a value or as a reference. The key binds the client instance during the grant process and proof of that key must be presented for all requests. 
+
+GNAP does not differentiate between pre-registered and dynamically-presented keys, though GNAP allows the AS to differentiate between keys it has seen before and those it has not. The AS can allow clients to dynamically present and prove a new key at runtime, such as a key generated on a client device and bound to only that instance of the client software on that device. If some keys are known ahead of time through a registration or other derivation process, the AS can restrict access to certain kinds of requests for these keys associated with particular clients.
+
+
 
 ## JSON Web Key (JWK)
 
@@ -54,7 +58,7 @@ client:      {
 
 ## Key Reference
 
-If a client instance has a reference to its key that is known to the AS, the client can present that reference in lieu of the key itself.
+If a client instance has a reference to its key that is known to the AS, the client can present that reference in lieu of the key itself. No format is given for this value, and dereferencing it is up to the AS.
 
 <Code 
   from="client" to="as"
@@ -64,7 +68,14 @@ client:      {
 }
 }} />
 
-The AS can identify which key the client is presenting from this reference handle and ensure that the correct key is used in the request. The proofing method is also usually locked when a key is passed by reference, and the client cannot alter it.
+The AS can identify which key the client is presenting from this reference handle and ensure that the correct key is used in the request. The proofing method is also locked when a key is passed by reference, and the client cannot alter it. Alternatively, a client instance can be identified by its `instance_id`, which also implies a specific known key material and proof method.
+
+
+<Code
+    from="client" to="as"
+    code={{
+    client: 'xyz-client-1234a'
+}} />
 
 # Presentation Proofing Types
 
@@ -232,11 +243,18 @@ Host: server.example.com
 Content-Type: application/jose
 Content-Length: 1047
  
-eyJhbGciOiJSUzI1NiIsImNyZWF0ZWQiOjE2MTg4ODQ0NzUsImh0bSI6IlBPU1QiLCJraWQiOiJnbmFwLXJzYSIsInR5cCI6ImduYXAtYmluZGluZytqd3NkIiwidXJpIjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20vZ25hcCJ9.CnsKICAgICJhY2Nlc3NfdG9rZW4iOiB7CiAgICAgICAgImFjY2VzcyI6IFsKICAgICAgICAgICAgImRvbHBoaW4tbWV0YWRhdGEiCiAgICAgICAgXQogICAgfSwKICAgICJpbnRlcmFjdCI6IHsKICAgICAgICAic3RhcnQiOiBbInJlZGlyZWN0Il0sCiAgICAgICAgImZpbmlzaCI6IHsKICAgICAgICAgICAgIm1ldGhvZCI6ICJyZWRpcmVjdCIsCiAgICAgICAgICAgICJ1cmkiOiAiaHR0cHM6Ly9jbGllbnQuZm9vL2NhbGxiYWNrIiwKICAgICAgICAgICAgIm5vbmNlIjogIlZKTE82QTRDQVlMQlhIVFIwS1JPIgogICAgICAgIH0KICAgIH0sCiAgICAiY2xpZW50IjogewogICAgICAicHJvb2YiOiAiandzIiwKICAgICAgImtleSI6IHsKICAgICAgICAiandrIjogewogICAgICAgICAgICAia2lkIjogImduYXAtcnNhIiwKICAgICAgICAgICAgImt0eSI6ICJSU0EiLAogICAgICAgICAgICAiZSI6ICJBUUFCIiwKICAgICAgICAgICAgImFsZyI6ICJSUzI1NiIsCiAgICAgICAgICAgICJuIjogImhZT0otWE9LSVNkTU1TaG5fRzRXOW0yMG1UMFZXdFFCc21CQmtJMmNtUnQ0QWk4QmZZZEhzRnpBdFlLT2pwQlIxUnBLcEptVkt4SUdOeTBnNlozYWQyWFlzaDhLb3dseVZ5OElrWjhOTXdTcmNVSUJaR1lYakhwd2p6dmZHdlhIXzVLSmxuUjNfdVJVcDRaNFVqazJiQ2FLZWdEbjExVjJ2eEU0MWhxYVBVbmhSWnhlMGpSRVRkZHpzRTNtdTFTSzhkVENST2p3VWwxNG1VTm84aVRyVG00bjBxRGFkejhCa1BvLXV2NEJDMGJ1blMwSzNiQV8zVWdWcDd6QmxRRm9GbkxUTzJ1V3BfbXVMRVdHbDY3Z0JxOU1PM2JyS1hmR2hpM2tPenl3endQVHVxLWNWUUR5RU43YUwwU3hDYjNIYzRJZHFEYU1nOHFIVXlPYnBQaXREUSIKICAgICAgICB9CiAgICAgIH0KICAgICAgImRpc3BsYXkiOiB7CiAgICAgICAgIm5hbWUiOiAiTXkgQ2xpZW50IERpc3BsYXkgTmFtZSIsCiAgICAgICAgInVyaSI6ICJodHRwczovL2NsaWVudC5mb28vIgogICAgICB9LAogICAgfSwKICAgICJzdWJqZWN0IjogewogICAgICAgICJmb3JtYXRzIjogWyJpc3Nfc3ViIiwgIm9wYXF1ZSJdCiAgICB9Cn0K.MwNoVMQp5hVxI0mCs9LlOUdFtkDXaA1_eTvOXq7DOGrtDKH7q4vP2xUq3fH2jRAZqnobo0WdPP3eM3NH5QUjW8pa6_QpwdIWkK7r-u_52puE0lPBp7J4U2w4l9gIbg8iknsmWmXeY5F6wiGT8ptfuEYGgmloAJd9LIeNvD3ULW2h2dz1Pn2eDnbyvgB0Ugae0BoZB4f69fKWj8Z9wvTIjk1LZJN1PcL7_zT8Lrlic9aPyzT7Q9ovkd1s-4whE7TrnGUzFc5mgWUn_gsOpsP5mIIljoEEv-FqOW2RyNYulOZl0Q8EnnDHV_vPzrHlUarbGg4YffgtwkQhdK72-JOxYQ
-`} />
+eyJhbGciOiJSUzI1NiIsImNyZWF0ZWQiOjE2MTg4ODQ0NzUsImh0bSI6IlBPU1QiLCJraWQiOiJnbmFwLXJzYSIsInR5cCI6ImduYXAtYmluZGluZytqd3NkIiwidXJpIjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20vZ25hcCJ9.CnsKICAgICJhY2Nlc3NfdG9rZW4iOiB7CiAgICAgICAgImFjY2VzcyI6IFsKICAgICAgICAgICAgImRvbHBoaW4tbWV0YWRhdGEiCiAgICAgICAgXQogICAgfSwKICAgICJpbnRlcmFjdCI6IHsKICAgICAgICAic3RhcnQiOiBbInJlZGlyZWN0Il0sCiAgICAgICAgImZpbmlzaCI6IHsKICAgICAgICAgICAgIm1ldGhvZCI6ICJyZWRpcmVjdCIsCiAgICAgICAgICAgICJ1cmkiOiAiaHR0cHM6Ly9jbGllbnQuZm9vL2NhbGxiYWNrIiwKICAgICAgICAgICAgIm5vbmNlIjogIlZKTE82QTRDQVlMQlhIVFIwS1JPIgogICAgICAgIH0KICAgIH0sCiAgICAiY2xpZW50IjogewogICAgICAicHJvb2YiOiAiandzIiwKICAgICAgImtleSI6IHsKICAgICAgICAiandrIjogewogICAgICAgICAgICAia2lkIjogImduYXAtcnNhIiwKICAgICAgICAgICAgImt0eSI6ICJSU0EiLAogICAgICAgICAgICAiZSI6ICJBUUFCIiwKICAgICAgICAgICAgImFsZyI6ICJSUzI1NiIsCiAgICAgICAgICAgICJuIjogImhZT0otWE9LSVNkTU1TaG5fRzRXOW0yMG1UMFZXdFFCc21CQmtJMmNtUnQ0QWk4QmZZZEhzRnpBdFlLT2pwQlIxUnBLcEptVkt4SUdOeTBnNlozYWQyWFlzaDhLb3dseVZ5OElrWjhOTXdTcmNVSUJaR1lYakhwd2p6dmZHdlhIXzVLSmxuUjNfdVJVcDRaNFVqazJiQ2FLZWdEbjExVjJ2eEU0MWhxYVBVbmhSWnhlMGpSRVRkZHpzRTNtdTFTSzhkVENST2p3VWwxNG1VTm84aVRyVG00bjBxRGFkejhCa1BvLXV2NEJDMGJ1blMwSzNiQV8zVWdWcDd6QmxRRm9GbkxUTzJ1V3BfbXVMRVdHbDY3Z0JxOU1PM2JyS1hmR2hpM2tPenl3endQVHVxLWNWUUR5RU43YUwwU3hDYjNIYzRJZHFEYU1nOHFIVXlPYnBQaXREUSIKICAgICAgICB9CiAgICAgIH0KICAgICAgImRpc3BsYXkiOiB7CiAgICAgICAgIm5hbWUiOiAiTXkgQ2xpZW50IERpc3BsYXkgTmFtZSIsCiAgICAgICAgInVyaSI6ICJodHRwczovL2NsaWVudC5mb28vIgogICAgICB9LAogICAgfSwKICAgICJzdWJqZWN0IjogewogICAgICAgICJmb3JtYXRzIjogWyJpc3Nfc3ViIiwgIm9wYXF1ZSJdCiAgICB9Cn0K.MwNoVMQp5hVxI0mCs9LlOUdFtkDXaA1_eTvOXq7DOGrtDKH7q4vP2xUq3fH2jRAZqnobo0WdPP3eM3NH5QUjW8pa6_QpwdIWkK7r-u_52puE0lPBp7J4U2w4l9gIbg8iknsmWmXeY5F6wiGT8ptfuEYGgmloAJd9LIeNvD3ULW2h2dz1Pn2eDnbyvgB0Ugae0BoZB4f69fKWj8Z9wvTIjk1LZJN1PcL7_zT8Lrlic9aPyzT7Q9ovkd1s-4whE7TrnGUzFc5mgWUn_gsOpsP5mIIljoEEv-FqOW2RyNYulOZl0Q8EnnDHV_vPzrHlUarbGg4YffgtwkQhdK72-JOxYQ`} />
 
 To support this method, the AS needs to check for the content type of `application/jose` and parse the payload out of the JWS to use as input to the AS. When using this method with a `GET`, `HEAD`, `DELETE`, `OPTIONS`, or other non-body call, the client instance instead uses the detached JWS method, above.
 
 # Sending Requests with Access Tokens
 
-To send a request to an RS, the client instance also has to protect the value of the access token by the signature method. For HTTP Message Signatures, this means also signing the `Authorization` header. For the JOSE methods, this means adding an `ath` field to the JWS header that includes the SHA256 hash of the access token's value.
+To send a request to an RS, the client instance also has to protect the value of the access token by the signature method. For HTTP Message Signatures, this means also signing the `Authorization` header. For the JOSE methods, this means adding an `ath` field to the JWS header that includes the SHA256 hash of the access token's value. An example of the HTTP Signature method is shown here.
+
+<Code 
+  from="client" to="as"
+  language='http' codeString={`GET /resource HTTP/1.1
+Host: resources.example.com
+Signature-Input: gnap=("@request-target" "host" "authorization");created=1624564850;keyid="xyz-client"
+Signature: gnap=:EN/rExQ/knVi61P5AFhyMGN7aVPzk/9C7nsYAWF2RvzsoV1uNxGZklM55qCIQpuhoNty4EhiH7iwuzZBbRCQcQ==:
+Authorization: GNAP OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />

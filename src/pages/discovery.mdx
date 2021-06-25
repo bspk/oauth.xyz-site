@@ -7,28 +7,60 @@ import Code from '../components/code'
 
 # Discovery
 
-By design, the GNAP minimizes the need for any pre-flight discovery. To start things off, the client only needs to know the transaction endpoint of the server, everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given transaction request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode.
+With its negotiation-based design, GNAP minimizes the need for the client instance to do any pre-flight discovery. To start a <Link to="/transactionrequest">request</Link>, the client instance only needs to know the single endpoint of the AS. Everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode such as any URLs the client instance needs to send the user to. Even <Link to="/continue">continuation of an ongoing request</Link> uses access tokens and URLs that are given to the client instance in <Link to="/transactionresponse">response to the first request</Link>.
 
-Even so, the protocol allows for some additional discovery mechanisms.
+Even with this design in mind, GNAP does include some optional discovery mechanisms to allow components to optimize their configurations.
 
-## Options Discovery
+## Client-AS Discovery
 
-The client can also send an HTTP `OPTIONS` request to the transaction endpoint to get a JSON document describing the server. 
+The client can send an HTTP `OPTIONS` request to the AS endpoint.
 
 <Code 
   from="client" to="as"
   language='http' codeString={`OPTIONS /transaction HTTP/1.1
 Host: server.example.com`} />
 
+This returns a JSON document describing the server's supported features. 
+
 <Code 
   from="as" to="client"
   language='json' code={{
-  "capabilities": ["foo", "extension-A", "extension-B"],
-  "interact_methods": ["callback", "redirect", "user_code"],
-  "key_proofs": ["jwsd", "mtls", "httpsig", "dpop", "oauthpop", "jws"],
-  "tx_endpoint": "http://host.docker.internal:9834/api/as/transaction"
+grant_request_endpoint: "https://server.example.com/tx",
+interaction_start_modes_supported: [ "redirect", "user_code", "app" ],
+interaction_finish_methods_supported: [ "redirect", "push" ],
+key_proofs_supported: [ "httpsig", "mtls", "jwsd" ],
+subject_formats_supported: [ "opaque", "email" ],
+assertions_supported: [ "id_token" ]
 }} />
 
-Clients can use this information to pre-configure an optimized request to the AS, if desired. However, note that this method of discovery is not required to start a transaction.
+Note that the OPTIONS discovery request is meant to be unauthenticated.
+
+Clients can use this information to pre-configure an optimized request to the AS, if desired. However, it's not expected that most clients will need to do this kind of optimization as it costs an extra round trip.
 
 Also note that presence of a value in the discovery document is not a guarantee that a client can use that feature. An AS is not obligated to allow any particular client or transaction request to use a given feature. For example, a client might be registered with a particular key proofing type and can therefore only use that type, even if the server supports others.
+
+## Client-RS Discovery
+
+If a client instance calls a GNAP-protected RS without an access token, the RS can point the client to the appropriate AS to use for its request using a `WWW-Authenticate` header. This header points to the AS endpoint, which the client instance can call with a <Link to="/transactionrequest">request for access</Link>.
+
+<Code
+    from="rs" to="client"
+    language="http" codeString={`HTTP 401 Not Authorized
+WWW-Authenticate: GNAP as_uri=https://server.example/tx,access=FWWIKYBQ6U56NL1`} />
+
+This response can also include a string that the client instance can use in its access token request as a reference value in the `access` array. This reference is meant to ensure the client will be able to access the resource it first tried to access. Since the original request was made without the context provided by an access token, this value represent's the RS's best guess as to what the client was asking for. The value can even be a dynamically-registered access reference value, if the RS and AS communicate at runtime, similar to UMA's permission registration system.
+
+## RS-AS Discovery
+
+The AS can offer several functions that face RS's being protected, and to facilitate dynamic and programmatic configuration of these functions, the AS can offer a discovery document at a location based on the request endpoint's host with `.well-known/gnap-as-rs` as its path.
+
+<Code
+    from="as" to="rs"
+    code={{
+grant_request_endpoint: "https//server.example.com/tx",
+introspection_endpoint: "https://server.example.com/introspect",
+resource_registration_endpoint: "https://server.example.com/resource",
+token_formats_supported: [ "jwt", "paseto" ]
+}}/>
+
+This is separated from the Client-AS discovery above because it's not expected that a client would ever see such a discovery document.

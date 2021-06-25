@@ -769,6 +769,10 @@ blockquote::after{
   background: linear-gradient(to right, #343a40, #17A2B8);
 }
 
+.alert-network-as-rs {
+  background: linear-gradient(to right, #FFC107, #343a40);
+}
+
 .alert-showhide {
   padding: 0.1rem;
 }
