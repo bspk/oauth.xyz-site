@@ -109,7 +109,9 @@ Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />
 
 A client can make a <Link to="/transactionrequest">request</Link> with a multi-part `access_token` section, which is formatted as a JSON array. Each object in the request requires a `label` field with names chosen by the client to differentiate the access being requested. A request would look like this.
 
-<Code code={{
+<Code 
+    from="client" to="as"
+    code={{
     "access_token": [
         {
             "label": "token1",
@@ -157,7 +159,9 @@ A client can make a <Link to="/transactionrequest">request</Link> with a multi-p
 
 The returned access token structure is similar, with an array of uniquely-labeled access token objects.
 
-<Code code={{
+<Code 
+    from="as" to="client"
+    code={{
     "access_token": [
         {
             "label": "token1",
@@ -261,9 +265,8 @@ A client can request the revocation of a token by sending a `DELETE` request to 
   from="client" to="rs"
   language='http' codeString={`DELETE /token/PRY5NM33OM4TB8N6BW7OZB8CDFONP219RP1L HTTP/1.1
 Host: server.example.com
-Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0
 Signature-Input: gnap=("@request-target" "host" "authorization");created=1624564850;keyid="xyz-client"
 Signature: gnap=:mcHk93cUDq1h/fb073O6oQM0Ek8tT+i2yZZHQOy05yLu0iiRUmVHC0K8m/kaB1Q/SXLYZeoadClcq7TVTvmZOA==:
-`} />
+Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />
 
 Both the AS and client throw out the access token after completion of the revocation.
