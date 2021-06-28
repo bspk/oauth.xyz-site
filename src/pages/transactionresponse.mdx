@@ -48,7 +48,7 @@ continue: {
 }
 }} />
 
-The `continue` section contains an <Link to="tokens">access token</Link> which is bound to the client instance's key as well as a `uri` that the client instance can use that access token at for making continuation requests. When the client instance makes these requests, it has to sign the request with the same key and method used to make the original request.
+The `continue` section contains an <Link to="/tokens">access token</Link> which is bound to the client instance's key as well as a `uri` that the client instance can use that access token at for making continuation requests. When the client instance makes these requests, it has to sign the request with the same key and method used to make the original request.
 
 If the section contains a `wait` parameter, the client instance needs to wait at least that many seconds before trying to make the continuation call.
 
