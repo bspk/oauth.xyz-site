@@ -6,7 +6,7 @@ import SelectorList from '../components/selectorlist'
 
 import { processCodeVal, CodeValueSelector } from '../components/codevalueselector'
 
-class TransactionRequest extends React.Component {
+class Request extends React.Component {
 
   codeValues = {
     
@@ -339,4 +339,4 @@ class TransactionRequest extends React.Component {
 
 };
 
-export default TransactionRequest;
+export default Request;

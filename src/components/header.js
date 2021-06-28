@@ -6,7 +6,7 @@ import React from 'react'
 const menuLinks = [
       {
         name: 'Request',
-        link: '/transactionrequest/'
+        link: '/request/'
       },
       {
         name: 'Continue',
@@ -14,7 +14,7 @@ const menuLinks = [
       },
       {
         name: 'Response',
-        link: '/transactionresponse/'
+        link: '/response/'
       },
       {
         name: 'Interaction',

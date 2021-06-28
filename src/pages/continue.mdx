@@ -40,9 +40,9 @@ If the client instance wants to cancel an ongoing request, whether it's been gra
 
 ## Response
 
-The AS responds to a transaction continuation request with a standard <Link to="/transactionresponse">response</Link>. Note that the AS can respond with a different `continue` field than that used in the transaction continuation request, in which case the client instance needs to use the new values of the access token and uri within that section.
+The AS responds to a transaction continuation request with a standard <Link to="/response">response</Link>. Note that the AS can respond with a different `continue` field than that used in the transaction continuation request, in which case the client instance needs to use the new values of the access token and uri within that section.
 
 ## Authentication
 
-A continuation request is always authenticated using the continuation access token issued in the `continue` section of the initial <Link to="/transactionresponse">response</Link>. Since this token is always bound to the client instance's key, this request is always signed.
+A continuation request is always authenticated using the continuation access token issued in the `continue` section of the initial <Link to="/response">response</Link>. Since this token is always bound to the client instance's key, this request is always signed.
 

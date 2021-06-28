@@ -1,6 +1,6 @@
 import { Link } from 'gatsby'
 
-import TransactionRequest from '../components/transactionrequest'
+import Request from '../components/request'
 import SEO from '../components/seo'
 import Code from '../components/code'
 
@@ -23,13 +23,13 @@ Note that the JSON in many sections is potentially polymorphic. For example, whe
 
 This interactive example shows how the different sections can be composed with each other in a request.
 
-<TransactionRequest />
+<Request />
 
 Each of the sections is detailed below. 
 
 The client instance has to protect all requests to the AS by <Link to="/keys">signing the request with its key</Link>.
 
-The AS will send a <Link to="/transactionresponse">response</Link> back to the client.
+The AS will send a <Link to="/response">response</Link> back to the client.
 
 ## Access Token
 

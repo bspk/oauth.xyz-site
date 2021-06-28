@@ -15,7 +15,7 @@ Access token formats and values are opaque to the client, but must be known to b
 
 By default, tokens in GNAP are issued bound to a key. <Link to="/keys">Proof of possession of the token's bound key</Link> must be presented alongside the token whenever that token is used. 
 
-Unless otherwise specified by the AS, this key is the same key and proof mechanism the client instance proved possession of in its initial <Link to="/transactionrequest">request</Link>.
+Unless otherwise specified by the AS, this key is the same key and proof mechanism the client instance proved possession of in its initial <Link to="/request">request</Link>.
 
 <Code
   from="as" to="client"
@@ -66,7 +66,7 @@ The client instance then uses this specified key when presenting the token, inst
 
 ## Bearer Tokens
 
-A token issued without an associated key is a bearer token, and any party with access to the token can present it to the RS. Bearer tokens are requested by setting the `bearer` flag in the <Link to="/transactionrequest">request</Link>.
+A token issued without an associated key is a bearer token, and any party with access to the token can present it to the RS. Bearer tokens are requested by setting the `bearer` flag in the <Link to="/request">request</Link>.
 
 <Code
   from="client" to="as"
@@ -82,7 +82,7 @@ A token issued without an associated key is a bearer token, and any party with a
     }
 }} />
 
-If issued, a bearer token has the `bound` field of the access token response set to `false` in the <Link to="/transactionresponse">response</Link>. 
+If issued, a bearer token has the `bound` field of the access token response set to `false` in the <Link to="/response">response</Link>. 
 
 <Code
   from="as" to="client"
@@ -107,7 +107,7 @@ Authorization: Bearer OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />
 
 ## Multiple access tokens
 
-A client can make a <Link to="/transactionrequest">request</Link> with a multi-part `access_token` section, which is formatted as a JSON array. Each object in the request requires a `label` field with names chosen by the client to differentiate the access being requested. A request would look like this.
+A client can make a <Link to="/request">request</Link> with a multi-part `access_token` section, which is formatted as a JSON array. Each object in the request requires a `label` field with names chosen by the client to differentiate the access being requested. A request would look like this.
 
 <Code 
     from="client" to="as"
@@ -241,7 +241,7 @@ Signature-Input: gnap=("@request-target" "host" "authorization");created=1624564
 Signature: gnap=:g0icu7VRfKaAmnArofz1m/S7ZdnybSO6gMncvwrUvWIXfB/DBltK0arEo5PqAv5vUKXSEb/7zkqZM4eeMf3xDg==:
 Authorization: GNAP OS9M2PMHKUR64TB8N6BW7OZB8CDFONP219RP1LT0`} />
 
-If the management URI is still valid, the AS revokes the old access token (if possible) and issues the new access token using the same format as in the <Link to="/transactionresponse">response</Link>.
+If the management URI is still valid, the AS revokes the old access token (if possible) and issues the new access token using the same format as in the <Link to="/response">response</Link>.
 
 <Code
   from="as" to="client"

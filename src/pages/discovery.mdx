@@ -7,7 +7,7 @@ import Code from '../components/code'
 
 # Discovery
 
-With its negotiation-based design, GNAP minimizes the need for the client instance to do any pre-flight discovery. To start a <Link to="/transactionrequest">request</Link>, the client instance only needs to know the single endpoint of the AS. Everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode such as any URLs the client instance needs to send the user to. Even <Link to="/continue">continuation of an ongoing request</Link> uses access tokens and URLs that are given to the client instance in <Link to="/transactionresponse">response to the first request</Link>.
+With its negotiation-based design, GNAP minimizes the need for the client instance to do any pre-flight discovery. To start a <Link to="/request">request</Link>, the client instance only needs to know the single endpoint of the AS. Everything else can be negotiated dynamically. For example, the client indicates all of its supported interaction modes for a given request, and the AS responds to whichever ones from that set that it supports with the appropriate information for that interaction mode such as any URLs the client instance needs to send the user to. Even <Link to="/continue">continuation of an ongoing request</Link> uses access tokens and URLs that are given to the client instance in <Link to="/response">response to the first request</Link>.
 
 Even with this design in mind, GNAP does include some optional discovery mechanisms to allow components to optimize their configurations.
 
@@ -41,7 +41,7 @@ Also note that presence of a value in the discovery document is not a guarantee 
 
 ## Client-RS Discovery
 
-If a client instance calls a GNAP-protected RS without an access token, the RS can point the client to the appropriate AS to use for its request using a `WWW-Authenticate` header. This header points to the AS endpoint, which the client instance can call with a <Link to="/transactionrequest">request for access</Link>.
+If a client instance calls a GNAP-protected RS without an access token, the RS can point the client to the appropriate AS to use for its request using a `WWW-Authenticate` header. This header points to the AS endpoint, which the client instance can call with a <Link to="/request">request for access</Link>.
 
 <Code
     from="rs" to="client"

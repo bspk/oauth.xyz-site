@@ -1,6 +1,6 @@
 import { Link } from 'gatsby'
 
-import TransactionResponse from '../components/transactionresponse'
+import Response from '../components/response'
 import SEO from '../components/seo'
 import Code from '../components/code'
 
@@ -8,7 +8,7 @@ import Code from '../components/code'
 
 # Response
 
-When the client instance makes its <Link to="/transactionrequest">initial request</Link> or a <Link to="/continue">continuation request</Link>, the AS responds with a JSON structure that contains details about what the client instance can do next. This includes some combination of the following: 
+When the client instance makes its <Link to="/request">initial request</Link> or a <Link to="/continue">continuation request</Link>, the AS responds with a JSON structure that contains details about what the client instance can do next. This includes some combination of the following: 
 
 - details needed for <Link to="/interaction">interacting with the user</Link>
 - any <Link to="/tokens">tokens that have been issued</Link> for use at an RS
@@ -16,7 +16,7 @@ When the client instance makes its <Link to="/transactionrequest">initial reques
 - details needed to <Link to="/continue">continue the request</Link>
 - Reference identifiers for the client instance and the current user, which can be used in future requests
 
-<TransactionResponse />
+<Response />
 
 Each of these sections is detailed below.
 
